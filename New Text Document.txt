@@ -1,0 +1,6 @@
+item name
+item sku
+special price
+disc %
+start date
+end date
