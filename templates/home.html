@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
-<div>
-  <h1>homepage dev</h1>
+<h1>homepage dev</h1>
+<div class="center">
   <form method="POST">
    <label for="fname">First name:</label><br>
    <input type="text" name="fname"><br>
@@ -28,6 +28,7 @@
             <td>{{i.id}}</td>
             <td>
               <a href="{{url_for('delete',id=i.id)}}">delete</a>
+              <a href="">edit</a>
             </td>
         </tr>
         {% endfor %}

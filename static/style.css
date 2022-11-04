@@ -1,12 +1,48 @@
+html{
+  font-family: sans-serif;
+}
+
 h1{
   color:green;
   }
+
 th,td {
-  /* border: 1px solid;
-  border-collapse: collapse; */
   border-bottom: 1px solid #ddd;
   font-family: Tahoma, Verdana, sans-serif;
 }
-p {
-font-family: Tahoma, Verdana, sans-serif;
+
+.center{
+  margin: auto;
+}
+
+table{
+  margin: auto;
+}
+
+li {
+  float: left;
+}
+
+li a:hover {
+  background-color: darkblue;
+}
+
+li a {
+  display: block;
+  padding: 8px;
+}
+
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: darkgray;
+}
+
+a {
+  display: block;
+  padding: 8px;
+  /* background-color: #dddddd; */
+  text-decoration: none;
 }
