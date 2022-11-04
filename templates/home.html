@@ -2,12 +2,36 @@
 {% block content %}
 <div>
   <h1>homepage dev</h1>
-  <form>
+  <form method="POST">
    <label for="fname">First name:</label><br>
-   <input type="text" id="fname" name="fname"><br>
+   <input type="text" name="fname"><br>
    <label for="lname">Last name:</label><br>
-   <input type="text" id="lname" name="lname"><br>
+   <input type="text" name="lname"><br>
    <input type="submit" value="Submit">
   </form>
+</div>
+<div>
+  <table>
+    <thead>
+        <tr>
+            <th>Nama Depan</th>
+            <th>Nama Belakang</th>
+            <th>ID</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for i in df %}
+        <tr>
+            <td>{{i.first_name}}</td>
+            <td>{{i.last_name}}</td>
+            <td>{{i.id}}</td>
+            <td>
+              <a href="{{url_for('delete',id=i.id)}}">delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
 </div>
 {% endblock %}

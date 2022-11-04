@@ -1,1 +1,12 @@
-h1{color:green}
+h1{
+  color:green;
+  }
+th,td {
+  /* border: 1px solid;
+  border-collapse: collapse; */
+  border-bottom: 1px solid #ddd;
+  font-family: Tahoma, Verdana, sans-serif;
+}
+p {
+font-family: Tahoma, Verdana, sans-serif;
+}
