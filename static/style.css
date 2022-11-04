@@ -1,8 +1,6 @@
-html{
-  font-family: sans-serif;
-}
 
-h1{
+
+/* h1{
   color:green;
   }
 
@@ -13,7 +11,7 @@ th,td {
 
 .center{
   margin: auto;
-}
+} */
 
 table{
   margin: auto;
@@ -23,9 +21,9 @@ li {
   float: left;
 }
 
-li a:hover {
-  background-color: darkblue;
-}
+/* li a:hover {
+  background-color: #06283D;
+} */
 
 li a {
   display: block;
@@ -34,15 +32,21 @@ li a {
 
 ul {
   list-style-type: none;
-  margin: 0;
-  padding: 0;
+  /* position: fixed; */
+  /* margin: 0; */
+  /* padding: 0; */
   overflow: hidden;
-  background-color: darkgray;
+  /* background-color: white; */
 }
 
-a {
+.anav {
   display: block;
   padding: 8px;
   /* background-color: #dddddd; */
+  color: #06283D;
+  font-weight: bold;
   text-decoration: none;
 }
+
+a:hover {color: #256D85;
+} */
