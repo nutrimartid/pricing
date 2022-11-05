@@ -29,6 +29,7 @@ li a {
   display: block;
   padding: 8px;
 }
+img {width: 100%;}
 
 ul {
   list-style-type: none;
