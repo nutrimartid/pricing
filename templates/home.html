@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
 
+
 <div class="container">
   <div class="row">
     <div class="col">
@@ -10,44 +11,83 @@
     <div class="col">
       <img src="https://assets.website-files.com/60807ca2d01082168c9aac03/60ab65506c8c9a7b75faf7c9_lonely-when-surrounded.jpg" alt="">
     </div>
-    <!-- <div class="col">
-      Column
-    </div> -->
   </div>
 </div>
 
+<div class="container">
+  <div class="row">
+    <div class="col">
+      <!-- <p>item1</p> -->
+      <div class="card">
+        <img src="https://assets.website-files.com/60807ca2d01082168c9aac03/60ab65506c8c9a7b75faf7c9_lonely-when-surrounded.jpg" class="card-img-top" alt="...">
+        <div class="card-body">
+          <h5 class="card-title">Card title</h5>
+          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+          <a href="#" class="btn btn-primary">Go somewhere</a>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <!-- <p>item2</p> -->
+      <div class="card">
+        <img src="https://assets.website-files.com/60807ca2d01082168c9aac03/60ab65506c8c9a7b75faf7c9_lonely-when-surrounded.jpg" class="card-img-top" alt="...">
+        <div class="card-body">
+          <h5 class="card-title">Card title</h5>
+          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+          <a href="#" class="btn btn-primary">Go somewhere</a>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <!-- <p>item3</p> -->
+      <div class="card">
+        <img src="https://assets.website-files.com/60807ca2d01082168c9aac03/60ab65506c8c9a7b75faf7c9_lonely-when-surrounded.jpg" class="card-img-top" alt="...">
+        <div class="card-body">
+          <h5 class="card-title">Card title</h5>
+          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+          <a href="#" class="btn btn-primary">Go somewhere</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <hr class="featurette-divider">
+</div>
+
+
+
 <div class="center">
   <form method="POST">
-   <label for="fname">First name:</label><br>
-   <input type="text" name="fname"><br>
-   <label for="lname">Last name:</label><br>
-   <input type="text" name="lname"><br>
-   <input type="submit" value="Submit">
+    <label for="fname">First name:</label><br>
+    <input type="text" name="fname"><br>
+    <label for="lname">Last name:</label><br>
+    <input type="text" name="lname"><br>
+    <input type="submit" value="Submit">
   </form>
 </div>
 <div>
   <table>
     <thead>
-        <tr>
-            <th>Nama Depan</th>
-            <th>Nama Belakang</th>
-            <th>ID</th>
-            <th>Action</th>
-        </tr>
+      <tr>
+        <th>Nama Depan</th>
+        <th>Nama Belakang</th>
+        <th>ID</th>
+        <th>Action</th>
+      </tr>
     </thead>
     <tbody>
-        {% for i in df %}
-        <tr>
-            <td>{{i.first_name}}</td>
-            <td>{{i.last_name}}</td>
-            <td>{{i.id}}</td>
-            <td>
-              <a href="{{url_for('delete',id=i.id)}}">delete</a>
-              <a href="">edit</a>
-            </td>
-        </tr>
-        {% endfor %}
+      {% for i in df %}
+      <tr>
+        <td>{{i.first_name}}</td>
+        <td>{{i.last_name}}</td>
+        <td>{{i.id}}</td>
+        <td>
+          <a href="{{url_for('delete',id=i.id)}}">delete</a>
+          <a href="">edit</a>
+        </td>
+      </tr>
+      {% endfor %}
     </tbody>
-</table>
+  </table>
 </div>
 {% endblock %}
