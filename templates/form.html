@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="agr1">
+  <!-- <h2>form</h2> -->
+  <form method="POST">
+    <!-- <div class="progress">
+    <div class="progress-bar" role="progressbar" aria-label="Basic example" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+  </div>
+  <br> -->
+
+  <!-- <label for="flexRadioDefault">Kami memiliki program regular berupa program promo dan hadiah untuk produk tertentu, apakah kamu mau medapatkan informasi ini?</label>
+  <br> -->
+  <p>Kami memiliki program regular berupa program promo dan hadiah untuk produk tertentu, apakah kamu mau medapatkan informasi ini?</p>
+  <!-- <a class="btn btn-primary" href="{{url_for('form2')}}" role="button">Ya</a> -->
+  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+    Ya
+  </button>
+  <a class="btn btn-primary" href="{{url_for('index')}}" role="button">Tidak</a>
+
+  <!-- Button trigger modal -->
+
+
+  <!-- Modal -->
+  <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <!-- <h1 class="modal-title fs-5" id="staticBackdropLabel">Modal title</h1> -->
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="container">
+            Apa aplikasi yang sering kamu gunakan untuk menerima infomasi seputar program regular?
+            <br>
+            <input type="radio" name="q1" id="option1_1" value="E-mail"> E-mail </input><br>
+            <input type="radio" name="q1" id="option1_2" value="Whatsapp"> Whatsapp </input><br>
+            <input type="radio" name="q1" id="option1_3" value="Keduanya" checked> Keduanya </input><br>
+          </div>
+          <br>
+          <div class="container">
+            Nama?
+            <br>
+            <input class="form-control" type="text" placeholder="" aria-label="default input example" id="qnama" name="qnama">
+          </div>
+          <br>
+          <div class="container">
+            Email yang digunakan untuk menerima program regular?
+            <br>
+            <input class="form-control" type="email" placeholder="" aria-label="default input example" id="qemail" name="qemail">
+          </div>
+          <br>
+          <div class="container">
+            Nomor whatsapp yang digunakan untuk menerima program regular?
+            <br>
+            <input class="form-control" type="text" placeholder="" aria-label="default input example" id="qphone" name="qphone">
+          </div>
+          <br>
+          <div class="container">
+            Data ini digunakan selama masih dipergunakan sesuai dengan tujuannya (memberikan informasi seputar promosi dan produk Nutrimart). Email/Whatsapp Anda akan digunakan untuk pengiriman informasi program promosi atau hadiah tersebut. Apakah informasi ini dapat diterima?
+            <br>
+            <!-- <input class="form-control" type="text" placeholder="" aria-label="default input example" id="qphone" name="qphone"> -->
+            <input type="radio" name="q6" id="option6_1" value="ya" checked> Ya </input><br>
+            <input type="radio" name="q6" id="option6_2" value="tidak"> Tidak </input><br>
+            <!-- <input type="radio" name="q1" id="option3" value="Keduanya" checked> Keduanya </input><br> -->
+          </div>
+          <br>
+          <div class="container">
+            <button type="submit" class="btn btn-primary mb-3">Selanjutnya</button>
+          </div>
+
+
+        </div>
+
+    </div>
+  </div>
+</div>
+
+</form>
+</div>
+
+
+{% endblock %}
