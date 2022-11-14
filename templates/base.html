@@ -13,19 +13,20 @@
 <body>
   <nav class="navbar bg-light">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#">
+      <a class="navbar-brand" href="{{url_for('index')}}">
+
         <img src="https://ik.imagekit.io/z83ycl28q/media/logo/stores/1/Asset_2ldpi.png" height="24" class="d-inline-block align-text-top">
-        <!-- <img src="/docs/5.2/assets/brand/bootstrap-logo.svg" alt="Logo" width="30" height="24" class="d-inline-block align-text-top">
-        Bootstrap -->
+
       </a>
     </div>
   </nav>
   <div class="container">
-    <!-- <header>
-      <img src="https://ik.imagekit.io/z83ycl28q/media/logo/stores/1/Asset_2ldpi.png" alt="" class="navimg">
-    </header> -->
     {% block content %}
     {% endblock %}
   </div>
+  <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
+  <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap5.js"></script>
+  {% block scripts %}{% endblock %}
 </body>
 </html>

@@ -1,19 +1,35 @@
 {% extends 'base.html' %}
 {% block content %}
 
+
+
 <div class="agr1">
-  <div class="progress">
-    <div class="progress-bar" role="progressbar" aria-label="Basic example" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-  </div>
+
+  <p>Anda sebagai subjek data pribadi berhak:</p>
+  <ul>
+    <li>
+      <p>Mendapatkan akses dan memperoleh salinan Data Pribadi tentang dirinya sesuai dengan ketentuan peraturan perundang-undangan</p>
+    </li>
+    <li>
+      <p>Melengkapi, memperbaharui,dan/atau memperbaiki kesalahan dan/atau ketidakakuratan Data Pribadi tentang dirinya sesuai dengan tujuan pemrosesan Data Pribadi</p>
+    </li>
+    <li>
+      <p>Mengakhiri pemrosesan, menghapus, dan/atau memusnahkan Data Pribadi tentang dirinya sesuai dengan ketentuan peraturan perundang-undangan</p>
+    </li>
+    <li>
+      <p>Menunda atau membatasi pemrosesan Data Pribadi secara proporsional sesuai dengan tujuan pemrosesan Data Pribadi</p>
+    </li>
+    <li>
+      <p>Mengajukan keberatan atas tindakan pengambilan keputusan yang hanya didasarkan pada pemrosesan secara otomatis, termasuk pemrofilan, yang menimbulkan akibat hukum atau berdampak signifikan pada Subjek Data Pribadi.</p>
+    </li>
+    <li>
+      <p>Menggunakan dan mengirimkan Data Pribadi tentang dirinya ke Pengendali Data Pribadi lainnya, sepanjang sistem yang digunakan dapat saling berkomunikasi secara aman sesuai dengan prinsip Perlindungan Data Pribadi berdasarkan UU ini.</p>
+    </li>
+  </ul>
+  <p>Untuk menggunakan hak-hak Anda, mohon menyampaikan pemberitahuan terlebih dahulu kepada kami</p>
   <br>
-
-  <div class="container">
-    Apa aplikasi yang sering kamu gunakan untuk menerima infomasi seputar program regular?
-  </div>
-  <!-- <h2>form 2</h2> -->
-
+  <a class="btn btn-primary" href="{{url_for('reward')}}" role="button">Selanjutnya</a>
 
 </div>
-
 
 {% endblock %}
