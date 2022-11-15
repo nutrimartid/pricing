@@ -51,7 +51,7 @@ def delete(id):
     deluser=tbluser.query.get(id)
     db.session.delete(deluser)
     db.session.commit()
-    return redirect(url_for('index'))
+    return redirect(url_for('allcustdb'))
 
 @app.route('/form',methods=['POST','GET'])
 def form():
