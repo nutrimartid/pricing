@@ -5,7 +5,10 @@
     <thead>
       <tr>
         <th>Nama Depan</th>
-        <th>Nama Belakang</th>
+        <th>Phone</th>
+        <th>Email</th>
+        <th>Aplikasi</th>
+        <th>Valid</th>
         <th>ID</th>
         <th>Action</th>
       </tr>
@@ -14,7 +17,10 @@
       {% for i in df %}
       <tr>
         <td>{{i.first_name}}</td>
-        <td>{{i.last_name}}</td>
+        <td>{{i.phone}}</td>
+        <td>{{i.email}}</td>
+        <td>{{i.aplikasi}}</td>
+        <td>{{i.valid}}</td>
         <td>{{i.id}}</td>
         <td>
           <a href="{{url_for('delete',id=i.id)}}">delete</a>

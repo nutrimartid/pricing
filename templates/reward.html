@@ -5,76 +5,57 @@
   <div class="container">
     <h2>Klaim Voucher Diskon 50%</h2>
     <h6>up to  Rp 25.000</h6>
+    <p>{{session.get('mp', 'not set')}}</p>
     <div class="container-flex">
-      <div class="row">
-        <div class="col">
+      <!-- <div class="row"> -->
+        <!-- <div class="col"> -->
           <div class="card" style="width: 18rem;">
+            {% if session.get('mp', 'not set')=="tokopedia" %}
             <img src="https://ecs7.tokopedia.net/assets-tokopedia-lite/v2/zeus/production/e5b8438b.svg" class="card-img-top" alt="...">
             <div class="card-body">
-              <!-- <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p> -->
               <a href="#" class="btn btn-primary">Klaim</a>
             </div>
-          </div>
-        </div>
-        <div class="col">
-          <div class="card" style="width: 18rem;">
+            {% elif session.get('mp', 'not set')=="shopee" %}
             <img src="https://upload.wikimedia.org/wikipedia/commons/f/fe/Shopee.svg" class="card-img-top" alt="...">
             <div class="card-body">
-              <!-- <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p> -->
               <a href="#" class="btn btn-primary">Klaim</a>
             </div>
-          </div>
-        </div>
-        <div class="col">
-          <div class="card" style="width: 18rem;">
+            {% elif session.get('mp', 'not set')=="lazada" %}
             <img src="https://laz-img-cdn.alicdn.com/images/ims-web/TB1Hs8GaMFY.1VjSZFnXXcFHXXa.png" class="card-img-top" alt="...">
             <div class="card-body">
-              <!-- <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p> -->
               <a href="#" class="btn btn-primary">Klaim</a>
             </div>
-          </div>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col">
-          <div class="card" style="width: 18rem;">
-            <img src="https://www.static-src.com/siva/asset//10_2022/Blibli.png" class="card-img-top" alt="...">
-            <div class="card-body">
-              <!-- <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p> -->
-              <a href="#" class="btn btn-primary">Klaim</a>
-            </div>
-          </div>
-        </div>
-        <div class="col">
-          <div class="card" style="width: 18rem;">
+            {% elif session.get('mp', 'not set')=="jdid" %}
             <img src="https://www.jd.id/news/wp-content/uploads/2020/06/JDID_4.png" class="card-img-top" alt="...">
             <div class="card-body">
-              <!-- <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p> -->
               <a href="#" class="btn btn-primary">Klaim</a>
             </div>
-          </div>
-        </div>
-        <div class="col">
-          <div class="card" style="width: 18rem;">
+            {% elif session.get('mp', 'not set')=="blibli" %}
+            <img src="https://www.static-src.com/siva/asset//10_2022/Blibli.png" class="card-img-top" alt="...">
+            <div class="card-body">
+              <a href="#" class="btn btn-primary">Klaim</a>
+            </div>
+            {% elif session.get('mp', 'not set')=="bukalapak" %}
             <img src="https://assets.bukalapak.com/sigil/bukalapak-logo-primary.svg" class="card-img-top" alt="...">
             <div class="card-body">
-              <!-- <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p> -->
               <a href="#" class="btn btn-primary">Klaim</a>
             </div>
-          </div>
-        </div>
+            {% else %}
+            {% endif %}
+
+          <!-- </div> -->
+        <!-- </div> -->
       </div>
+
     </div>
+
+
+    <!-- <h1>reward</h1> -->
+
+
+
 
   </div>
 
 
-  <!-- <h1>reward</h1> -->
-
-
-
-
-</div>
-
-
-{% endblock %}
+  {% endblock %}

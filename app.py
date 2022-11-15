@@ -1,4 +1,4 @@
-from flask import Flask,render_template,url_for,request,redirect
+from flask import Flask,render_template,url_for,request,redirect,session
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 import os
@@ -24,8 +24,11 @@ class tbluser(db.Model):
     # last_name = db.Column(db.String(64))
 
 
-@app.route('/',methods=['POST','GET'])
-def index():
+@app.route('/<mp>',methods=['POST','GET'])
+def index(mp):
+    print(mp)
+    session['mp']=mp
+    print (session.get('mp', 'not set'))
     # df=tbluser.query.all()
     # print(df)
     # if request.method=='POST':
@@ -52,6 +55,7 @@ def delete(id):
 
 @app.route('/form',methods=['POST','GET'])
 def form():
+    print (session.get('mp', 'not set'))
     if request.method=='POST':
         newuser=tbluser(first_name=request.form['qnama'],email=request.form['qemail'],phone=request.form['qphone'],aplikasi=request.form['q1'],valid=request.form['q6'])
         db.session.add(newuser)
