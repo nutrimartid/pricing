@@ -91,7 +91,7 @@ def janjianharga():
         # print(type(request.form['jh_enddate']))
         db.session.add(newjanjian)
         db.session.commit()
-        return redirect(url_for('janjianharga'))
+        return redirect(url_for('listjanjianharga'))
     return render_template('janjianharga.html',a=item_name,b=item_sku,c=item_pl)
 
 @app.route('/listjanjianharga',methods=['POST','GET'])
