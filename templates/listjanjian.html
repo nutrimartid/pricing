@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h1>List Janjian Harga</h1>
+<br>
+<table id="tabeljanjian" class="table table-striped table-hover">
+  <thead>
+    <tr>
+      <th>Nama Produk</th>
+      <th>SKU</th>
+      <th>PL NFI</th>
+      <th>Harga Janjian</th>
+      <th>Start Date</th>
+      <th>End Date</th>
+      <th>ID</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for i in df %}
+    <tr>
+      <td>{{i.realnamaproduk}}</td>
+      <td>{{i.realsku}}</td>
+      <td>{{i.plnfi}}</td>
+      <td>{{i.hargajanjian}}</td>
+      <td>{{i.startdate}}</td>
+      <td>{{i.enddate}}</td>
+      <td>{{i.id}}</td>
+      <td>
+        <a href="{{url_for('deljanjian',id=i.id)}}">delete</a>
+        <a href="">edit</a>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+  $(document).ready(function(){$('#tabeljanjian').DataTable();});
+</script>
+{% endblock %}
