@@ -12,6 +12,15 @@ h1,h2,h6{text-align:center;}
 .card-img-top{padding:10px;}
 
 .card-img-container{height:25px}
+
+.navbar{
+  background-color: #bfe165;
+}
+
+.navbar-text{
+  color:white !important;
+  font-size:small;
+}
 /* p{
  word-wrap:break-word;
 
