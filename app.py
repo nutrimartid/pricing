@@ -1,7 +1,9 @@
-from flask import Flask,render_template,url_for,request,redirect,session
+from flask import Flask,render_template,url_for,request,redirect,session,make_response
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import create_engine
 from flask_migrate import Migrate
 from datetime import date
+import pandas as pd
 import os
 
 
@@ -107,6 +109,16 @@ def deljanjian(id):
     db.session.commit()
     # print(id)
     return redirect(url_for('listjanjianharga'))
+
+@app.route('/download/<type>',methods=['GET', 'POST'])
+def download(type):
+    cnx = create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
+    if type=='janjianharga':
+        df=pd.read_sql_table('tbljanjian', con=cnx)
+    resp = make_response(df.to_csv(index=False))
+    resp.headers["Content-Disposition"] = f"attachment; filename=export_{type}.csv"
+    resp.headers["Content-Type"] = "text/csv"
+    return resp
 
 @app.route('/form2',methods=['POST','GET'])
 def form2():
