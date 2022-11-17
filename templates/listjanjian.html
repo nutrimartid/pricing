@@ -27,8 +27,8 @@
       <td>{{i.enddate}}</td>
       <td>{{i.id}}</td>
       <td>
-        <a href="{{url_for('deljanjian',id=i.id)}}">delete</a>
-        <a href="">edit</a>
+        <a class="btn btn-outline-danger btn-sm" href="{{url_for('deljanjian',id=i.id)}}" role="button">delete</a>
+        <!-- <a href="">edit</a> -->
       </td>
     </tr>
     {% endfor %}
