@@ -5,34 +5,55 @@
   <h3>Janjian Harga</h3>
   <br>
   <form method="POST">
+    {% if msg %}
+    <div class="alert alert-danger" role="alert">
+      {{msg}}
+    </div>
+    {% endif %}
+
+
     <!-- <p>Real Nama Produk</p> -->
-    <label for="jh_itemname">Real Nama Produk</label>
-    <input class="form-control" type="text" value="{{a}}" aria-label="default input example" id="jh_itemname" name="jh_itemname" readonly>
+    <div class="row g-3">
+      <div class="col">
+        <label for="jh_itemname">Real Nama Produk</label>
+        <input class="form-control-plaintext" type="text" value="{{a}}" aria-label="default input example" id="jh_itemname" name="jh_itemname" readonly>
+      </div>
+      <div class="col-3">
+        <label for="jh_itemsku">Real SKU</label>
+        <input class="form-control-plaintext" type="text" value="{{b}}" aria-label="default input example" id="jh_itemsku" name="jh_itemsku" readonly>
+      </div>
+    </div>
     <br>
-    <!-- <p>Real SKU</p> -->
-    <label for="jh_itemsku">Real SKU</label>
-    <input class="form-control" type="text" value="{{b}}" aria-label="default input example" id="jh_itemsku" name="jh_itemsku" readonly>
+    <div class="row g-3">
+      <div class="col">
+        <label for="jh_plnfi">PL NFI</label>
+        <input class="form-control" type="number" value="{{c}}" aria-label="default input example" id="jh_plnfi" name="jh_plnfi" readonly>
+      </div>
+      <div class="col">
+        <label for="jh_harga">Harga Janjian</label>
+        <input class="form-control" type="number" aria-label="default input example" id="jh_harga" name="jh_harga" required>
+      </div>
+    </div>
     <br>
-
-    <label for="jh_plnfi">PL NFI</label>
-    <input class="form-control" type="number" value="{{c}}" aria-label="default input example" id="jh_plnfi" name="jh_plnfi" readonly>
+    <div class="row g-3">
+      <div class="col">
+        <label for="jh_startdate">Start Date</label>
+        <input class="form-control" type="date" aria-label="default input example" id="jh_startdate" name="jh_startdate" required>
+      </div>
+      <div class="col">
+        <label for="jh_enddate">End Date</label>
+        <input class="form-control" type="date" aria-label="default input example" id="jh_enddate" name="jh_enddate" required>
+      </div>
+    </div>
     <br>
-
-    <label for="jh_harga">Harga Janjian</label>
-    <input class="form-control" type="number" aria-label="default input example" id="jh_harga" name="jh_harga" required>
+    <div class="row g-3">
+      <div class="col">
+        <label for="jh_notes">Notes</label>
+        <input class="form-control" type="text" aria-label="default input example" id="jh_notes" name="jh_notes">
+      </div>
+    </div>
     <br>
-
-    <label for="jh_startdate">Start Date</label>
-    <input class="form-control" type="date" aria-label="default input example" id="jh_startdate" name="jh_startdate" required>
-    <br>
-
-    <label for="jh_enddate">End Date</label>
-    <input class="form-control" type="date" aria-label="default input example" id="jh_enddate" name="jh_enddate" required>
-    <br>
-
     <button type="submit" class="btn btn-primary mb-3">Submit</button>
-
-
   </form>
 
 </div>

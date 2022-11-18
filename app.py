@@ -34,6 +34,7 @@ class tbljanjian(db.Model):
     hargajanjian = db.Column(db.Integer)
     startdate = db.Column(db.Date)
     enddate = db.Column(db.Date)
+    notes=db.Column(db.Text)
     # valid = db.Column(db.String(64))
 
 
@@ -82,18 +83,24 @@ def janjianharga():
     item_sku=request.args.get('item_sku')
     item_pl=request.args.get('item_pl')
     if request.method=='POST':
-        y1=int(request.form['jh_startdate'].split('-')[0])
-        m1=int(request.form['jh_startdate'].split('-')[1])
-        d1=int(request.form['jh_startdate'].split('-')[2])
-        y2=int(request.form['jh_enddate'].split('-')[0])
-        m2=int(request.form['jh_enddate'].split('-')[1])
-        d2=int(request.form['jh_enddate'].split('-')[2])
-        newjanjian=tbljanjian(realnamaproduk=request.form['jh_itemname'],realsku=request.form['jh_itemsku'],plnfi=request.form['jh_plnfi'],hargajanjian=request.form['jh_harga'],startdate=date(year=y1,month=m1,day=d1),enddate=date(year=y2,month=m2,day=d2))
-        # print(request.form['jh_enddate'])
-        # print(type(request.form['jh_enddate']))
-        db.session.add(newjanjian)
-        db.session.commit()
-        return redirect(url_for('listjanjianharga'))
+        if request.form['jh_startdate'] < request.form['jh_enddate']:
+            # print(request.form['jh_startdate'] > request.form['jh_enddate'])
+            # print(request.form['jh_startdate'])
+            # print(request.form['jh_enddate'])
+            y1=int(request.form['jh_startdate'].split('-')[0])
+            m1=int(request.form['jh_startdate'].split('-')[1])
+            d1=int(request.form['jh_startdate'].split('-')[2])
+            y2=int(request.form['jh_enddate'].split('-')[0])
+            m2=int(request.form['jh_enddate'].split('-')[1])
+            d2=int(request.form['jh_enddate'].split('-')[2])
+            newjanjian=tbljanjian(realnamaproduk=request.form['jh_itemname'],realsku=request.form['jh_itemsku'],plnfi=request.form['jh_plnfi'],hargajanjian=request.form['jh_harga'],startdate=date(year=y1,month=m1,day=d1),enddate=date(year=y2,month=m2,day=d2),notes=request.form['jh_notes'])
+            # print(request.form['jh_enddate'])
+            # print(type(request.form['jh_enddate']))
+            db.session.add(newjanjian)
+            db.session.commit()
+            return redirect(url_for('listjanjianharga'))
+        else:
+            return render_template('janjianharga.html',a=item_name,b=item_sku,c=item_pl,msg="start date must be less than end date")
     return render_template('janjianharga.html',a=item_name,b=item_sku,c=item_pl)
 
 @app.route('/listjanjianharga',methods=['POST','GET'])
@@ -116,6 +123,7 @@ def download(type):
     if type=='janjianharga':
         df=pd.read_sql_table('tbljanjian', con=cnx)
     resp = make_response(df.to_csv(index=False))
+    print(df)
     resp.headers["Content-Disposition"] = f"attachment; filename=export_{type}.csv"
     resp.headers["Content-Type"] = "text/csv"
     return resp
