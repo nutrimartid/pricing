@@ -2,7 +2,20 @@
 {% block content %}
 
 <h1>List Janjian Harga</h1>
-<a href="{{url_for('download',type='janjianharga')}}">download</a>
+<div class='container'>
+  <div class="dropdown">
+    <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+      Download
+    </button>
+    <ul class="dropdown-menu">
+      <li><a class="dropdown-item" href="{{url_for('download',type='janjianharga')}}">All</a></li>
+      <li><a class="dropdown-item disabled" href="#">Active</a></li>
+      <li><a class="dropdown-item disabled" href="#">Pending</a></li>
+    </ul>
+  </div>
+</div>
+
+
 {% if msg > 0 %}
   <div class="alert alert-warning" role="alert">
     <b>{{msg}} item</b> janjian harga berakhir kurang dari 7 hari

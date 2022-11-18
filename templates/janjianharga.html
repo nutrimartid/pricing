@@ -55,7 +55,17 @@
     <br>
     <button type="submit" class="btn btn-primary mb-3">Submit</button>
   </form>
-
+  <hr>
+  <div class="container">
+    {{ df|safe }}
+  </div>
 </div>
 
+{% endblock %}
+
+{% block scripts %}
+<script>
+  $(document).ready(function(){$('table').DataTable();});
+  // $(document).ready(function(){$('#tabeljanjian2').DataTable();});
+</script>
 {% endblock %}
