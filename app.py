@@ -2,7 +2,7 @@ from flask import Flask,render_template,url_for,request,redirect,session,make_re
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import create_engine
 from flask_migrate import Migrate
-from datetime import date
+from datetime import date,datetime,timedelta
 import pandas as pd
 import os
 
@@ -84,9 +84,6 @@ def janjianharga():
     item_pl=request.args.get('item_pl')
     if request.method=='POST':
         if request.form['jh_startdate'] < request.form['jh_enddate']:
-            # print(request.form['jh_startdate'] > request.form['jh_enddate'])
-            # print(request.form['jh_startdate'])
-            # print(request.form['jh_enddate'])
             y1=int(request.form['jh_startdate'].split('-')[0])
             m1=int(request.form['jh_startdate'].split('-')[1])
             d1=int(request.form['jh_startdate'].split('-')[2])
@@ -94,8 +91,6 @@ def janjianharga():
             m2=int(request.form['jh_enddate'].split('-')[1])
             d2=int(request.form['jh_enddate'].split('-')[2])
             newjanjian=tbljanjian(realnamaproduk=request.form['jh_itemname'],realsku=request.form['jh_itemsku'],plnfi=request.form['jh_plnfi'],hargajanjian=request.form['jh_harga'],startdate=date(year=y1,month=m1,day=d1),enddate=date(year=y2,month=m2,day=d2),notes=request.form['jh_notes'])
-            # print(request.form['jh_enddate'])
-            # print(type(request.form['jh_enddate']))
             db.session.add(newjanjian)
             db.session.commit()
             return redirect(url_for('listjanjianharga'))
@@ -105,16 +100,16 @@ def janjianharga():
 
 @app.route('/listjanjianharga',methods=['POST','GET'])
 def listjanjianharga():
-    df=tbljanjian.query.all()
-    return render_template('listjanjian.html',df=df)
+    msg=tbljanjian.query.filter(tbljanjian.enddate<=date.today()+timedelta(days=7),tbljanjian.enddate>date.today(),tbljanjian.startdate<=date.today()).count()
+    df_active=tbljanjian.query.filter(tbljanjian.enddate>date.today(),tbljanjian.startdate<=date.today()).all()
+    df_pending=tbljanjian.query.filter(tbljanjian.startdate>date.today()).all()
+    return render_template('listjanjian.html',df=df_active,df2=df_pending,msg=msg)
 
 @app.route('/deljanjian/<id>',methods=['POST','GET'])
 def deljanjian(id):
-    # id=request.args.get('id')
     deljanji=tbljanjian.query.get(id)
     db.session.delete(deljanji)
     db.session.commit()
-    # print(id)
     return redirect(url_for('listjanjianharga'))
 
 @app.route('/download/<type>',methods=['GET', 'POST'])
