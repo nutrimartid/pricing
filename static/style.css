@@ -25,6 +25,10 @@ h1,h2,h6{text-align:center;}
 label{
   font-weight: bold;
 }
+
+tr{
+  text-align:left !important;
+}
 /* p{
  word-wrap:break-word;
 
