@@ -83,7 +83,7 @@ def janjianharga():
     item_sku=request.args.get('item_sku')
     item_pl=request.args.get('item_pl')
     cnx = create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
-    df=pd.read_sql(f"SELECT * FROM tbljanjian WHERE realsku = '{item_sku}''", con=cnx)
+    df=pd.read_sql(f"SELECT * FROM tbljanjian WHERE realsku = '{item_sku}'", con=cnx)
     # print(df)
     # print("============")
     if request.method=='POST':
@@ -132,6 +132,8 @@ def download(type):
     cnx = create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
     if type=='janjianharga':
         df=pd.read_sql_table('tbljanjian', con=cnx)
+    else:
+        df=pd.read_sql_table('tbluser', con=cnx)
     resp = make_response(df.to_csv(index=False))
     # print(df)
     resp.headers["Content-Disposition"] = f"attachment; filename=export_{type}.csv"
