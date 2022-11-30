@@ -1,0 +1,24 @@
+{% extends 'base2.html' %}
+{% block content %}
+<div class="agr1">
+    {% if msg %}
+    <div class="alert alert-danger" role="alert">{{msg}}</div>
+    {% endif %}
+    <div class="mb-3">
+        <form method=POST enctype=multipart/form-data>
+            <label for="formFile" class="form-label">Masukan SKU list</label>
+            <input class="form-control" type=file name=file id="formFile">
+            <br>
+            <input class="btn btn-primary mb-3" type=submit value=Upload>
+            <!-- <label for="formFile" class="form-label">Masukan SKU list</label>
+            <input class="form-control" type="file" id="formFile">
+            <br>
+            <button type="submit" class="btn btn-primary mb-3">Submit</button> -->
+        </form>
+    </div>
+    <a href="{{url_for('downtemp')}}">download template</a>
+</div>
+
+
+      
+{% endblock %}
