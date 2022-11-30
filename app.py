@@ -157,7 +157,7 @@ def upload_file():
         filedir=os.path.join(app.config['UPLOAD_FOLDER'],secure_filename(f.filename))
         if ".xlsx" in filedir:    
             f.save(filedir)          
-            df=pd.read_excel(filedir)
+            df=pd.read_excel(filedir,engine='openpyxl')
             df=df.to_html()
             # print(df)
             return render_template('uploadview.html',filedir=filedir,df=df)
@@ -168,7 +168,7 @@ def upload_file():
 
 @app.route("/downtemp", methods=['GET', 'POST'])
 def downtemp():
-    return send_file('static\generate promoplan template.xlsx')
+    return send_file('static/generate promoplan template.xlsx')
 # @app.route("/uploadview", methods=['GET', 'POST'])
 # def upload_view(filedir):
 #     return render_template('upload_view.html',filedir=filedir)
