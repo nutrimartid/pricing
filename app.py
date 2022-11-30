@@ -2,11 +2,11 @@ from flask import Flask,render_template,url_for,request,redirect,session,make_re
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import create_engine
 from flask_migrate import Migrate
-from datetime import date,datetime,timedelta
+from datetime import date,timedelta
 from werkzeug.utils import secure_filename
-from werkzeug.datastructures import  FileStorage
 import pandas as pd
-import os
+import numpy as np
+import os,requests
 
 
 
@@ -37,7 +37,7 @@ class tbljanjian(db.Model):
     startdate = db.Column(db.Date)
     enddate = db.Column(db.Date)
     notes=db.Column(db.Text)
-    # valid = db.Column(db.String(64))
+
 
 
 @app.route('/<mp>',methods=['POST','GET'])
@@ -57,9 +57,6 @@ def index(mp):
 @app.route('/allcustdb',methods=['POST','GET'])
 def allcustdb():
     df=tbluser.query.all()
-    # deluser=tbluser.query.get(id)
-    # db.session.delete(deluser)
-    # db.session.commit()
     return render_template('allcust.html',df=df)
 
 @app.route('/delete<id>',methods=['POST','GET'])
@@ -86,8 +83,6 @@ def janjianharga():
     item_pl=request.args.get('item_pl')
     cnx = create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
     df=pd.read_sql(f"SELECT * FROM tbljanjian WHERE realsku = '{item_sku}'", con=cnx)
-    # print(df)
-    # print("============")
     if request.method=='POST':
         cek_a=df[(df['enddate']>request.form['jh_startdate'])&(df['startdate']<request.form['jh_enddate'])]['id']
         cek_c=df[(df['startdate']<request.form['jh_startdate'])&(df['enddate']>request.form['jh_enddate'])]['id']
@@ -107,7 +102,6 @@ def janjianharga():
                 db.session.commit()
                 return redirect(url_for('listjanjianharga'))
             else:
-                # return render_template('janjianharga.html',a=item_name,b=item_sku,c=item_pl,msg="overlap promo plan")
                 return render_template('janjianharga.html',a=item_name,b=item_sku,c=item_pl,msg="overlap promo plan",df=df[['startdate','enddate','hargajanjian','notes']].rename(columns={'startdate':'Start Date','enddate':'End Date','hargajanjian':'Harga Janjian'}).to_html(index=False,classes='table table-striped table-hover'))
 
 
@@ -137,7 +131,6 @@ def download(type):
     else:
         df=pd.read_sql_table('tbluser', con=cnx)
     resp = make_response(df.to_csv(index=False))
-    # print(df)
     resp.headers["Content-Disposition"] = f"attachment; filename=export_{type}.csv"
     resp.headers["Content-Type"] = "text/csv"
     return resp
@@ -155,12 +148,64 @@ def upload_file():
     if request.method == 'POST':
         f = request.files['file']
         filedir=os.path.join(app.config['UPLOAD_FOLDER'],secure_filename(f.filename))
+        cnx = create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
         if ".xlsx" in filedir:    
             f.save(filedir)          
-            df=pd.read_excel(filedir)
-            df=df.to_html()
-            # print(df)
-            return render_template('uploadview.html',filedir=filedir,df=df)
+            df=pd.read_excel(filedir,engine='openpyxl')
+            # df=df.to_html()
+            data_sku=requests.get('https://tatanama.pythonanywhere.com/apinew')
+            data_sku=pd.DataFrame(data_sku.json())
+            data_sku=data_sku[['SKU','Brand','Nama_Produk','Harga_Display','Price_List_NFI',
+                                'SKU_Produk_1','PCS_Produk_1','Price_List_NFI_1',
+                                'SKU_Produk_2','PCS_Produk_2','Price_List_NFI_2',
+                                'SKU_Produk_3','PCS_Produk_3','Price_List_NFI_3',
+                                'SKU_Produk_4','PCS_Produk_4','Price_List_NFI_4',
+                                'SKU_Produk_5','PCS_Produk_5','Price_List_NFI_5',
+                                'SKU_Produk_6','PCS_Produk_6','Price_List_NFI_6',
+                                'SKU_Produk_7','PCS_Produk_7','Price_List_NFI_7']] 
+            colint=[x for x in data_sku.columns if not 'SKU' in x and not 'Nama' in x and not 'Brand' in x]
+            data_sku[colint] = data_sku[colint].apply(pd.to_numeric, errors='coerce')
+            data_sku=data_sku[data_sku['SKU'].isin(df['SKU'].astype(str).unique())]
+            skuNs=data_sku[data_sku['Brand']=='NS']['SKU'].unique()
+
+            for i in [1,2,3,4,5,6,7]:
+                data_sku.loc[data_sku[f'Price_List_NFI_{i}'].isin([0,'',None]),f'Price_List_NFI_{i}']=np.nan
+                data_sku.loc[data_sku[f'Price_List_NFI_{i}'].isnull(),f'Price_List_NFI_{i}']=np.nan
+                data_sku.loc[data_sku[f'PCS_Produk_{i}'].isin([0,'',None]),f'PCS_Produk_{i}']=np.nan
+                data_sku.loc[data_sku[f'PCS_Produk_{i}'].isnull(),f'PCS_Produk_{i}']=np.nan
+                data_sku.loc[data_sku[f'SKU_Produk_{i}'].isin([0,'',None]),f'SKU_Produk_{i}']=np.nan
+                data_sku.loc[data_sku[f'SKU_Produk_{i}'].isnull(),f'SKU_Produk_{i}']=np.nan
+
+            for i in [1,2,3,4,5,6,7]:
+                data_sku[f'subtotal_pl_{i}']=data_sku[f'PCS_Produk_{i}']*data_sku[f'Price_List_NFI_{i}']
+                data_sku[f'subtotal_tier1_{i}']=data_sku[f'PCS_Produk_{i}']*data_sku[f'Price_List_NFI_{i}']*0.96
+                data_sku.loc[data_sku[f'SKU_Produk_{i}'].isin(skuNs),f'subtotal_tier1_{i}']=data_sku[f'PCS_Produk_{i}']*data_sku[f'Price_List_NFI_{i}']*1.04
+
+            # janjian=pd.read_csv("D:\Downloads\export_janjianharga(1).csv")
+            janjian=pd.read_sql_table('tbljanjian', con=cnx)
+            janjian['realsku']=janjian['realsku'].astype(str)
+            janjian=janjian[['realsku','hargajanjian']].rename(columns={'realsku':'SKU'})
+            janjian1=janjian.rename(columns={'SKU':'SKU_Produk_1','hargajanjian':'hargajanjian1'})
+            janjian2=janjian.rename(columns={'SKU':'SKU_Produk_2','hargajanjian':'hargajanjian2'})
+            janjian3=janjian.rename(columns={'SKU':'SKU_Produk_3','hargajanjian':'hargajanjian3'})
+            janjian4=janjian.rename(columns={'SKU':'SKU_Produk_4','hargajanjian':'hargajanjian4'})
+            janjian5=janjian.rename(columns={'SKU':'SKU_Produk_5','hargajanjian':'hargajanjian5'})
+            janjian6=janjian.rename(columns={'SKU':'SKU_Produk_6','hargajanjian':'hargajanjian6'})
+            janjian7=janjian.rename(columns={'SKU':'SKU_Produk_7','hargajanjian':'hargajanjian7'})
+
+            # print(janjian)
+            data_sku_copy=data_sku.merge(janjian,how='left').merge(janjian1,how='left').merge(janjian2,how='left').merge(janjian3,how='left').merge(janjian4,how='left').merge(janjian5,how='left').merge(janjian6,how='left').merge(janjian7,how='left').fillna(0)
+            # print(data_sku_copy)
+            for i in [1,2,3,4,5,6,7]:
+                data_sku_copy.loc[data_sku_copy[f'hargajanjian{i}']!=0,f'subtotal_tier1_{i}']=data_sku_copy[f'PCS_Produk_{i}']*data_sku_copy[f'hargajanjian{i}']
+            data_sku_copy['Pricing Tier 1']=data_sku_copy['subtotal_tier1_1']+data_sku_copy['subtotal_tier1_2']+data_sku_copy['subtotal_tier1_3']+data_sku_copy['subtotal_tier1_4']+data_sku_copy['subtotal_tier1_5']+data_sku_copy['subtotal_tier1_6']+data_sku_copy['subtotal_tier1_7']
+            data_sku_copy['Pricing Tier 1']=round(data_sku_copy['Pricing Tier 1'],-2)
+            data_sku_copy.loc[data_sku_copy['Pricing Tier 1']==0,'Pricing Tier 1']=data_sku_copy['hargajanjian']
+            data_sku_copy.loc[(data_sku_copy['Pricing Tier 1']==0)&(data_sku_copy['Brand']=='NS'),'Pricing Tier 1']=round(data_sku_copy['Price_List_NFI']*1.05,-2)
+            data_sku_copy.loc[data_sku_copy['Pricing Tier 1']==0,'Pricing Tier 1']=round(data_sku_copy['Price_List_NFI']*0.98,-2)
+            data_sku_copy.loc[data_sku_copy['hargajanjian']!=0,'Pricing Tier 1']=data_sku_copy['hargajanjian']
+            data_sku_copy=data_sku_copy[['SKU','Nama_Produk','Harga_Display','Price_List_NFI','Pricing Tier 1']]
+            return render_template('uploadview.html',filedir=filedir,df=data_sku_copy.head(10).to_html())
         else:
             return render_template('upload.html',msg="FILE ERROR")
     else:
@@ -168,7 +213,7 @@ def upload_file():
 
 @app.route("/downtemp", methods=['GET', 'POST'])
 def downtemp():
-    return send_file('static\generate promoplan template.xlsx')
+    return send_file('static/generate promoplan template.xlsx')
 # @app.route("/uploadview", methods=['GET', 'POST'])
 # def upload_view(filedir):
 #     return render_template('upload_view.html',filedir=filedir)
