@@ -1,5 +1,18 @@
 {% extends 'base2.html' %}
 {% block content %}
+<h1>Promo Plan</h1>
+<div class='container'>
+    <div class="dropdown">
+      <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+        Download
+      </button>
+      <ul class="dropdown-menu">
+        <li><a class="dropdown-item" href="{{url_for('downtemp')}}">Template</a></li>
+        <!-- <li><a class="dropdown-item disabled" href="#">Active</a></li>
+        <li><a class="dropdown-item disabled" href="#">Pending</a></li> -->
+      </ul>
+    </div>
+  </div>
 <div class="agr1">
     {% if msg %}
     <div class="alert alert-danger" role="alert">{{msg}}</div>
@@ -18,7 +31,7 @@
             <button type="submit" class="btn btn-primary mb-3">Submit</button> -->
         </form>
     </div>
-    <a href="{{url_for('downtemp')}}">download template</a>
+    <!-- <a href="{{url_for('downtemp')}}">download template</a> -->
 </div>
 
 {% endblock %}
