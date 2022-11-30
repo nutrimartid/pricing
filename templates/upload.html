@@ -1,24 +1,37 @@
 {% extends 'base2.html' %}
 {% block content %}
+<h1>Promo Plan</h1>
+<div class='container'>
+    <div class="dropdown">
+      <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+        Download
+      </button>
+      <ul class="dropdown-menu">
+        <li><a class="dropdown-item" href="{{url_for('downtemp')}}">Template</a></li>
+        <!-- <li><a class="dropdown-item disabled" href="#">Active</a></li>
+        <li><a class="dropdown-item disabled" href="#">Pending</a></li> -->
+      </ul>
+    </div>
+  </div>
 <div class="agr1">
     {% if msg %}
     <div class="alert alert-danger" role="alert">{{msg}}</div>
     {% endif %}
     <div class="mb-3">
         <form method=POST enctype=multipart/form-data>
-            <label for="formFile" class="form-label">Masukan SKU list</label>
-            <input class="form-control" type=file name=file id="formFile">
+            <label for="formFile" class="form-label">Masukan SKU file</label>
+            <input class="form-control" type='file' name='ppfile' id="formFile" required>
+            <label for="formDate" class="form-label">Masukan Promo date</label>
+            <input class="form-control" type='date' name='ppdate' id="formDate" required>
             <br>
-            <input class="btn btn-primary mb-3" type=submit value=Upload>
+            <input class="btn btn-primary mb-3" type=submit value=Generate>
             <!-- <label for="formFile" class="form-label">Masukan SKU list</label>
             <input class="form-control" type="file" id="formFile">
             <br>
             <button type="submit" class="btn btn-primary mb-3">Submit</button> -->
         </form>
     </div>
-    <a href="{{url_for('downtemp')}}">download template</a>
+    <!-- <a href="{{url_for('downtemp')}}">download template</a> -->
 </div>
 
-
-      
 {% endblock %}

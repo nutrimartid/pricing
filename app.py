@@ -146,7 +146,9 @@ def reward():
 @app.route("/upload", methods=['GET', 'POST'])
 def upload_file():
     if request.method == 'POST':
-        f = request.files['file']
+        f = request.files['ppfile']
+        ppdate = request.form['ppdate']
+        print(ppdate)
         filedir=os.path.join(app.config['UPLOAD_FOLDER'],secure_filename(f.filename))
         cnx = create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
         if ".xlsx" in filedir:    
@@ -183,19 +185,16 @@ def upload_file():
 
             # janjian=pd.read_csv("D:\Downloads\export_janjianharga(1).csv")
             janjian=pd.read_sql_table('tbljanjian', con=cnx)
+            janjian=janjian[(janjian['startdate']<=ppdate)&(janjian['enddate']>=ppdate)]
             janjian['realsku']=janjian['realsku'].astype(str)
             janjian=janjian[['realsku','hargajanjian']].rename(columns={'realsku':'SKU'})
-            janjian1=janjian.rename(columns={'SKU':'SKU_Produk_1','hargajanjian':'hargajanjian1'})
-            janjian2=janjian.rename(columns={'SKU':'SKU_Produk_2','hargajanjian':'hargajanjian2'})
-            janjian3=janjian.rename(columns={'SKU':'SKU_Produk_3','hargajanjian':'hargajanjian3'})
-            janjian4=janjian.rename(columns={'SKU':'SKU_Produk_4','hargajanjian':'hargajanjian4'})
-            janjian5=janjian.rename(columns={'SKU':'SKU_Produk_5','hargajanjian':'hargajanjian5'})
-            janjian6=janjian.rename(columns={'SKU':'SKU_Produk_6','hargajanjian':'hargajanjian6'})
-            janjian7=janjian.rename(columns={'SKU':'SKU_Produk_7','hargajanjian':'hargajanjian7'})
+            data_sku=data_sku.merge(janjian,how='left')
+            for i in [1,2,3,4,5,6,7]:
+                janjian_m=janjian.rename(columns={'SKU':f'SKU_Produk_{i}','hargajanjian':f'hargajanjian{i}'})
+                # print(janjian_m)
+                data_sku=data_sku.merge(janjian_m,how='left')
+            data_sku_copy=data_sku.fillna(0).copy()
 
-            # print(janjian)
-            data_sku_copy=data_sku.merge(janjian,how='left').merge(janjian1,how='left').merge(janjian2,how='left').merge(janjian3,how='left').merge(janjian4,how='left').merge(janjian5,how='left').merge(janjian6,how='left').merge(janjian7,how='left').fillna(0)
-            # print(data_sku_copy)
             for i in [1,2,3,4,5,6,7]:
                 data_sku_copy.loc[data_sku_copy[f'hargajanjian{i}']!=0,f'subtotal_tier1_{i}']=data_sku_copy[f'PCS_Produk_{i}']*data_sku_copy[f'hargajanjian{i}']
             data_sku_copy['Pricing Tier 1']=data_sku_copy['subtotal_tier1_1']+data_sku_copy['subtotal_tier1_2']+data_sku_copy['subtotal_tier1_3']+data_sku_copy['subtotal_tier1_4']+data_sku_copy['subtotal_tier1_5']+data_sku_copy['subtotal_tier1_6']+data_sku_copy['subtotal_tier1_7']
@@ -205,7 +204,11 @@ def upload_file():
             data_sku_copy.loc[data_sku_copy['Pricing Tier 1']==0,'Pricing Tier 1']=round(data_sku_copy['Price_List_NFI']*0.98,-2)
             data_sku_copy.loc[data_sku_copy['hargajanjian']!=0,'Pricing Tier 1']=data_sku_copy['hargajanjian']
             data_sku_copy=data_sku_copy[['SKU','Nama_Produk','Harga_Display','Price_List_NFI','Pricing Tier 1']]
-            return render_template('uploadview.html',filedir=filedir,df=data_sku_copy.head(10).to_html())
+            # return render_template('uploadview.html',filedir=filedir,df=data_sku_copy.head(10).to_html())
+            resp = make_response(data_sku_copy.to_csv(index=False))
+            resp.headers["Content-Disposition"] = f"attachment; filename=export_promoplan.csv"
+            resp.headers["Content-Type"] = "text/csv"
+            return resp
         else:
             return render_template('upload.html',msg="FILE ERROR")
     else:
@@ -217,6 +220,10 @@ def downtemp():
 # @app.route("/uploadview", methods=['GET', 'POST'])
 # def upload_view(filedir):
 #     return render_template('upload_view.html',filedir=filedir)
+
+# @app.route("/ceksqlpandas", methods=['GET', 'POST'])
+# def ceksqlpandas():
+#     janjian=pd.read_sql_table('tbljanjian', con=cnx)
 
 if __name__ == '__main__':
     app.run()
