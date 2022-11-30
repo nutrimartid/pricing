@@ -1,8 +1,10 @@
-from flask import Flask,render_template,url_for,request,redirect,session,make_response
+from flask import Flask,render_template,url_for,request,redirect,session,make_response,send_file
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import create_engine
 from flask_migrate import Migrate
 from datetime import date,datetime,timedelta
+from werkzeug.utils import secure_filename
+from werkzeug.datastructures import  FileStorage
 import pandas as pd
 import os
 
@@ -147,6 +149,29 @@ def form2():
 @app.route('/reward',methods=['POST','GET'])
 def reward():
     return render_template('reward.html')
+
+@app.route("/upload", methods=['GET', 'POST'])
+def upload_file():
+    if request.method == 'POST':
+        f = request.files['file']
+        filedir=os.path.join(app.config['UPLOAD_FOLDER'],secure_filename(f.filename))
+        if ".xlsx" in filedir:    
+            f.save(filedir)          
+            df=pd.read_excel(filedir)
+            df=df.to_html()
+            # print(df)
+            return render_template('uploadview.html',filedir=filedir,df=df)
+        else:
+            return render_template('upload.html',msg="FILE ERROR")
+    else:
+        return render_template('upload.html')
+
+@app.route("/downtemp", methods=['GET', 'POST'])
+def downtemp():
+    return send_file('static\generate promoplan template.xlsx')
+# @app.route("/uploadview", methods=['GET', 'POST'])
+# def upload_view(filedir):
+#     return render_template('upload_view.html',filedir=filedir)
 
 if __name__ == '__main__':
     app.run()
