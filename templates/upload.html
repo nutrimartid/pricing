@@ -7,9 +7,9 @@
     <div class="mb-3">
         <form method=POST enctype=multipart/form-data>
             <label for="formFile" class="form-label">Masukan SKU file</label>
-            <input class="form-control" type=file name=ppfile id="formFile" required>
+            <input class="form-control" type='file' name='ppfile' id="formFile" required>
             <label for="formDate" class="form-label">Masukan Promo date</label>
-            <input class="form-control" type=date name=ppdate id="formDate" required>
+            <input class="form-control" type='date' name='ppdate' id="formDate" required>
             <br>
             <input class="btn btn-primary mb-3" type=submit value=Generate>
             <!-- <label for="formFile" class="form-label">Masukan SKU list</label>
@@ -21,6 +21,4 @@
     <a href="{{url_for('downtemp')}}">download template</a>
 </div>
 
-
-      
 {% endblock %}
