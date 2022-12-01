@@ -151,10 +151,12 @@ def upload_file():
         print(ppdate)
         filedir=os.path.join(app.config['UPLOAD_FOLDER'],secure_filename(f.filename))
         cnx = create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
-        if ".xlsx" in filedir:    
+        if ".xlsx" in filedir:
+            #### read upload file    
             f.save(filedir)          
             df=pd.read_excel(filedir,engine='openpyxl')
-            # df=df.to_html()
+            
+            #### download from tatanama
             data_sku=requests.get('https://tatanama.pythonanywhere.com/apinew')
             data_sku=pd.DataFrame(data_sku.json())
             data_sku=data_sku[['SKU','Brand','Nama_Produk','Harga_Display','Price_List_NFI',
@@ -169,7 +171,8 @@ def upload_file():
             data_sku[colint] = data_sku[colint].apply(pd.to_numeric, errors='coerce')
             data_sku=data_sku[data_sku['SKU'].isin(df['SKU'].astype(str).unique())]
             skuNs=data_sku[data_sku['Brand']=='NS']['SKU'].unique()
-
+            
+            #### data cleaning for tatanama
             for i in [1,2,3,4,5,6,7]:
                 data_sku.loc[data_sku[f'Price_List_NFI_{i}'].isin([0,'',None]),f'Price_List_NFI_{i}']=np.nan
                 data_sku.loc[data_sku[f'Price_List_NFI_{i}'].isnull(),f'Price_List_NFI_{i}']=np.nan
@@ -177,13 +180,14 @@ def upload_file():
                 data_sku.loc[data_sku[f'PCS_Produk_{i}'].isnull(),f'PCS_Produk_{i}']=np.nan
                 data_sku.loc[data_sku[f'SKU_Produk_{i}'].isin([0,'',None]),f'SKU_Produk_{i}']=np.nan
                 data_sku.loc[data_sku[f'SKU_Produk_{i}'].isnull(),f'SKU_Produk_{i}']=np.nan
-
+            
+            #### subtotal for non janjian bundle
             for i in [1,2,3,4,5,6,7]:
                 data_sku[f'subtotal_pl_{i}']=data_sku[f'PCS_Produk_{i}']*data_sku[f'Price_List_NFI_{i}']
                 data_sku[f'subtotal_tier1_{i}']=data_sku[f'PCS_Produk_{i}']*data_sku[f'Price_List_NFI_{i}']*0.96
                 data_sku.loc[data_sku[f'SKU_Produk_{i}'].isin(skuNs),f'subtotal_tier1_{i}']=data_sku[f'PCS_Produk_{i}']*data_sku[f'Price_List_NFI_{i}']*1.04
-
-            # janjian=pd.read_csv("D:\Downloads\export_janjianharga(1).csv")
+            
+            #### read data janjian active
             janjian=pd.read_sql_table('tbljanjian', con=cnx)
             janjian=janjian[(janjian['startdate']<=ppdate)&(janjian['enddate']>=ppdate)]
             janjian['realsku']=janjian['realsku'].astype(str)
@@ -191,20 +195,27 @@ def upload_file():
             data_sku=data_sku.merge(janjian,how='left')
             for i in [1,2,3,4,5,6,7]:
                 janjian_m=janjian.rename(columns={'SKU':f'SKU_Produk_{i}','hargajanjian':f'hargajanjian{i}'})
-                # print(janjian_m)
                 data_sku=data_sku.merge(janjian_m,how='left')
             data_sku_copy=data_sku.fillna(0).copy()
 
+            #### subtotal for bundle with harga janjian
             for i in [1,2,3,4,5,6,7]:
-                data_sku_copy.loc[data_sku_copy[f'hargajanjian{i}']!=0,f'subtotal_tier1_{i}']=data_sku_copy[f'PCS_Produk_{i}']*data_sku_copy[f'hargajanjian{i}']
+                data_sku_copy.loc[data_sku_copy[f'hargajanjian{i}']!=0,f'subtotal_tier1_{i}']=data_sku_copy[f'PCS_Produk_{i}']*(data_sku_copy[f'hargajanjian{i}']-500)
+            
+            #### pricing for bundle
             data_sku_copy['Pricing Tier 1']=data_sku_copy['subtotal_tier1_1']+data_sku_copy['subtotal_tier1_2']+data_sku_copy['subtotal_tier1_3']+data_sku_copy['subtotal_tier1_4']+data_sku_copy['subtotal_tier1_5']+data_sku_copy['subtotal_tier1_6']+data_sku_copy['subtotal_tier1_7']
             data_sku_copy['Pricing Tier 1']=round(data_sku_copy['Pricing Tier 1'],-2)
+
+            #### pricing for single item janjian
             data_sku_copy.loc[data_sku_copy['Pricing Tier 1']==0,'Pricing Tier 1']=data_sku_copy['hargajanjian']
             data_sku_copy.loc[(data_sku_copy['Pricing Tier 1']==0)&(data_sku_copy['Brand']=='NS'),'Pricing Tier 1']=round(data_sku_copy['Price_List_NFI']*1.05,-2)
+            
+            #### pricing for non janjian single
             data_sku_copy.loc[data_sku_copy['Pricing Tier 1']==0,'Pricing Tier 1']=round(data_sku_copy['Price_List_NFI']*0.98,-2)
+            
+            #### pricing for janjian bundle
             data_sku_copy.loc[data_sku_copy['hargajanjian']!=0,'Pricing Tier 1']=data_sku_copy['hargajanjian']
             data_sku_copy=data_sku_copy[['SKU','Nama_Produk','Harga_Display','Price_List_NFI','Pricing Tier 1']]
-            # return render_template('uploadview.html',filedir=filedir,df=data_sku_copy.head(10).to_html())
             resp = make_response(data_sku_copy.to_csv(index=False))
             resp.headers["Content-Disposition"] = f"attachment; filename=export_promoplan.csv"
             resp.headers["Content-Type"] = "text/csv"
@@ -217,13 +228,6 @@ def upload_file():
 @app.route("/downtemp", methods=['GET', 'POST'])
 def downtemp():
     return send_file('static/generate promoplan template.xlsx')
-# @app.route("/uploadview", methods=['GET', 'POST'])
-# def upload_view(filedir):
-#     return render_template('upload_view.html',filedir=filedir)
-
-# @app.route("/ceksqlpandas", methods=['GET', 'POST'])
-# def ceksqlpandas():
-#     janjian=pd.read_sql_table('tbljanjian', con=cnx)
 
 if __name__ == '__main__':
     app.run()
