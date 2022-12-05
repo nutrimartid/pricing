@@ -1,0 +1,29 @@
+{% extends 'base2.html' %}
+{% block content %}
+
+<div>
+    <h2>konten</h2>
+    <div class="agr1">
+        <!-- {% if msg %}
+        <div class="alert alert-danger" role="alert">{{msg}}</div>
+        {% endif %} -->
+        <div class="mb-3">
+            <form method=POST enctype=multipart/form-data>
+                <label for="formFile" class="form-label">Masukan Gambar file</label>
+                <input class="form-control" type='file' name='hifile' id="hiFile" required>
+                <!-- <label for="formDate" class="form-label">Masukan Promo date</label>
+                <input class="form-control" type='date' name='ppdate' id="formDate" required> -->
+                <br>
+                <input class="btn btn-primary mb-3" type=submit value=Generate>
+            </form>
+        </div>
+    </div>
+    {% if res %}
+    {{res}}
+    {% endif %}
+
+</div>
+
+{% endblock %}
+
+
