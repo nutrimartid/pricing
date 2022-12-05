@@ -7,16 +7,19 @@ from werkzeug.utils import secure_filename
 import pandas as pd
 import numpy as np
 import os,requests
+from imagekitio import ImageKit
 
 
 
 app = Flask(__name__)
-# basedir = os.path.abspath(os.path.dirname(__file__))
 app.config.from_pyfile('config.py')
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'data.sqlite')
-# app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
+
+imagekit = ImageKit(private_key=app.config['PRIKEYIMGKIT'],
+                    public_key=app.config['PUBKEYIMGKIT'],
+                    url_endpoint = app.config['URLENDIMGKIT'])
 
 
 class tbluser(db.Model):
@@ -228,6 +231,21 @@ def upload_file():
 @app.route("/downtemp", methods=['GET', 'POST'])
 def downtemp():
     return send_file('static/generate promoplan template.xlsx')
+
+@app.route("/konten", methods=['GET', 'POST'])
+def konten():
+    if request.method == 'POST':
+        print('masuk')
+        f=request.files['hifile']
+        filedir=os.path.join(app.config['UPLOAD_FOLDER'],secure_filename(f.filename))
+        f.save(filedir)
+        filedir=f"http://nutrimartevent.pythonanywhere.com/{filedir}"
+        upload = imagekit.upload_file(file=filedir,file_name="test-url.jpg")
+        print(upload)
+        res=upload.response_metadata.raw
+        return render_template('konten.html',res=res)
+    else:
+        return render_template('konten.html')
 
 if __name__ == '__main__':
     app.run()
