@@ -86,6 +86,7 @@ def janjianharga():
     item_pl=request.args.get('item_pl')
     cnx = create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
     df=pd.read_sql(f"SELECT * FROM tbljanjian WHERE realsku = '{item_sku}'", con=cnx)
+    cnx.dispose()
     if request.method=='POST':
         cek_a=df[(df['enddate']>request.form['jh_startdate'])&(df['startdate']<request.form['jh_enddate'])]['id']
         cek_c=df[(df['startdate']<request.form['jh_startdate'])&(df['enddate']>request.form['jh_enddate'])]['id']
@@ -133,6 +134,7 @@ def download(type):
         df=pd.read_sql_table('tbljanjian', con=cnx)
     else:
         df=pd.read_sql_table('tbluser', con=cnx)
+    cnx.dispose()    
     resp = make_response(df.to_csv(index=False))
     resp.headers["Content-Disposition"] = f"attachment; filename=export_{type}.csv"
     resp.headers["Content-Type"] = "text/csv"
@@ -192,6 +194,7 @@ def upload_file():
             
             #### read data janjian active
             janjian=pd.read_sql_table('tbljanjian', con=cnx)
+            cnx.dispose()
             janjian=janjian[(janjian['startdate']<=ppdate)&(janjian['enddate']>=ppdate)]
             janjian['realsku']=janjian['realsku'].astype(str)
             janjian=janjian[['realsku','hargajanjian']].rename(columns={'realsku':'SKU'})
