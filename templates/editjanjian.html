@@ -6,6 +6,11 @@
   <h6>{{item.realnamaproduk}}</h6>
   <h6>{{item.realsku}}</h6>
   <br>
+  {% if msg %}
+  <div class="alert alert-warning" role="alert">
+    {{msg}}
+  </div>
+  {% endif %}
   <form method="POST">
     <br>
     <div class="row g-3">

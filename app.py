@@ -110,7 +110,7 @@ def janjianharga():
 
 
         else:
-            return render_template('janjianharga.html',a=item_name,b=item_sku,c=item_pl,msg="start date must be less than end date ",df=df[['startdate','enddate','hargajanjian','notes']].rename(columns={'startdate':'Start Date','enddate':'End Date','hargajanjian':'Harga Janjian'}).to_html(index=False,classes='table table-striped table-hover'))
+            return render_template('janjianharga.html',a=item_name,b=item_sku,c=item_pl,msg="start date must be less than end date",df=df[['startdate','enddate','hargajanjian','notes']].rename(columns={'startdate':'Start Date','enddate':'End Date','hargajanjian':'Harga Janjian'}).to_html(index=False,classes='table table-striped table-hover'))
     return render_template('janjianharga.html',a=item_name,b=item_sku,c=item_pl,df=df[['startdate','enddate','hargajanjian','notes']].rename(columns={'startdate':'Start Date','enddate':'End Date','hargajanjian':'Harga Janjian'}).to_html(index=False,classes='table table-striped table-hover'))
 
 @app.route('/listjanjianharga',methods=['POST','GET'])
@@ -134,23 +134,38 @@ def deljanjian(id):
 @app.route('/editjanjian/<id>',methods=['GET','POST'])
 def editjanjian(id):
     itemjanjian=tbljanjian.query.get(id)
+    cnx = create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
+    df=pd.read_sql(f"SELECT * FROM tbljanjian WHERE realsku = '{itemjanjian.realsku}'", con=cnx)
+    df['id']=df['id'].astype(str)
+    cnx.dispose()
     if request.method == 'GET':
         # form['jh_plnfi']=itemjanjian.plnfi
         return render_template('editjanjian.html',item=itemjanjian)
     else:
-        y1=int(request.form['jh_startdate'].split('-')[0])
-        m1=int(request.form['jh_startdate'].split('-')[1])
-        d1=int(request.form['jh_startdate'].split('-')[2])
-        y2=int(request.form['jh_enddate'].split('-')[0])
-        m2=int(request.form['jh_enddate'].split('-')[1])
-        d2=int(request.form['jh_enddate'].split('-')[2])
-        # newjanjian=tbljanjian(realnamaproduk=request.form['jh_itemname'],realsku=request.form['jh_itemsku'],plnfi=request.form['jh_plnfi'],hargajanjian=request.form['jh_harga'],startdate=date(year=y1,month=m1,day=d1),enddate=date(year=y2,month=m2,day=d2),notes=request.form['jh_notes'])
-        itemjanjian.hargajanjian=request.form['jh_harga']
-        itemjanjian.startdate=date(year=y1,month=m1,day=d1)
-        itemjanjian.enddate=date(year=y2,month=m2,day=d2)
-        db.session.add(itemjanjian)
-        db.session.commit()
-        return redirect(url_for('listjanjianharga'))
+        cek_a=df[(df['enddate']>request.form['jh_startdate'])&(df['startdate']<request.form['jh_enddate'])&(df['id']!=str(id))]['id']
+        cek_c=df[(df['startdate']<request.form['jh_startdate'])&(df['enddate']>request.form['jh_enddate'])&(df['id']!=str(id))]['id']
+        cek_d=df[(df['startdate']>request.form['jh_startdate'])&(df['enddate']<request.form['jh_enddate'])&(df['id']!=str(id))]['id']
+        cek=cek_a.append(cek_c).append(cek_d)
+        # print(df[id].info())
+        if request.form['jh_startdate'] < request.form['jh_enddate']:
+            if len(cek)==0:
+                y1=int(request.form['jh_startdate'].split('-')[0])
+                m1=int(request.form['jh_startdate'].split('-')[1])
+                d1=int(request.form['jh_startdate'].split('-')[2])
+                y2=int(request.form['jh_enddate'].split('-')[0])
+                m2=int(request.form['jh_enddate'].split('-')[1])
+                d2=int(request.form['jh_enddate'].split('-')[2])
+                # newjanjian=tbljanjian(realnamaproduk=request.form['jh_itemname'],realsku=request.form['jh_itemsku'],plnfi=request.form['jh_plnfi'],hargajanjian=request.form['jh_harga'],startdate=date(year=y1,month=m1,day=d1),enddate=date(year=y2,month=m2,day=d2),notes=request.form['jh_notes'])
+                itemjanjian.hargajanjian=request.form['jh_harga']
+                itemjanjian.startdate=date(year=y1,month=m1,day=d1)
+                itemjanjian.enddate=date(year=y2,month=m2,day=d2)
+                db.session.add(itemjanjian)
+                db.session.commit()
+                return redirect(url_for('listjanjianharga'))
+            else:
+                return render_template('editjanjian.html',item=itemjanjian,msg="overlap promo plan")
+        else:
+            return render_template('editjanjian.html',item=itemjanjian,msg="start date must be less than end date")
 
 @app.route('/download/<type>',methods=['GET', 'POST'])
 def download(type):
