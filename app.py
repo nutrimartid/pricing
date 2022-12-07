@@ -118,14 +118,39 @@ def listjanjianharga():
     msg=tbljanjian.query.filter(tbljanjian.enddate<=date.today()+timedelta(days=7),tbljanjian.enddate>date.today(),tbljanjian.startdate<=date.today()).count()
     df_active=tbljanjian.query.filter(tbljanjian.enddate>date.today(),tbljanjian.startdate<=date.today()).all()
     df_pending=tbljanjian.query.filter(tbljanjian.startdate>date.today()).all()
-    return render_template('listjanjian.html',df=df_active,df2=df_pending,msg=msg)
+    df_selesai=tbljanjian.query.filter(tbljanjian.enddate<date.today()).all()
+    return render_template('listjanjian.html',df=df_active,df2=df_pending,msg=msg,df_selesai=df_selesai)
 
 @app.route('/deljanjian/<id>',methods=['POST','GET'])
 def deljanjian(id):
-    deljanji=tbljanjian.query.get(id)
-    db.session.delete(deljanji)
-    db.session.commit()
-    return redirect(url_for('listjanjianharga'))
+    if request.method=='POST':
+        deljanji=tbljanjian.query.get(id)
+        db.session.delete(deljanji)
+        db.session.commit()
+        return redirect(url_for('listjanjianharga'))
+    else:
+        return render_template('delconfirm.html',id=id)
+
+@app.route('/editjanjian/<id>',methods=['GET','POST'])
+def editjanjian(id):
+    itemjanjian=tbljanjian.query.get(id)
+    if request.method == 'GET':
+        # form['jh_plnfi']=itemjanjian.plnfi
+        return render_template('editjanjian.html',item=itemjanjian)
+    else:
+        y1=int(request.form['jh_startdate'].split('-')[0])
+        m1=int(request.form['jh_startdate'].split('-')[1])
+        d1=int(request.form['jh_startdate'].split('-')[2])
+        y2=int(request.form['jh_enddate'].split('-')[0])
+        m2=int(request.form['jh_enddate'].split('-')[1])
+        d2=int(request.form['jh_enddate'].split('-')[2])
+        # newjanjian=tbljanjian(realnamaproduk=request.form['jh_itemname'],realsku=request.form['jh_itemsku'],plnfi=request.form['jh_plnfi'],hargajanjian=request.form['jh_harga'],startdate=date(year=y1,month=m1,day=d1),enddate=date(year=y2,month=m2,day=d2),notes=request.form['jh_notes'])
+        itemjanjian.hargajanjian=request.form['jh_harga']
+        itemjanjian.startdate=date(year=y1,month=m1,day=d1)
+        itemjanjian.enddate=date(year=y2,month=m2,day=d2)
+        db.session.add(itemjanjian)
+        db.session.commit()
+        return redirect(url_for('listjanjianharga'))
 
 @app.route('/download/<type>',methods=['GET', 'POST'])
 def download(type):
