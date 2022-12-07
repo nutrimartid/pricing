@@ -3,3 +3,4 @@ migrations/
 *sqlite
 venv/
 __pycache__/
+static/upload/
