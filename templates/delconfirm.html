@@ -1,0 +1,13 @@
+{% extends 'base2.html' %}
+{% block content %}
+
+<div class="agr1">
+    <h2>Delete Janjian harga ?</h2>
+    <br>
+    <form method=POST enctype=multipart/form-data class="formDelj">
+        <input class="btn btn-danger btn-sm mb-3" type=submit value=Yes>
+        <a class="btn btn-primary btn-sm mb-3" href="{{url_for('listjanjianharga')}}" role="button">No</a>
+    </form>
+</div>
+
+{% endblock %}
