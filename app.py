@@ -137,9 +137,11 @@ def editjanjian(id):
     cnx = create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
     df=pd.read_sql(f"SELECT * FROM tbljanjian WHERE realsku = '{itemjanjian.realsku}'", con=cnx)
     df['id']=df['id'].astype(str)
+    df['enddate']=pd.to_datetime(df["enddate"], format="%Y/%m/%d")
+    df['startdate']=pd.to_datetime(df["startdate"], format="%Y/%m/%d")
+    print(df)
     cnx.dispose()
     if request.method == 'GET':
-        # form['jh_plnfi']=itemjanjian.plnfi
         return render_template('editjanjian.html',item=itemjanjian)
     else:
         cek_a=df[(df['enddate']>request.form['jh_startdate'])&(df['startdate']<request.form['jh_enddate'])&(df['id']!=str(id))]['id']
