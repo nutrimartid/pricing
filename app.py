@@ -284,13 +284,18 @@ def konten():
         f=request.files['hifile']
         filedir=os.path.join(app.config['UPLOAD_FOLDER'],secure_filename(f.filename))
         f.save(filedir)
-        filedir=f"http://nutrimartevent.pythonanywhere.com/{filedir}"
+        # filedir=f"http://nutrimartevent.pythonanywhere.com/{filedir}"
+        filedir="http://nutrimartevent.pythonanywhere.com/static/upload/android-chrome-192x192_1.png"
         upload = imagekit.upload_file(file=filedir,file_name="test-url.jpg")
         print(upload)
         res=upload.response_metadata.raw
         return render_template('konten.html',res=res)
     else:
         return render_template('konten.html')
+
+@app.route('/proddesc',methods=['POST','GET'])
+def proddesc():
+    return render_template('base3.html')
 
 if __name__ == '__main__':
     app.run()
