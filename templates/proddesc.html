@@ -1,0 +1,40 @@
+{% extends 'base3.html' %}
+{% block content %}
+
+<div class="agr1">
+    <!-- <form method="post">
+        <textarea id="summernote" name="editordata"></textarea>
+        <button type="submit" class="btn btn-primary mb-3">Submit</button>
+    </form> -->
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>SKU</th>
+                <th>hero image</th>
+                <th>Desc</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for i in df %}
+            <tr>
+                <td>{{i.id}}</td>
+                <td>{{i.sku}}</td>
+                <td>
+                    <div class="con_hov">
+                        <img src="{{i.herourl}}" alt="">
+                        <a href="" class="btn btn-outline-warning btn-sm" role="button">edit</a>
+                    </div>
+                </td>
+                <!-- <td>{{i.herourl}}</td> -->
+                <td>{{i.prod_desc|safe}}</td>
+                <td><a href="{{url_for('delproddesc',id=i.id)}}" class="btn btn-outline-danger btn-sm" role="button">delete</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+
+{% endblock %}
