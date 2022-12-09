@@ -300,16 +300,24 @@ def konten():
 @app.route('/proddesc/<sku>',methods=['POST','GET'])
 def proddesc(sku):
     df=tblkonten.query.filter_by(sku=sku).first()
-    # if df:
-    #     print('df ada isi')
-    # else:
-    #     print('df kosong')
     if request.method == 'POST':
         if df:
+            f=request.files['formHero']
+            if f:
+                print('ada file')
+                ftype=f.content_type.split('/')[1]
+                if ftype in ['jpeg','jpg','png']:
+                    f.filename = f"{sku}_h.{ftype}"
+                    filedir=os.path.join(app.config['UPLOAD_FOLDER'],secure_filename(f.filename))
+                    f.save(filedir)
+                    df.herourl=filedir              
+                else:
+                    return render_template('wysiwyg.html',df=df,sku=sku,msg="not image")
+            # else:
             df.prod_desc=request.form['editordata']
             db.session.add(df)
             db.session.commit()
-            return redirect(url_for("proddesclist"))
+            return redirect(url_for("proddesc",sku=sku))
         else:
             print('ok')
             f=request.files['formHero']
@@ -321,7 +329,7 @@ def proddesc(sku):
                 newdata=tblkonten(herourl=filedir,prod_desc=request.form['editordata'],sku=sku)
                 db.session.add(newdata)
                 db.session.commit()
-                return redirect(url_for("proddesclist"))
+                return redirect(url_for("proddesc",sku=sku))
             else:
                 return render_template('wysiwyg.html',df=df,sku=sku,msg="not image")
     else:
