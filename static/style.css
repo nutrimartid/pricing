@@ -19,6 +19,9 @@ h1,h2,h5,h6{text-align:center;}
 .navbar{
   background-color: #bfe165;
 }
+.row > *{
+  width: auto !important;
+}
 
 .navbar-text{
   color:white !important;
@@ -33,3 +36,10 @@ tr{
   text-align:left !important;
 }
 
+.dropdown-toggle::after{
+  display: none !important;
+}
+
+.heroImg{width: 300px;
+}
+ 

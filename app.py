@@ -41,6 +41,11 @@ class tbljanjian(db.Model):
     enddate = db.Column(db.Date)
     notes=db.Column(db.Text)
 
+class tblkonten(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    sku = db.Column(db.String(64))
+    herourl = db.Column(db.String(64))
+    prod_desc = db.Column(db.Text)
 
 
 @app.route('/<mp>',methods=['POST','GET'])
@@ -283,7 +288,6 @@ def konten():
         print('masuk')
         f=request.files['hifile']
         filedir=os.path.join(app.config['UPLOAD_FOLDER'],secure_filename(f.filename))
-        f.save(filedir)
         # filedir=f"http://nutrimartevent.pythonanywhere.com/{filedir}"
         filedir="http://nutrimartevent.pythonanywhere.com/static/upload/android-chrome-192x192_1.png"
         upload = imagekit.upload_file(file=filedir,file_name="test-url.jpg")
@@ -293,9 +297,47 @@ def konten():
     else:
         return render_template('konten.html')
 
-@app.route('/proddesc',methods=['POST','GET'])
-def proddesc():
-    return render_template('base3.html')
+@app.route('/proddesc/<sku>',methods=['POST','GET'])
+def proddesc(sku):
+    df=tblkonten.query.filter_by(sku=sku).first()
+    # if df:
+    #     print('df ada isi')
+    # else:
+    #     print('df kosong')
+    if request.method == 'POST':
+        if df:
+            df.prod_desc=request.form['editordata']
+            db.session.add(df)
+            db.session.commit()
+            return redirect(url_for("proddesclist"))
+        else:
+            print('ok')
+            f=request.files['formHero']
+            ftype=f.content_type.split('/')[1]
+            if ftype in ['jpeg','jpg','png']:
+                f.filename = f"{sku}_h.{ftype}"
+                filedir=os.path.join(app.config['UPLOAD_FOLDER'],secure_filename(f.filename))
+                f.save(filedir)
+                newdata=tblkonten(herourl=filedir,prod_desc=request.form['editordata'],sku=sku)
+                db.session.add(newdata)
+                db.session.commit()
+                return redirect(url_for("proddesclist"))
+            else:
+                return render_template('wysiwyg.html',df=df,sku=sku,msg="not image")
+    else:
+        return render_template('wysiwyg.html',df=df,sku=sku)
+
+@app.route('/delproddesc/<id>',methods=['POST','GET'])
+def delproddesc(id):
+    deldata=tblkonten.query.get(id)
+    db.session.delete(deldata)
+    db.session.commit()
+    return redirect(url_for("proddesclist"))
+
+@app.route('/proddesclist',methods=['POST','GET'])
+def proddesclist():
+    df=tblkonten.query.all()
+    return render_template('proddesc.html',df=df)
 
 if __name__ == '__main__':
     app.run()
