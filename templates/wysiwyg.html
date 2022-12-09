@@ -1,0 +1,62 @@
+{% extends 'base3.html' %}
+{% block content %}
+
+
+<div class="agr1">
+    <div class="rowtop">
+        <div class="column">
+            <h3>{{sku}}</h3>
+        </div>
+        <div class="'column">
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                {% if df.sku %}
+                    Edit
+                {% else %}
+                    Add
+                {% endif %}
+            </button>
+        </div>
+    </div>
+
+    <br>
+    <div class="row">
+        <div class="column">
+            <img src="../{{df.herourl}}" alt="" class="heroImg">
+        </div>
+        <div class="column">
+            {{df.prod_desc|safe}}
+        </div>
+    </div> 
+</div>
+
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="staticBackdropLabel">{{sku}}</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <div class="container">
+                {% if msg %}
+                <div class="alert alert-danger" role="alert">
+                    {{msg}}
+                </div>
+                {% endif %}
+                <form method="POST" enctype=multipart/form-data>
+                    <label for="formHero" class="form-label">Hero Image</label>
+                    <input class="form-control" type='file' name='formHero' id="formHero">
+            
+                    <label for="editordata" class="form-label">Product Description</label>
+                    <textarea id="summernote" name="editordata">{{df.prod_desc}}</textarea>
+                    <br>
+                    <button type="submit" class="btn btn-primary btn-sm">Submit</button>
+                </form>
+            </div>
+        </div>
+
+    </div>
+  </div>
+</div>
+
+{% endblock %}

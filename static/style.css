@@ -19,6 +19,9 @@ h1,h2,h5,h6{text-align:center;}
 .navbar{
   background-color: #bfe165;
 }
+/* .row > *{
+  width: auto !important;
+} */
 
 .navbar-text{
   color:white !important;
@@ -33,3 +36,32 @@ tr{
   text-align:left !important;
 }
 
+.dropdown-toggle::after{
+  display: none !important;
+}
+
+.heroImg{width: 300px;
+}
+
+.rowtop{
+  --bs-gutter-x: 1.5rem;
+  --bs-gutter-y: 0;
+  display: flex;
+  flex-wrap: wrap;
+  /* margin-top: calc(-1 * var(--bs-gutter-y));
+  margin-right: calc(-.5 * var(--bs-gutter-x));
+  margin-left: calc(-.5 * var(--bs-gutter-x)); */
+  justify-content: space-between;
+}
+
+.row{
+  flex-wrap: inherit !important;
+}
+
+.column{
+  flex-shrink: inherit !important;
+}
+
+.kontenlist{
+  width: 100px;
+}
