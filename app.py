@@ -197,6 +197,17 @@ def upload_file():
     if request.method == 'POST':
         f = request.files['ppfile']
         ppdate = request.form['ppdate']
+        btl_ts_s = int(request.form['btl_s_ts'])
+        btl_ts_b = int(request.form['btl_b_ts'])
+        btl_hilo_s = int(request.form['btl_s_hilo'])
+        btl_hilo_b = int(request.form['btl_b_hilo'])
+        btl_lmen_s = int(request.form['btl_s_lmen'])
+        btl_lmen_b = int(request.form['btl_b_lmen'])
+        btl_wdank_s = int(request.form['btl_s_wdank'])
+        btl_wdank_b = int(request.form['btl_b_wdank'])
+        btl_ns_s = int(request.form['btl_s_ns'])
+        btl_ns_b = int(request.form['btl_b_ns'])
+
         print(ppdate)
         filedir=os.path.join(app.config['UPLOAD_FOLDER'],secure_filename(f.filename))
         cnx = create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
@@ -220,6 +231,11 @@ def upload_file():
             data_sku[colint] = data_sku[colint].apply(pd.to_numeric, errors='coerce')
             data_sku=data_sku[data_sku['SKU'].isin(df['SKU'].astype(str).unique())]
             skuNs=data_sku[data_sku['Brand']=='NS']['SKU'].unique()
+            skuTs=data_sku[data_sku['Brand']=='TS']['SKU'].unique()
+            skuHl=data_sku[data_sku['Brand']=='HiLo']['SKU'].unique()
+            skuLm=data_sku[data_sku['Brand']=='L-Men']['SKU'].unique()
+            skuWd=data_sku[data_sku['Brand']=="W'dank"]['SKU'].unique()
+            # skuNs=data_sku[data_sku['Brand']=='NS']['SKU'].unique()
             
             #### data cleaning for tatanama
             for i in [1,2,3,4,5,6,7]:
@@ -233,8 +249,13 @@ def upload_file():
             #### subtotal for non janjian bundle
             for i in [1,2,3,4,5,6,7]:
                 data_sku[f'subtotal_pl_{i}']=data_sku[f'PCS_Produk_{i}']*data_sku[f'Price_List_NFI_{i}']
-                data_sku[f'subtotal_tier1_{i}']=data_sku[f'PCS_Produk_{i}']*data_sku[f'Price_List_NFI_{i}']*0.96
-                data_sku.loc[data_sku[f'SKU_Produk_{i}'].isin(skuNs),f'subtotal_tier1_{i}']=data_sku[f'PCS_Produk_{i}']*data_sku[f'Price_List_NFI_{i}']*1.04
+                data_sku[f'subtotal_tier1_{i}']=data_sku[f'PCS_Produk_{i}']*data_sku[f'Price_List_NFI_{i}']*1
+                data_sku.loc[data_sku[f'SKU_Produk_{i}'].isin(skuNs),f'subtotal_tier1_{i}']=data_sku[f'PCS_Produk_{i}']*data_sku[f'Price_List_NFI_{i}']*(100-btl_ns_b)/100
+                data_sku.loc[data_sku[f'SKU_Produk_{i}'].isin(skuTs),f'subtotal_tier1_{i}']=data_sku[f'PCS_Produk_{i}']*data_sku[f'Price_List_NFI_{i}']*(100-btl_ts_b)/100
+                data_sku.loc[data_sku[f'SKU_Produk_{i}'].isin(skuHl),f'subtotal_tier1_{i}']=data_sku[f'PCS_Produk_{i}']*data_sku[f'Price_List_NFI_{i}']*(100-btl_hilo_b)/100
+                data_sku.loc[data_sku[f'SKU_Produk_{i}'].isin(skuLm),f'subtotal_tier1_{i}']=data_sku[f'PCS_Produk_{i}']*data_sku[f'Price_List_NFI_{i}']*(100-btl_lmen_b)/100
+                data_sku.loc[data_sku[f'SKU_Produk_{i}'].isin(skuWd),f'subtotal_tier1_{i}']=data_sku[f'PCS_Produk_{i}']*data_sku[f'Price_List_NFI_{i}']*(100-btl_wdank_b)/100
+                # data_sku.loc[data_sku[f'SKU_Produk_{i}'].isin(skuNs),f'subtotal_tier1_{i}']=data_sku[f'PCS_Produk_{i}']*data_sku[f'Price_List_NFI_{i}']*1.04
             
             #### read data janjian active
             janjian=pd.read_sql_table('tbljanjian', con=cnx)
@@ -261,7 +282,15 @@ def upload_file():
             data_sku_copy.loc[(data_sku_copy['Pricing Tier 1']==0)&(data_sku_copy['Brand']=='NS'),'Pricing Tier 1']=round(data_sku_copy['Price_List_NFI']*1.05,-2)
             
             #### pricing for non janjian single
-            data_sku_copy.loc[data_sku_copy['Pricing Tier 1']==0,'Pricing Tier 1']=round(data_sku_copy['Price_List_NFI']*0.98,-2)
+            
+            data_sku_copy.loc[(data_sku_copy['Pricing Tier 1']==0)&(data_sku_copy['Brand']=='NS'),'Pricing Tier 1']=round(data_sku_copy['Price_List_NFI']*(100-btl_ns_s)/100,-2)
+            data_sku_copy.loc[(data_sku_copy['Pricing Tier 1']==0)&(data_sku_copy['Brand']=='TS'),'Pricing Tier 1']=round(data_sku_copy['Price_List_NFI']*(100-btl_ts_s)/100,-2)
+            data_sku_copy.loc[(data_sku_copy['Pricing Tier 1']==0)&(data_sku_copy['Brand']=='HiLo'),'Pricing Tier 1']=round(data_sku_copy['Price_List_NFI']*(100-btl_hilo_s)/100,-2)
+            data_sku_copy.loc[(data_sku_copy['Pricing Tier 1']==0)&(data_sku_copy['Brand']=='L-Men'),'Pricing Tier 1']=round(data_sku_copy['Price_List_NFI']*(100-btl_lmen_s)/100,-2)
+            data_sku_copy.loc[(data_sku_copy['Pricing Tier 1']==0)&(data_sku_copy['Brand']=="W'dank"),'Pricing Tier 1']=round(data_sku_copy['Price_List_NFI']*(100-btl_ns_s)/100,-2)
+            data_sku_copy.loc[data_sku_copy['Pricing Tier 1']==0,'Pricing Tier 1']=round(data_sku_copy['Price_List_NFI']*1,-2)
+            # data_sku_copy.loc[(data_sku_copy['Pricing Tier 1']==0)&(data_sku_copy['Brand']=='NS'),'Pricing Tier 1']=round(data_sku_copy['Price_List_NFI']*0.98,-2)
+
             
             #### pricing for janjian bundle
             data_sku_copy.loc[data_sku_copy['hargajanjian']!=0,'Pricing Tier 1']=data_sku_copy['hargajanjian']
