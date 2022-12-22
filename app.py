@@ -9,18 +9,15 @@ import numpy as np
 import os,requests
 from imagekitio import ImageKit
 
-
-
 app = Flask(__name__)
 app.config.from_pyfile('config.py')
 
 db = SQLAlchemy(app)
-migrate = Migrate(app, db)
+migrate = Migrate(app, db,render_as_batch=True)
 
 imagekit = ImageKit(private_key=app.config['PRIKEYIMGKIT'],
                     public_key=app.config['PUBKEYIMGKIT'],
                     url_endpoint = app.config['URLENDIMGKIT'])
-
 
 class tbluser(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -33,7 +30,7 @@ class tbluser(db.Model):
 
 class tbljanjian(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    realnamaproduk = db.Column(db.String(64))
+    realnamaproduk = db.Column(db.String(175))
     realsku = db.Column(db.String(64))
     plnfi = db.Column(db.Integer)
     hargajanjian = db.Column(db.Integer)
