@@ -65,3 +65,13 @@ tr{
 .kontenlist{
   width: 100px;
 }
+
+.container_btl{
+  width: 40%;
+  min-width: fit-content;
+}
+
+#btlcard{
+  flex-wrap: wrap !important;
+  padding-bottom: 5px;
+}
