@@ -6,7 +6,7 @@ from datetime import date,timedelta
 from werkzeug.utils import secure_filename
 import pandas as pd
 import numpy as np
-import os,requests
+import os,requests,io
 from imagekitio import ImageKit
 
 app = Flask(__name__)
@@ -178,10 +178,20 @@ def download(type):
         df=pd.read_sql_table('tbljanjian', con=cnx)
     else:
         df=pd.read_sql_table('tbluser', con=cnx)
-    cnx.dispose()    
-    resp = make_response(df.to_csv(index=False))
-    resp.headers["Content-Disposition"] = f"attachment; filename=export_{type}.csv"
-    resp.headers["Content-Type"] = "text/csv"
+    cnx.dispose()
+
+    out = io.BytesIO()
+    writer = pd.ExcelWriter(out, engine='xlsxwriter')
+    df.to_excel(excel_writer=writer, index=False, sheet_name='Sheet1')
+    writer.save()
+    writer.close()
+    resp = make_response(out.getvalue())
+    resp.headers["Content-Disposition"] = f"attachment; filename=export_{type}.xlsx"
+    resp.headers["Content-type"] = "application/x-xls"
+
+    # resp = make_response(df.to_csv(index=False))
+    # resp.headers["Content-Disposition"] = f"attachment; filename=export_{type}.csv"
+    # resp.headers["Content-Type"] = "text/csv"
     return resp
 
 @app.route('/form2',methods=['POST','GET'])
@@ -279,7 +289,7 @@ def upload_file():
 
             #### pricing for single item janjian
             data_sku_copy.loc[data_sku_copy['Pricing Tier 1']==0,'Pricing Tier 1']=data_sku_copy['hargajanjian']
-            data_sku_copy.loc[(data_sku_copy['Pricing Tier 1']==0)&(data_sku_copy['Brand']=='NS'),'Pricing Tier 1']=round(data_sku_copy['Price_List_NFI']*1.05,-2)
+            # data_sku_copy.loc[(data_sku_copy['Pricing Tier 1']==0)&(data_sku_copy['Brand']=='NS'),'Pricing Tier 1']=round(data_sku_copy['Price_List_NFI']*1.05,-2)
             
             #### pricing for non janjian single
             
@@ -295,9 +305,19 @@ def upload_file():
             #### pricing for janjian bundle
             data_sku_copy.loc[data_sku_copy['hargajanjian']!=0,'Pricing Tier 1']=data_sku_copy['hargajanjian']
             data_sku_copy=data_sku_copy[['SKU','Nama_Produk','Harga_Display','Price_List_NFI','Pricing Tier 1']]
-            resp = make_response(data_sku_copy.to_csv(index=False))
-            resp.headers["Content-Disposition"] = f"attachment; filename=export_promoplan.csv"
-            resp.headers["Content-Type"] = "text/csv"
+
+            out = io.BytesIO()
+            writer = pd.ExcelWriter(out, engine='xlsxwriter')
+            data_sku_copy.to_excel(excel_writer=writer, index=False, sheet_name='Sheet1')
+            writer.save()
+            writer.close()
+            resp = make_response(out.getvalue())
+            resp.headers["Content-Disposition"] = f"attachment; filename=export_promoplan.xlsx"
+            resp.headers["Content-type"] = "application/x-xls"
+
+            # resp = make_response(data_sku_copy.to_csv(index=False))
+            # resp.headers["Content-Disposition"] = f"attachment; filename=export_promoplan.csv"
+            # resp.headers["Content-Type"] = "text/csv"
             return resp
         else:
             return render_template('upload.html',msg="FILE ERROR")
