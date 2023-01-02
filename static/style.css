@@ -73,5 +73,7 @@ tr{
 
 #btlcard{
   flex-wrap: wrap !important;
-  padding-bottom: 5px;
+  padding-bottom: 25px;
+  padding-left: 0px;
+  padding-right: 0px;
 }
