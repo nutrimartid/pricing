@@ -89,6 +89,8 @@ def janjianharga():
     cnx = create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
     df=pd.read_sql(f"SELECT * FROM tbljanjian WHERE realsku = '{item_sku}'", con=cnx)
     cnx.dispose()
+    df['enddate']=pd.to_datetime(df["enddate"], format="%Y/%m/%d")
+    df['startdate']=pd.to_datetime(df["startdate"], format="%Y/%m/%d")
     if request.method=='POST':
         cek_a=df[(df['enddate']>request.form['jh_startdate'])&(df['startdate']<request.form['jh_enddate'])]['id']
         cek_c=df[(df['startdate']<request.form['jh_startdate'])&(df['enddate']>request.form['jh_enddate'])]['id']
