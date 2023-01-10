@@ -57,7 +57,7 @@ def index():
     #     db.session.add(newuser)
     #     db.session.commit()
     #     return redirect(url_for('index'))
-    datetimenow=datetime.now()-timedelta(hours=7)
+    datetimenow=datetime.now()+timedelta(hours=7)
     
     return render_template('home.html',datetimenow=datetimenow)
 
@@ -180,6 +180,7 @@ def download(type):
     cnx = create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
     if type=='janjianharga':
         df=pd.read_sql_table('tbljanjian', con=cnx)
+        df['enddate']=df['enddate']+timedelta(hours=23,minutes=59,seconds=59)
     else:
         df=pd.read_sql_table('tbluser', con=cnx)
     cnx.dispose()
