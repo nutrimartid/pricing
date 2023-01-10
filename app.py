@@ -2,7 +2,7 @@ from flask import Flask,render_template,url_for,request,redirect,session,make_re
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import create_engine
 from flask_migrate import Migrate
-from datetime import date,timedelta
+from datetime import date,timedelta,datetime
 from werkzeug.utils import secure_filename
 import pandas as pd
 import numpy as np
@@ -45,11 +45,11 @@ class tblkonten(db.Model):
     prod_desc = db.Column(db.Text)
 
 
-@app.route('/<mp>',methods=['POST','GET'])
-def index(mp):
-    print(mp)
-    session['mp']=mp
-    print (session.get('mp', 'not set'))
+@app.route('/',methods=['POST','GET'])
+def index():
+    # print(mp)
+    # session['mp']=mp
+    # print (session.get('mp', 'not set'))
     # df=tbluser.query.all()
     # print(df)
     # if request.method=='POST':
@@ -57,7 +57,9 @@ def index(mp):
     #     db.session.add(newuser)
     #     db.session.commit()
     #     return redirect(url_for('index'))
-    return render_template('home2.html')
+    datetimenow=datetime.now()-timedelta(hours=7)
+    
+    return render_template('home.html',datetimenow=datetimenow)
 
 @app.route('/allcustdb',methods=['POST','GET'])
 def allcustdb():
