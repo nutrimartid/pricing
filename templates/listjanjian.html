@@ -112,7 +112,7 @@
         <th>Start Date</th>
         <th>End Date</th>
         <!-- <th>ID</th> -->
-        <th>Action</th>
+        <!-- <th>Action</th> -->
       </tr>
     </thead>
     <tbody>
@@ -126,11 +126,11 @@
         <td>{{i.startdate}}</td>
         <td>{{i.enddate}}</td>
         <!-- <td>{{i.id}}</td> -->
-        <td>
+        <!-- <td>
           <a class="btn btn-outline-danger btn-sm" href="{{url_for('deljanjian',id=i.id)}}" role="button">delete</a>
           <a class="btn btn-outline-warning btn-sm" href="{{url_for('editjanjian',id=i.id)}}" role="button">Edit</a>
           <!-- <a href="">edit</a> -->
-        </td>
+        </td> -->
       </tr>
       {% endfor %}
     </tbody>
