@@ -49,8 +49,10 @@
         <td>{{i.enddate}}</td>
         <!-- <td>{{i.id}}</td> -->
         <td>
-          <a class="btn btn-outline-danger btn-sm" href="{{url_for('deljanjian',id=i.id)}}" role="button">delete</a>
-          <a class="btn btn-outline-warning btn-sm" href="{{url_for('editjanjian',id=i.id)}}" role="button">Edit</a>
+          <!-- <a class="btn btn-outline-danger btn-sm" href="{{url_for('deljanjian',id=i.id)}}" role="button">delete</a>
+          <a class="btn btn-outline-warning btn-sm" href="{{url_for('editjanjian',id=i.id)}}" role="button">Edit</a> -->
+          <a href="{{url_for('deljanjian',id=i.id)}}"><img class='utilicon' src="static/delete.png" alt=""></a>
+          <a href="{{url_for('editjanjian',id=i.id)}}"><img class='utilicon' src="static/edit.png" alt=""></a>
           <!-- <a href="">edit</a> -->
         </td>
       </tr>
@@ -88,8 +90,10 @@
         <td>{{i.enddate}}</td>
         <!-- <td>{{i.id}}</td> -->
         <td>
-          <a class="btn btn-outline-danger btn-sm" href="{{url_for('deljanjian',id=i.id)}}" role="button">delete</a>
-          <a class="btn btn-outline-warning btn-sm" href="{{url_for('editjanjian',id=i.id)}}" role="button">Edit</a>
+          <!-- <a class="btn btn-outline-danger btn-sm" href="{{url_for('deljanjian',id=i.id)}}" role="button">delete</a> -->
+          <!-- <a class="btn btn-outline-warning btn-sm" href="{{url_for('editjanjian',id=i.id)}}" role="button">Edit</a> -->
+          <a href="{{url_for('deljanjian',id=i.id)}}"><img class='utilicon' src="static/delete.png" alt=""></a>
+          <a href="{{url_for('editjanjian',id=i.id)}}"><img class='utilicon' src="static/edit.png" alt=""></a>
           <!-- <a href="">edit</a> -->
         </td>
       </tr>

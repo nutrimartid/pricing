@@ -89,3 +89,17 @@ tr{
 #tabeljanjian3{
   font-size: small;
 }
+
+.utilicon{
+  width: 25px;
+  border-style: solid;
+  border-width: 1px;
+  border-radius: 5px;
+  padding: 3px;
+  border-color: gray;
+}
+
+.utilicon:hover{
+  border-color: green;
+  border-width: 1.5px;
+}
