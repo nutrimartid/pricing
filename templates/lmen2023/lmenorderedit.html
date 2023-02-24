@@ -1,0 +1,39 @@
+{% extends 'lmen2023/baselmen.html' %}
+{% block content %}
+
+<h2>{{df.orderid}}</h2>
+<h2>{{df.email}}</h2>
+
+<form method="POST">
+    {% if msg %}
+    <div class="alert alert-secondary" role="alert">
+        {{msg}}
+    </div>
+    {% endif %}
+    <label for="inporderval" class="form-label">Order Value</label>
+    <input class="form-control" type="number" value="{{df.ordervalue}}" aria-label="default input example" id="inporderval" name="inporderval" required>
+    <label for="inporderstat">Order Status</label>
+    <select name="inporderstat" id="inporderstat" class="form-select mb-3">
+      <!-- <option selected>Open this select menu</option> -->
+      {% if df.orderstatus=='Unvalid' %}
+      <option value="Pending" >Pending</option>
+      <option value="Valid">Valid</option>
+      <option value="Unvalid" selected>Unvalid</option>
+      {% elif df.orderstatus=='Valid' %} 
+      <option value="Pending" >Pending</option>
+      <option value="Valid" selected>Valid</option>
+      <option value="Unvalid">Unvalid</option>
+      {% else %}
+      <option value="Pending" selected>Pending</option>
+      <option value="Valid" >Valid</option>
+      <option value="Unvalid">Unvalid</option>
+      {% endif %}
+      <!-- <option value="Internal">Internal</option> -->
+    </select>
+    <input type="submit" name="action" value="Update Order" class="btn btn-primary mb-3">
+</form>
+
+
+{% endblock %}
+
+

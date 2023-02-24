@@ -2,16 +2,17 @@ from flask import Flask,render_template,url_for,request,redirect,session,make_re
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import create_engine
 from flask_migrate import Migrate
+from flask_restful import Resource,Api
 from datetime import date,timedelta,datetime
 from werkzeug.utils import secure_filename
 import pandas as pd
 import numpy as np
-import os,requests,io
+import os,requests,io,json
 from imagekitio import ImageKit
 
 app = Flask(__name__)
 app.config.from_pyfile('config.py')
-
+api=Api(app)
 db = SQLAlchemy(app)
 migrate = Migrate(app, db,render_as_batch=True)
 
@@ -27,6 +28,29 @@ class tbluser(db.Model):
     aplikasi = db.Column(db.String(64))
     valid = db.Column(db.String(64))
     # last_name = db.Column(db.String(64))
+
+class tbluserlmen(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    first_name = db.Column(db.String(100))
+    email = db.Column(db.String(64),index=True, unique=True)
+    phone = db.Column(db.String(64))
+    username_tiktok = db.Column(db.String(100))
+    # aplikasi = db.Column(db.String(64))
+    password = db.Column(db.String(64))
+
+class tblorderlmen(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(64))
+    orderid = db.Column(db.String(100),index=True, unique=True)
+    ordervalue = db.Column(db.Integer)
+    orderstatus = db.Column(db.String(64))
+
+class tblafflmen(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(64))
+    affvalue = db.Column(db.Integer)
+    affdocs = db.Column(db.String(100))
+    affstatus = db.Column(db.String(64))
 
 class tbljanjian(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -44,6 +68,18 @@ class tblkonten(db.Model):
     herourl = db.Column(db.String(64))
     prod_desc = db.Column(db.Text)
 
+class apiv1(Resource):
+    def get(self):
+        # df=dbtrialapi.query.all()
+        engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
+        df = pd.read_sql_query("SELECT * FROM tbljanjian", con=engine)
+        engine.dispose()
+        df=df.to_json(orient='records')
+        df=json.loads(df)[0]['hargajanjian']
+        # print(df.to_dict())
+        return df
+
+api.add_resource(apiv1,'/apiv1')
 
 @app.route('/',methods=['POST','GET'])
 def index():
@@ -58,7 +94,6 @@ def index():
     #     db.session.commit()
     #     return redirect(url_for('index'))
     datetimenow=datetime.now()+timedelta(hours=7)
-    
     return render_template('home.html',datetimenow=datetimenow)
 
 @app.route('/allcustdb',methods=['POST','GET'])
@@ -397,6 +432,168 @@ def delproddesc(id):
 def proddesclist():
     df=tblkonten.query.all()
     return render_template('proddesc.html',df=df)
+
+@app.route('/lmentopspender2023',methods=['POST','GET'])
+def lmentopspender2023():
+    if request.method == 'POST':
+        if request.form['action']=='Daftar':
+            newuser=tbluserlmen(first_name=request.form['qnama'],email=request.form['qemail'],phone=request.form['qphone'],username_tiktok=request.form['qunamett'],password=request.form['qpass'])
+            db.session.add(newuser)
+            db.session.commit()
+            print(request.form['action'])
+            return render_template('lmen2023/lmentopspender2023.html',msg="Registrasi Berhasil, Silahkan Login")
+        else:
+            # return request.form['action']
+            usercek=tbluserlmen.query.filter_by(email=request.form['qemailmsk']).first()
+            if usercek is None or usercek.password!=request.form['qpassmsk']:
+                msg='Username / Password salah'
+                return render_template('lmen2023/lmentopspender2023.html',msg=msg)
+            else:
+                session['user']=request.form['qemailmsk']
+                session['username']=usercek.first_name
+                session['uid']=usercek.id
+                return redirect(url_for('lmeninput'))
+    else:
+        return render_template('lmen2023/lmentopspender2023.html')
+
+@app.route('/lmentopspender2023/alluser',methods=['POST','GET'])
+def lmenalluser():
+    df=tbluserlmen.query.all()
+    return render_template('lmen2023/lmenalluser.html',df=df)
+
+@app.route('/lmentopspender2023/deluser/<id>',methods=['POST','GET']) #### delete user saja bukan yg di submit jg
+def lmendeluser(id):
+    deldata=tbluserlmen.query.get(id)
+    db.session.delete(deldata)
+    db.session.commit()
+    return redirect(url_for("lmenalluser"))
+
+@app.route('/lmentopspender2023/logout',methods=['GET','POST'])
+def lmenkeluar():
+    session.pop('user', None)
+    return redirect(url_for('lmentopspender2023'))
+
+@app.route('/lmentopspender2023/input',methods=['GET','POST'])
+def lmeninput():
+    # print(app.config['basedir'])
+    print(os.path.abspath(os.path.dirname(__file__)))
+    if session.get('user',None):
+        if request.method == 'POST':
+            # print(request.form['action'])
+            if request.form['action']=='Add Order':
+                neworderid=tblorderlmen(orderid=request.form['inporderid'],email=session.get('user',None))
+                db.session.add(neworderid)
+                db.session.commit()
+                return redirect(url_for('lmeninput'))
+            else:
+                # print('masuk sini')
+                f=request.files['formAff']
+                # print('masuk sini')
+                # print(f)
+                ftype=f.content_type.split('/')[1]
+                # name=
+                # if ftype in ['jpeg','jpg','png']:
+                timeid=str(datetime.now()).replace("-",'').replace(":",'').replace(" ",'').replace(".",'')
+                # # f.filename = f"{sku}_h.{ftype}"
+                f.filename = f"{session.get('uid',None)}_{timeid}.{ftype}"
+                filedir=os.path.join(app.config['UPLOAD_FOLDER'],secure_filename(f.filename))
+                f.save(filedir)
+                newaffiliate=tblafflmen(email=session.get('user',None),affvalue=request.form['inpaffval'],affdocs=filedir)
+                db.session.add(newaffiliate)
+                db.session.commit()
+                return redirect(url_for('lmeninput'))
+        else:
+            df=tblorderlmen.query.filter_by(email=session.get('user',None)).all()#
+            df2=tblafflmen.query.filter_by(email=session.get('user',None)).all()#
+            return render_template('lmen2023/lmeninput.html',df=df,df2=df2)
+    else:
+        return redirect(url_for('lmentopspender2023'))
+
+
+@app.route('/lmentopspender2023/delinput/<id>',methods=['POST','GET']) #### masih bisa delete punya org lain
+def lmendelinput(id):
+    deldata=tblorderlmen.query.get(id)
+    if str(session.get('user',None))==str(deldata.email) or str(session.get('user',None))=='customer@nutrimart.co.id':    
+        db.session.delete(deldata)
+        db.session.commit()
+        if str(session.get('user',None))=='customer@nutrimart.co.id':
+            return redirect(url_for("lmenorderall"))
+        else:
+            return redirect(url_for("lmeninput"))
+    else:
+        return redirect(url_for("lmenkeluar"))
+
+@app.route('/lmentopspender2023/delinputaff/<id>',methods=['POST','GET']) #### masih bisa delete punya org lain
+def lmendelinputaff(id):
+    deldata=tblafflmen.query.get(id)
+    if str(session.get('user',None))==str(deldata.email) or str(session.get('user',None))=='customer@nutrimart.co.id':    
+        os.remove(deldata.affdocs)
+        db.session.delete(deldata)
+        db.session.commit()
+        if str(session.get('user',None))=='customer@nutrimart.co.id':
+            return redirect(url_for("lmenaffall"))
+        else:
+            return redirect(url_for("lmeninput"))
+    else:
+        return redirect(url_for("lmenkeluar"))
+
+@app.route('/lmentopspender2023/profile/<id>',methods=['POST','GET'])  ## ini belum beres
+def lmenprofile(id):
+    if str(session.get('uid',None))==str(id):    
+        if request.method == 'GET':
+            user=tbluserlmen.query.get(id)
+            return render_template("lmen2023/lmenprofile.html",user=user)
+        else:
+            return ("edit")
+    else:
+        return redirect(url_for('lmenkeluar'))
+
+@app.route('/lmentopspender2023/order',methods=['POST','GET'])  
+def lmenorderall():
+    if str(session.get('user',None))=='customer@nutrimart.co.id':
+        df=tblorderlmen.query.all()
+        return render_template('lmen2023/lmenorderall.html',df=df)
+    else:
+        return redirect(url_for('lmenkeluar'))
+
+@app.route('/lmentopspender2023/orderedit/<id>',methods=['POST','GET'])  
+def lmenorderedit(id):
+    if str(session.get('user',None))=='customer@nutrimart.co.id':
+        df=tblorderlmen.query.get(id)
+        if request.method == 'POST':
+            df.ordervalue=request.form['inporderval']
+            df.orderstatus=request.form['inporderstat']
+            db.session.add(df)
+            db.session.commit()
+            return render_template('lmen2023/lmenorderedit.html',df=df,msg="updated")
+        else:
+            return render_template('lmen2023/lmenorderedit.html',df=df)
+    else:
+        return redirect(url_for('lmenkeluar'))
+
+@app.route('/lmentopspender2023/affiliate',methods=['POST','GET'])  
+def lmenaffall():
+    if str(session.get('user',None))=='customer@nutrimart.co.id':
+        df=tblafflmen.query.all()
+        return render_template('lmen2023/lmenaffall.html',df=df)
+    else:
+        return redirect(url_for('lmenkeluar'))
+
+@app.route('/lmentopspender2023/affiliateedit/<id>',methods=['POST','GET'])  
+def affiliateedit(id):
+    if str(session.get('user',None))=='customer@nutrimart.co.id':
+        df=tblafflmen.query.get(id)
+        if request.method == 'POST':
+            print('masuk')
+            df.affvalue=request.form['inpaffval']
+            df.affstatus=request.form['inpaffstat']
+            db.session.add(df)
+            db.session.commit()
+            return render_template('lmen2023/lmenaffedit.html',df=df,msg="updated")
+        else:
+            return render_template('lmen2023/lmenaffedit.html',df=df)
+    else:
+        return redirect(url_for('lmenkeluar'))
 
 if __name__ == '__main__':
     app.run()

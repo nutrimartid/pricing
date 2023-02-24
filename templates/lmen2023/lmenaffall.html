@@ -1,0 +1,36 @@
+{% extends 'lmen2023/baselmen.html' %}
+{% block content %}
+<h2>all affilate for admin only</h2>
+<div class="container">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Cust Email</th>
+                <th>Affiliate Value</th>
+                <th>Affiliate Status</th>
+                <th>Docs</th>
+                <th>Action</th>
+                <!-- <th></th> -->
+            </tr>
+        </thead>
+        <tbody>
+            {% for i in df %}
+            <tr>
+                <td>{{i.id}}</td>
+                <td>{{i.email}}</td>
+                <td>{{i.affvalue}}</td>
+                <td>{{i.affstatus}}</td>
+                <td>{{i.affdocs}}</td>
+                <td><a href="{{url_for('affiliateedit',id=i.id)}}">edit</a> <a href="{{url_for('lmendelinputaff',id=i.id)}}">delete</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+
+
+{% endblock %}
+
+

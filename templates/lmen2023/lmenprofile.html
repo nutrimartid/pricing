@@ -1,0 +1,42 @@
+{% extends 'lmen2023/baselmen.html' %}
+{% block content %}
+
+<h1>Profile</h1>
+<br>
+<form method="POST" autocomplete="off" class="formprofilelmen">
+    <div class="container">
+    Nama Lengkap
+    <!-- <br> -->
+    <input class="form-control" type="text" placeholder="" aria-label="default input example" id="qnama" name="qnama" required>
+    </div>
+    <!-- <br> -->
+    <div class="container">
+    Email
+    <!-- <br> -->
+    <input class="form-control" type="email" placeholder="" aria-label="default input example" id="qemail" name="qemail" required>
+    </div>
+    <!-- <br> -->
+    <div class="container">
+    Nomor Handphone
+    <!-- <br> -->
+    <input class="form-control" type="text" placeholder="" aria-label="default input example" id="qphone" name="qphone" required>
+    </div>
+    <div class="container">
+    Username Tiktok
+    <!-- <br> -->
+    <input class="form-control" type="text" placeholder="" aria-label="default input example" id="qunamett" name="qunamett">
+    </div>
+    <div class="container">
+    Password
+    <!-- <br> -->
+    <input class="form-control" type="password" placeholder="" aria-label="default input example" id="qpass" name="qpass" required>
+    </div>
+    <!-- <br> -->
+    <br>
+    <div class="container">
+    <input type="submit" name="action" value="Update" class="btn btn-primary mb-3">
+    </div>
+</form>
+{% endblock %}
+
+
