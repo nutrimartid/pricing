@@ -486,15 +486,9 @@ def lmeninput():
                 db.session.commit()
                 return redirect(url_for('lmeninput'))
             else:
-                # print('masuk sini')
                 f=request.files['formAff']
-                # print('masuk sini')
-                # print(f)
                 ftype=f.content_type.split('/')[1]
-                # name=
-                # if ftype in ['jpeg','jpg','png']:
                 timeid=str(datetime.now()).replace("-",'').replace(":",'').replace(" ",'').replace(".",'')
-                # # f.filename = f"{sku}_h.{ftype}"
                 f.filename = f"{session.get('uid',None)}_{timeid}.{ftype}"
                 filedir=os.path.join(app.config['UPLOAD_FOLDER'],secure_filename(f.filename))
                 f.save(filedir)
@@ -540,11 +534,31 @@ def lmendelinputaff(id):
 @app.route('/lmentopspender2023/profile/<id>',methods=['POST','GET'])  ## ini belum beres
 def lmenprofile(id):
     if str(session.get('uid',None))==str(id):    
+        user=tbluserlmen.query.get(id)
         if request.method == 'GET':
-            user=tbluserlmen.query.get(id)
+            # user=tbluserlmen.query.get(id)
             return render_template("lmen2023/lmenprofile.html",user=user)
         else:
-            return ("edit")
+            # df=tblorderlmen.query.filter_by(email=user.email).all()#
+            # for i in df:
+            #     i.email=request.form['qemail']
+            #     db.session.add(i)
+            #     db.session.commit()
+            # df2=tblafflmen.query.filter_by(email=user.email).all()#
+            # for i in df2:
+            #     i.email=request.form['qemail']
+            #     db.session.add(i)
+            #     db.session.commit()
+            # user.first_name=request.form['qnama']
+            # user.email=request.form['qemail']
+            user.phone=request.form['qphone']
+            user.username_tiktok=request.form['qunamett']
+            user.password=request.form['qpass']
+            db.session.add(user)
+            db.session.commit()
+            # session['user']=user.email
+            # session['username']=user.first_name
+            return redirect(url_for('lmeninput'))
     else:
         return redirect(url_for('lmenkeluar'))
 

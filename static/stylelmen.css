@@ -9,4 +9,23 @@
 .utilicon{
     width: 25px;
   }
-  
+
+select[name="tabellmenorder_length"] {
+    color: cornflowerblue;
+}
+
+select[name="tabellmenaff_length"] {
+    color: cornflowerblue;
+}
+
+input[type="search"]{
+    color: cornflowerblue;
+}
+
+.dataTables_info{
+    display: none;
+}
+
+.form-control{
+    color: cornflowerblue !important;
+}

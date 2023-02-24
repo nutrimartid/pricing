@@ -2,7 +2,7 @@
 {% block content %}
 <h2>all affilate for admin only</h2>
 <div class="container">
-    <table class="table">
+    <table id="tabellmenaff" class="table">
         <thead>
             <tr>
                 <th>ID</th>
@@ -33,4 +33,9 @@
 
 {% endblock %}
 
+{% block scripts %}
+<script>
+  $(document).ready(function(){$('#tabellmenaff').DataTable();});
+</script>
+{% endblock %}
 
