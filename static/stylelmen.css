@@ -14,6 +14,13 @@ select[name="tabellmenorder_length"] {
     color: cornflowerblue;
 }
 
+.mainbanner{
+    width: -webkit-fill-available;
+    max-height: 500px;
+    border-radius: 25px;
+    max-width: -moz-available;
+}
+
 select[name="tabellmenaff_length"] {
     color: cornflowerblue;
 }
@@ -28,4 +35,17 @@ input[type="search"]{
 
 .form-control{
     color: cornflowerblue !important;
+}
+
+.login{
+    align-self: center;
+    text-align: center;
+}
+
+.lgnbtn{
+    width: 100%;
+}
+
+.rowmargintop{
+    margin-top: 5px !important;
 }

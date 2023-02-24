@@ -2,24 +2,44 @@
 {% block content %}
 
 <div class="container">
-    <div class="container">
-        <!-- div -->
-        {% if msg %}
-        <div class="alert alert-secondary" role="alert">
-            {{msg}}
+    <div class="row">
+        <div class="col">
+            <img class="mainbanner" src="{{ url_for('static', filename='mainbanner.jpg') }}" alt="">
         </div>
-        {% endif %}
-        <!-- <button>Masuk</button> -->
+        <div class="col login">
+            <div class="row rowmargintop">
+                <!-- div -->
+                {% if msg %}
+                <div class="alert alert-secondary" role="alert">
+                    {{msg}}
+                </div>
+                {% endif %}
+                <!-- <button>Masuk</button> -->
+        
+                
 
-        {% if not session['user'] %}
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalLogin">
-            Masuk
-        </button>
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-            Daftar
-        </button>
-        {% endif %}
+
+                
+            </div>
+
+            <div class="row rowmargintop">
+                {% if not session['user'] %}
+                <div class="col">
+                    <button type="button" class="btn btn-primary lgnbtn" data-bs-toggle="modal" data-bs-target="#modalLogin">
+                        Masuk
+                    </button>
+                </div>
+                <div class="col">
+                    <button type="button" class="btn btn-primary lgnbtn" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                        Daftar
+                    </button>
+                </div>
+                {% endif %}
+            </div>
+        </div>
     </div>
+    
+
 </div>
 
 <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
