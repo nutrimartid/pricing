@@ -1,0 +1,36 @@
+{% extends 'lmen2023/baselmen.html' %}
+{% block content %}
+
+<h2>all order for admin only</h2>
+
+<div class="container">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Order #</th>
+                <th>Cust Email</th>
+                <th>Order Value</th>
+                <th>Order Status</th>
+                <th>Action</th>
+                <!-- <th></th> -->
+            </tr>
+        </thead>
+        <tbody>
+            {% for i in df %}
+            <tr>
+                <td>{{i.orderid}}</td>
+                <td>{{i.email}}</td>
+                <td>{{i.ordervalue}}</td>
+                <td>{{i.orderstatus}}</td>
+                <td><a href="{{url_for('lmenorderedit',id=i.id)}}">edit</a> <a href="{{url_for('lmendelinput',id=i.id)}}">delete</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+
+
+{% endblock %}
+
+

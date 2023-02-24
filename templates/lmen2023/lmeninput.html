@@ -1,0 +1,109 @@
+{% extends 'lmen2023/baselmen.html' %}
+{% block content %}
+
+<h1>Hi, <b>{{session['username']}}</b></h1>
+<br>
+
+
+<ul class="nav nav-tabs" id="myTab" role="tablist">
+    <li class="nav-item" role="presentation">
+      <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home-tab-pane" type="button" role="tab" aria-controls="home-tab-pane" aria-selected="true">My Order</button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile-tab-pane" type="button" role="tab" aria-controls="profile-tab-pane" aria-selected="false">My Affiliate</button>
+    </li>
+</ul>
+
+<div class="tab-content" id="myTabContent">
+    <div class="tab-pane fade show active" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
+        <div class="container">
+            <form method="POST">
+                <br>
+                <label for="inporderid" class="form-label">Order ID</label>
+                <input class="form-control" type="text" placeholder="" aria-label="default input example" id="inporderid" name="inporderid" required>
+                <br>
+                <input type="submit" name="action" value="Add Order" class="btn btn-primary mb-3">
+            </form>
+        </div>
+    </div>
+    <div class="tab-pane fade" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
+        <div class="container">
+            <form method="POST" enctype=multipart/form-data>
+                <br>
+                <label for="formAff" class="form-label">Screenshot Page Affiliate</label>
+                <input class="form-control" type='file' name='formAff' id="formAff" accept="image/png, image/jpeg, .mp4" required>
+                <label for="inporderid" class="form-label">Affiliate Value</label>
+                <input class="form-control" type="number" placeholder="" aria-label="default input example" id="inpaffval" name="inpaffval" required>
+                <br>
+                <input type="submit" name="action" value="Add Affiliate" class="btn btn-primary mb-3">
+            </form>
+        </div>
+    </div>
+</div>
+<hr>
+<!-- <div class="container"> -->
+<div class="row">
+    <div class="col">
+        <h1>My Order</h1>
+        <table class="table table-dark table-striped">
+            <thead>
+                <tr>
+                    <th>Order ID</th>
+                    <th>Value</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in df %}
+                <tr>
+                    <td>{{i.orderid}}</td>
+                    <td>{{i.ordervalue}}</td>
+                    <td>{{i.orderstatus}}</td>
+                    <td><a href="{{url_for('lmendelinput',id=i.id)}}"><img class='utilicon' src="{{ url_for('static', filename='delete_w.png') }}" alt=""></a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="col">
+        <h1>My Affiliate</h1>
+        <table class="table table-dark table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Value</th>
+                    <th>Attachment</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for i in df2 %}
+                <tr>
+                    <td>{{i.id}}</td>
+                    <td>{{i.affvalue}}</td>
+                    <td><a href="/{{i.affdocs}}" target="_blank">view</a></td>
+                    <td>{{i.affstatus}}</td>
+                    <td><a href="{{url_for('lmendelinputaff',id=i.id)}}"><img class='utilicon' src="{{ url_for('static', filename='delete_w.png') }}" alt=""></a></td>
+                    
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+    <!-- <form method="POST">
+        <label for="inporderid" class="form-label">Order ID</label>
+        <input class="form-control" type="text" placeholder="" aria-label="default input example" id="inporderid" name="inporderid" required>
+        <input type="submit" name="action" value="Tambah" class="btn btn-primary mb-3">
+    </form> -->
+<!-- </div> -->
+
+
+
+{% endblock %}
+
+

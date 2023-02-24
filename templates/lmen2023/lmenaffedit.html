@@ -1,0 +1,42 @@
+{% extends 'lmen2023/baselmen.html' %}
+{% block content %}
+
+<h2>{{df.id}}</h2>
+<h2>{{df.email}}</h2>
+<a href="/{{df.affdocs}}" target="_blank">view</a>
+<!-- <h2>{{df.affdocs}}</h2> -->
+
+
+<form method="POST">
+    {% if msg %}
+    <div class="alert alert-secondary" role="alert">
+        {{msg}}
+    </div>
+    {% endif %}
+    <label for="inpaffval" class="form-label">Affiliate Value</label>
+    <input class="form-control" type="number" value="{{df.affvalue}}" aria-label="default input example" id="inpaffval" name="inpaffval" required>
+    <label for="inpaffstat">Affiliate Status</label>
+    <select name="inpaffstat" id="inpaffstat" class="form-select mb-3">
+      <!-- <option selected>Open this select menu</option> -->
+      {% if df.affstatus=='Unvalid' %}
+      <option value="Pending" >Pending</option>
+      <option value="Valid">Valid</option>
+      <option value="Unvalid" selected>Unvalid</option>
+      {% elif df.affstatus=='Valid' %} 
+      <option value="Pending" >Pending</option>
+      <option value="Valid" selected>Valid</option>
+      <option value="Unvalid">Unvalid</option>
+      {% else %}
+      <option value="Pending" selected>Pending</option>
+      <option value="Valid" >Valid</option>
+      <option value="Unvalid">Unvalid</option>
+      {% endif %}
+      <!-- <option value="Internal">Internal</option> -->
+    </select>
+    <input type="submit" name="action" value="Update Affilaite" class="btn btn-primary mb-3">
+</form>
+
+
+{% endblock %}
+
+

@@ -1,0 +1,115 @@
+{% extends 'lmen2023/baselmen.html' %}
+{% block content %}
+
+<div class="container">
+    <div class="container">
+        <!-- div -->
+        {% if msg %}
+        <div class="alert alert-secondary" role="alert">
+            {{msg}}
+        </div>
+        {% endif %}
+        <!-- <button>Masuk</button> -->
+
+        {% if not session['user'] %}
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalLogin">
+            Masuk
+        </button>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+            Daftar
+        </button>
+        {% endif %}
+    </div>
+</div>
+
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <!-- <h1 class="modal-title fs-5" id="staticBackdropLabel">Modal title</h1> -->
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" autocomplete="off">
+                    <div class="container">
+                    Nama Lengkap
+                    <!-- <br> -->
+                    <input class="form-control" type="text" placeholder="" aria-label="default input example" id="qnama" name="qnama" required>
+                    </div>
+                    <!-- <br> -->
+                    <div class="container">
+                    Email
+                    <!-- <br> -->
+                    <input class="form-control" type="email" placeholder="" aria-label="default input example" id="qemail" name="qemail" required>
+                    </div>
+                    <!-- <br> -->
+                    <div class="container">
+                    Nomor Handphone
+                    <!-- <br> -->
+                    <input class="form-control" type="text" placeholder="" aria-label="default input example" id="qphone" name="qphone" required>
+                    </div>
+                    <div class="container">
+                    Username Tiktok (optional)
+                    <!-- <br> -->
+                    <input class="form-control" type="text" placeholder="" aria-label="default input example" id="qunamett" name="qunamett">
+                    </div>
+                    <div class="container">
+                    Password
+                    <!-- <br> -->
+                    <input class="form-control" type="password" placeholder="" aria-label="default input example" id="qpass" name="qpass" required>
+                    </div>
+                    <!-- <br> -->
+                    <br>
+                    <div class="container">
+                    <input type="submit" name="action" value="Daftar" class="btn btn-primary mb-3">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalLogin" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <!-- <h1 class="modal-title fs-5" id="staticBackdropLabel">Modal title</h1> -->
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- <div class="container">
+                Apa aplikasi yang sering kamu gunakan untuk menerima infomasi seputar program regular?
+                <br>
+                <input type="radio" name="q1" id="option1_1" value="E-mail"> E-mail </input><br>
+                <input type="radio" name="q1" id="option1_2" value="Whatsapp"> Whatsapp </input><br>
+                <input type="radio" name="q1" id="option1_3" value="Keduanya" checked> Keduanya </input><br>
+                </div> -->
+                <!-- <br> -->
+                <form method="POST" autocomplete="off">
+                    <div class="container">
+                    Email
+                    <!-- <br> -->
+                    <input class="form-control" type="email" placeholder="" aria-label="default input example" id="qemailmsk" name="qemailmsk" required>
+                    </div>
+                    <div class="container">
+                    Password
+                    <!-- <br> -->
+                    <input class="form-control" type="password" placeholder="" aria-label="default input example" id="qpassmsk" name="qpassmsk" required>
+                    </div>
+                    <!-- <br> -->
+                    <br>
+                    <div class="container">
+                    <input type="submit" name="action" value="Masuk" class="btn btn-primary mb-3">
+                    </div>
+                </form>
+                
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+
