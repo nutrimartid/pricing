@@ -7,29 +7,29 @@
     <div class="container">
     Nama Lengkap
     <!-- <br> -->
-    <input class="form-control" type="text" placeholder="" aria-label="default input example" id="qnama" name="qnama" required>
+    <input class="form-control" value="{{user.first_name}}" type="text" placeholder="" aria-label="default input example" id="qnama" name="qnama" readonly>
     </div>
     <!-- <br> -->
     <div class="container">
     Email
     <!-- <br> -->
-    <input class="form-control" type="email" placeholder="" aria-label="default input example" id="qemail" name="qemail" required>
+    <input class="form-control" value="{{user.email}}" type="email" placeholder="" aria-label="default input example" id="qemail" name="qemail" readonly>
     </div>
     <!-- <br> -->
     <div class="container">
     Nomor Handphone
     <!-- <br> -->
-    <input class="form-control" type="text" placeholder="" aria-label="default input example" id="qphone" name="qphone" required>
+    <input class="form-control" value="{{user.phone}}" type="text" placeholder="" aria-label="default input example" id="qphone" name="qphone" required>
     </div>
     <div class="container">
     Username Tiktok
     <!-- <br> -->
-    <input class="form-control" type="text" placeholder="" aria-label="default input example" id="qunamett" name="qunamett">
+    <input class="form-control" value="{{user.username_tiktok}}" type="text" placeholder="" aria-label="default input example" id="qunamett" name="qunamett">
     </div>
     <div class="container">
     Password
     <!-- <br> -->
-    <input class="form-control" type="password" placeholder="" aria-label="default input example" id="qpass" name="qpass" required>
+    <input class="form-control" value="{{user.password}}" type="password" placeholder="" aria-label="default input example" id="qpass" name="qpass" required>
     </div>
     <!-- <br> -->
     <br>

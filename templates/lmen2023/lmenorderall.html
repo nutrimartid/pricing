@@ -4,7 +4,7 @@
 <h2>all order for admin only</h2>
 
 <div class="container">
-    <table class="table">
+    <table id="tabellmenorder" class="table">
         <thead>
             <tr>
                 <th>Order #</th>
@@ -31,6 +31,12 @@
 
 
 
+{% endblock %}
+
+{% block scripts %}
+<script>
+  $(document).ready(function(){$('#tabellmenorder').DataTable();});
+</script>
 {% endblock %}
 
 
