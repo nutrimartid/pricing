@@ -216,6 +216,8 @@ def download(type):
     if type=='janjianharga':
         df=pd.read_sql_table('tbljanjian', con=cnx)
         df['enddate']=df['enddate']+timedelta(hours=23,minutes=59,seconds=59)
+    elif type=='lmenuser':
+        df=pd.read_sql_table('tbluserlmen', con=cnx)
     else:
         df=pd.read_sql_table('tbluser', con=cnx)
     cnx.dispose()
@@ -481,7 +483,7 @@ def lmeninput():
         if request.method == 'POST':
             # print(request.form['action'])
             if request.form['action']=='Add Order':
-                neworderid=tblorderlmen(orderid=request.form['inporderid'],email=session.get('user',None))
+                neworderid=tblorderlmen(orderid=request.form['inporderid'],email=session.get('user',None),orderstatus="Pending")
                 db.session.add(neworderid)
                 db.session.commit()
                 return redirect(url_for('lmeninput'))
@@ -492,7 +494,7 @@ def lmeninput():
                 f.filename = f"{session.get('uid',None)}_{timeid}.{ftype}"
                 filedir=os.path.join(app.config['UPLOAD_FOLDER'],secure_filename(f.filename))
                 f.save(filedir)
-                newaffiliate=tblafflmen(email=session.get('user',None),affvalue=request.form['inpaffval'],affdocs=filedir)
+                newaffiliate=tblafflmen(email=session.get('user',None),affvalue=request.form['inpaffval'],affdocs=filedir,affstatus="Pending")
                 db.session.add(newaffiliate)
                 db.session.commit()
                 return redirect(url_for('lmeninput'))

@@ -4,6 +4,17 @@
 <h1>Hi, <b>{{session['username']}}</b></h1>
 <br>
 
+{% if session['user']=='customer@nutrimart.co.id' %}
+<ul>
+    <li><a href="{{url_for('lmenorderall')}}">Order</a></li>
+    <li><a href="{{url_for('lmenaffall')}}">Affiliate</a></li>
+    <li><a href="{{url_for('lmenalluser')}}">User</a></li>
+</ul>
+
+<!-- <a href="">order</a> -->
+
+{% else %}
+
 
 <ul class="nav nav-tabs" id="myTab" role="tablist">
     <li class="nav-item" role="presentation">
@@ -41,7 +52,7 @@
     </div>
 </div>
 <hr>
-<!-- <div class="container"> -->
+
 <div class="row">
     <div class="col">
         <h1>My Order</h1>
@@ -94,13 +105,7 @@
     </div>
 </div>
 
-
-    <!-- <form method="POST">
-        <label for="inporderid" class="form-label">Order ID</label>
-        <input class="form-control" type="text" placeholder="" aria-label="default input example" id="inporderid" name="inporderid" required>
-        <input type="submit" name="action" value="Tambah" class="btn btn-primary mb-3">
-    </form> -->
-<!-- </div> -->
+{% endif %}
 
 
 

@@ -1,23 +1,29 @@
 {% extends 'lmen2023/baselmen.html' %}
 {% block content %}
 
+<a href="{{url_for('download',type='lmenuser')}}" role="button" class="btn btn-outline-primary">download</a>
+<br>
 <div class="container">
     <table class="table">
         <thead>
             <tr>
                 <th>Nama</th>
                 <th>Email</th>
-                <th>Password</th>
+                <th>Phone</th>
+                <th>Username Tiktok</th>
+                <!-- <th>Password</th> -->
                 <th>Action</th>
             </tr>
         </thead>
         <tbody>
             {% for i in df %}
             <tr>
-                <td>{{i.first_name}} {{i.username_tiktok}}</td>
+                <td>{{i.first_name}}</td>
                 <td>{{i.email}}</td>
-                <td>{{i.password}}</td>
-                <td><a href="{{url_for('lmendeluser',id=i.id)}}">delete</a></td>
+                <td>{{i.phone}}</td>
+                <td>{{i.username_tiktok}}</td>
+                <!-- <td>{{i.password}}</td> -->
+                <td><a href="">delete</a></td>
             </tr>
             {% endfor %}
         </tbody>
