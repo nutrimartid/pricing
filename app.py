@@ -75,16 +75,18 @@ class apiv1(Resource):
         df = pd.read_sql_query("SELECT * FROM tbljanjian", con=engine)
         engine.dispose()
         df=df.to_json(orient='records')
-        df=json.loads(df)[0]['hargajanjian']
+        df=json.loads(df)#[0]['hargajanjian']
         # print(df.to_dict())
         return df
     def post(self):
         # jenis=request.args.get('type')
         id=request.args.get('id')
+        value=request.args.get('status')
         status=request.args.get('status')
         editdata=tblorderlmen.query.get(id)
         if editdata:
             editdata.orderstatus=str(status)
+            editdata.ordervalue=int(value)
             db.session.add(editdata)
             db.session.commit()
             return {'status':'added new api'}
