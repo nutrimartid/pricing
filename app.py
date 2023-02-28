@@ -81,7 +81,7 @@ class apiv1(Resource):
     def post(self):
         # jenis=request.args.get('type')
         id=request.args.get('id')
-        value=request.args.get('status')
+        value=request.args.get('value')
         status=request.args.get('status')
         editdata=tblorderlmen.query.get(id)
         if editdata:
