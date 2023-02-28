@@ -70,14 +70,20 @@ class tblkonten(db.Model):
 
 class apiv1(Resource):
     def get(self):
-        # df=dbtrialapi.query.all()
-        engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
-        df = pd.read_sql_query("SELECT * FROM tbljanjian", con=engine)
-        engine.dispose()
-        df=df.to_json(orient='records')
-        df=json.loads(df)#[0]['hargajanjian']
-        # print(df.to_dict())
-        return df
+        if request.args.get('type')=="lmen":
+            engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
+            df = pd.read_sql_query("SELECT * FROM tblorderlmen", con=engine)
+            engine.dispose()
+            df=df.to_json(orient='records')
+            df=json.loads(df)
+            return df
+        else:
+            engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
+            df = pd.read_sql_query("SELECT * FROM tbljanjian", con=engine)
+            engine.dispose()
+            df=df.to_json(orient='records')
+            df=json.loads(df)
+            return df
     def post(self):
         # jenis=request.args.get('type')
         id=request.args.get('id')
