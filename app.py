@@ -78,6 +78,18 @@ class apiv1(Resource):
         df=json.loads(df)[0]['hargajanjian']
         # print(df.to_dict())
         return df
+    def post(self):
+        # jenis=request.args.get('type')
+        id=request.args.get('id')
+        status=request.args.get('status')
+        editdata=tblorderlmen.query.get(id)
+        if len(editdata)>0:
+            editdata.orderstatus=str(status)
+            db.session.add(itemjanjian)
+            db.session.commit()
+            return {'status':'added new api'}
+        else:
+            return {'status':'FAILED'}
 
 api.add_resource(apiv1,'/apiv1')
 
@@ -435,7 +447,7 @@ def proddesclist():
     df=tblkonten.query.all()
     return render_template('proddesc.html',df=df)
 
-@app.route('/lmentopspender2023',methods=['POST','GET'])
+@app.route('/lmen_goes_to_europe',methods=['POST','GET'])
 def lmentopspender2023():
     if request.method == 'POST':
         if request.form['action']=='Daftar':
@@ -458,24 +470,24 @@ def lmentopspender2023():
     else:
         return render_template('lmen2023/lmentopspender2023.html')
 
-@app.route('/lmentopspender2023/alluser',methods=['POST','GET'])
+@app.route('/lmen_goes_to_europe/alluser',methods=['POST','GET'])
 def lmenalluser():
     df=tbluserlmen.query.all()
     return render_template('lmen2023/lmenalluser.html',df=df)
 
-@app.route('/lmentopspender2023/deluser/<id>',methods=['POST','GET']) #### delete user saja bukan yg di submit jg
+@app.route('/lmen_goes_to_europe/deluser/<id>',methods=['POST','GET']) #### delete user saja bukan yg di submit jg
 def lmendeluser(id):
     deldata=tbluserlmen.query.get(id)
     db.session.delete(deldata)
     db.session.commit()
     return redirect(url_for("lmenalluser"))
 
-@app.route('/lmentopspender2023/logout',methods=['GET','POST'])
+@app.route('/lmen_goes_to_europe/logout',methods=['GET','POST'])
 def lmenkeluar():
     session.pop('user', None)
     return redirect(url_for('lmentopspender2023'))
 
-@app.route('/lmentopspender2023/input',methods=['GET','POST'])
+@app.route('/lmen_goes_to_europe/input',methods=['GET','POST'])
 def lmeninput():
     # print(app.config['basedir'])
     print(os.path.abspath(os.path.dirname(__file__)))
@@ -506,7 +518,7 @@ def lmeninput():
         return redirect(url_for('lmentopspender2023'))
 
 
-@app.route('/lmentopspender2023/delinput/<id>',methods=['POST','GET']) #### masih bisa delete punya org lain
+@app.route('/lmen_goes_to_europe/delinput/<id>',methods=['POST','GET']) #### masih bisa delete punya org lain
 def lmendelinput(id):
     deldata=tblorderlmen.query.get(id)
     if str(session.get('user',None))==str(deldata.email) or str(session.get('user',None))=='customer@nutrimart.co.id':    
@@ -519,7 +531,7 @@ def lmendelinput(id):
     else:
         return redirect(url_for("lmenkeluar"))
 
-@app.route('/lmentopspender2023/delinputaff/<id>',methods=['POST','GET']) #### masih bisa delete punya org lain
+@app.route('/lmen_goes_to_europe/delinputaff/<id>',methods=['POST','GET']) #### masih bisa delete punya org lain
 def lmendelinputaff(id):
     deldata=tblafflmen.query.get(id)
     if str(session.get('user',None))==str(deldata.email) or str(session.get('user',None))=='customer@nutrimart.co.id':    
@@ -533,7 +545,7 @@ def lmendelinputaff(id):
     else:
         return redirect(url_for("lmenkeluar"))
 
-@app.route('/lmentopspender2023/profile/<id>',methods=['POST','GET'])  ## ini belum beres
+@app.route('/lmen_goes_to_europe/profile/<id>',methods=['POST','GET'])  ## ini belum beres
 def lmenprofile(id):
     if str(session.get('uid',None))==str(id):    
         user=tbluserlmen.query.get(id)
@@ -564,7 +576,7 @@ def lmenprofile(id):
     else:
         return redirect(url_for('lmenkeluar'))
 
-@app.route('/lmentopspender2023/order',methods=['POST','GET'])  
+@app.route('/lmen_goes_to_europe/order',methods=['POST','GET'])  
 def lmenorderall():
     if str(session.get('user',None))=='customer@nutrimart.co.id':
         df=tblorderlmen.query.all()
@@ -572,7 +584,7 @@ def lmenorderall():
     else:
         return redirect(url_for('lmenkeluar'))
 
-@app.route('/lmentopspender2023/orderedit/<id>',methods=['POST','GET'])  
+@app.route('/lmen_goes_to_europe/orderedit/<id>',methods=['POST','GET'])  
 def lmenorderedit(id):
     if str(session.get('user',None))=='customer@nutrimart.co.id':
         df=tblorderlmen.query.get(id)
@@ -587,7 +599,7 @@ def lmenorderedit(id):
     else:
         return redirect(url_for('lmenkeluar'))
 
-@app.route('/lmentopspender2023/affiliate',methods=['POST','GET'])  
+@app.route('/lmen_goes_to_europe/affiliate',methods=['POST','GET'])  
 def lmenaffall():
     if str(session.get('user',None))=='customer@nutrimart.co.id':
         df=tblafflmen.query.all()
@@ -595,7 +607,7 @@ def lmenaffall():
     else:
         return redirect(url_for('lmenkeluar'))
 
-@app.route('/lmentopspender2023/affiliateedit/<id>',methods=['POST','GET'])  
+@app.route('/lmen_goes_to_europe/affiliateedit/<id>',methods=['POST','GET'])  
 def affiliateedit(id):
     if str(session.get('user',None))=='customer@nutrimart.co.id':
         df=tblafflmen.query.get(id)
