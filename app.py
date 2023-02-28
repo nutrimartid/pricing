@@ -85,7 +85,7 @@ class apiv1(Resource):
         editdata=tblorderlmen.query.get(id)
         if editdata:
             editdata.orderstatus=str(status)
-            db.session.add(itemjanjian)
+            db.session.add(editdata)
             db.session.commit()
             return {'status':'added new api'}
         else:
