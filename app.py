@@ -83,7 +83,7 @@ class apiv1(Resource):
         id=request.args.get('id')
         status=request.args.get('status')
         editdata=tblorderlmen.query.get(id)
-        if len(editdata)>0:
+        if editdata:
             editdata.orderstatus=str(status)
             db.session.add(itemjanjian)
             db.session.commit()
