@@ -33,8 +33,9 @@ input[type="search"]{
     display: none;
 }
 
-.form-control{
+.form-control, .form-select{
     color: cornflowerblue !important;
+    margin-bottom: 0.7rem;
 }
 
 .login{
@@ -48,4 +49,10 @@ input[type="search"]{
 
 .rowmargintop{
     margin-top: 5px !important;
+}
+
+.stickyicon{
+    position: fixed;
+    bottom: 5%;
+    right: 5%;
 }

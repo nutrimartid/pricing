@@ -48,6 +48,7 @@ class tblorderlmen(db.Model):
 class tblafflmen(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(64))
+    affmp = db.Column(db.String(64))
     affvalue = db.Column(db.Integer)
     affdocs = db.Column(db.String(100))
     affstatus = db.Column(db.String(64))
@@ -457,26 +458,29 @@ def proddesclist():
 
 @app.route('/lmen_goes_to_europe',methods=['POST','GET'])
 def lmentopspender2023():
-    if request.method == 'POST':
-        if request.form['action']=='Daftar':
-            newuser=tbluserlmen(first_name=request.form['qnama'],email=request.form['qemail'],phone=request.form['qphone'],username_tiktok=request.form['qunamett'],password=request.form['qpass'])
-            db.session.add(newuser)
-            db.session.commit()
-            print(request.form['action'])
-            return render_template('lmen2023/lmentopspender2023.html',msg="Registrasi Berhasil, Silahkan Login")
-        else:
-            # return request.form['action']
-            usercek=tbluserlmen.query.filter_by(email=request.form['qemailmsk']).first()
-            if usercek is None or usercek.password!=request.form['qpassmsk']:
-                msg='Username / Password salah'
-                return render_template('lmen2023/lmentopspender2023.html',msg=msg)
-            else:
-                session['user']=request.form['qemailmsk']
-                session['username']=usercek.first_name
-                session['uid']=usercek.id
-                return redirect(url_for('lmeninput'))
+    if session.get('user',None):
+        return redirect(url_for('lmeninput'))
     else:
-        return render_template('lmen2023/lmentopspender2023.html')
+        if request.method == 'POST':
+            if request.form['action']=='Daftar':
+                newuser=tbluserlmen(first_name=request.form['qnama'],email=request.form['qemail'],phone=request.form['qphone'],username_tiktok=request.form['qunamett'],password=request.form['qpass'])
+                db.session.add(newuser)
+                db.session.commit()
+                print(request.form['action'])
+                return render_template('lmen2023/lmentopspender2023.html',msg="Registrasi Berhasil, Silahkan Login")
+            else:
+                # return request.form['action']
+                usercek=tbluserlmen.query.filter_by(email=request.form['qemailmsk']).first()
+                if usercek is None or usercek.password!=request.form['qpassmsk']:
+                    msg='Username / Password salah'
+                    return render_template('lmen2023/lmentopspender2023.html',msg=msg)
+                else:
+                    session['user']=request.form['qemailmsk']
+                    session['username']=usercek.first_name
+                    session['uid']=usercek.id
+                    return redirect(url_for('lmeninput'))
+        else:
+            return render_template('lmen2023/lmentopspender2023.html')
 
 @app.route('/lmen_goes_to_europe/alluser',methods=['POST','GET'])
 def lmenalluser():
@@ -514,7 +518,7 @@ def lmeninput():
                 f.filename = f"{session.get('uid',None)}_{timeid}.{ftype}"
                 filedir=os.path.join(app.config['UPLOAD_FOLDER'],secure_filename(f.filename))
                 f.save(filedir)
-                newaffiliate=tblafflmen(email=session.get('user',None),affvalue=request.form['inpaffval'],affdocs=filedir,affstatus="Pending")
+                newaffiliate=tblafflmen(email=session.get('user',None),affvalue=request.form['inpaffval'],affdocs=filedir,affstatus="Pending",affmp=request.form['inpaffmp'])
                 db.session.add(newaffiliate)
                 db.session.commit()
                 return redirect(url_for('lmeninput'))
