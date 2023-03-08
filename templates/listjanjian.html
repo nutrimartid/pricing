@@ -28,11 +28,11 @@
       <tr>
         <th>Nama Produk</th>
         <th>SKU</th>
-        <th>PL NFI</th>
-        <th>Harga Janjian</th>
+        <th>PL</th>
+        <th>Janjian</th>
         <th>Disc</th>
-        <th>Start Date</th>
-        <th>End Date</th>
+        <th>Start</th>
+        <th>End</th>
         <!-- <th>ID</th> -->
         <th>Action</th>
       </tr>
@@ -40,11 +40,11 @@
     <tbody>
       {% for i in df %}
       <tr>
-        <td>{{i.realnamaproduk}}</td>
+        <td>{{i.realnamaproduk}} - {{i.notes}}</td>
         <td>{{i.realsku}}</td>
         <td>{{i.plnfi}}</td>
         <td>{{i.hargajanjian}}</td>
-        <td>{{((i.hargajanjian/i.plnfi-1)*100) | round}} %</td>
+        <td>{{((i.hargajanjian/i.plnfi-1)*100) | round | int}} %</td>
         <td>{{i.startdate}}</td>
         <td>{{i.enddate}}</td>
         <!-- <td>{{i.id}}</td> -->
@@ -69,11 +69,11 @@
       <tr>
         <th>Nama Produk</th>
         <th>SKU</th>
-        <th>PL NFI</th>
-        <th>Harga Janjian</th>
+        <th>PL</th>
+        <th>Janjian</th>
         <th>Disc</th>
-        <th>Start Date</th>
-        <th>End Date</th>
+        <th>Start</th>
+        <th>End</th>
         <!-- <th>ID</th> -->
         <th>Action</th>
       </tr>
@@ -81,11 +81,11 @@
     <tbody>
       {% for i in df2 %}
       <tr>
-        <td>{{i.realnamaproduk}}</td>
+        <td>{{i.realnamaproduk}} - {{i.notes}}</td>
         <td>{{i.realsku}}</td>
         <td>{{i.plnfi}}</td>
         <td>{{i.hargajanjian}}</td>
-        <td>{{((i.hargajanjian/i.plnfi-1)*100) | round}} %</td>
+        <td>{{((i.hargajanjian/i.plnfi-1)*100) | round | int}} %</td>
         <td>{{i.startdate}}</td>
         <td>{{i.enddate}}</td>
         <!-- <td>{{i.id}}</td> -->
@@ -110,11 +110,11 @@
       <tr>
         <th>Nama Produk</th>
         <th>SKU</th>
-        <th>PL NFI</th>
-        <th>Harga Janjian</th>
+        <th>PL</th>
+        <th>Janjian</th>
         <th>Disc</th>
-        <th>Start Date</th>
-        <th>End Date</th>
+        <th>Start</th>
+        <th>End</th>
         <!-- <th>ID</th> -->
         <!-- <th>Action</th> -->
       </tr>
