@@ -1,6 +1,6 @@
 from flask import Flask,render_template,url_for,request,redirect,session,make_response,send_file
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine,func
 from flask_migrate import Migrate
 from flask_restful import Resource,Api
 from datetime import date,timedelta,datetime
@@ -101,6 +101,27 @@ class apiv1(Resource):
             return {'status':'FAILED'}
 
 api.add_resource(apiv1,'/apiv1')
+
+def valord(uemail):
+    val1=db.session.query(db.func.sum(tblorderlmen.ordervalue)).filter_by(email=uemail,orderstatus="Valid").scalar()
+    if not val1:
+        val1=0
+    val2=db.session.query(db.func.sum(tblafflmen.affvalue)).filter_by(email=uemail,affstatus="Valid").scalar()
+    if not val2:
+        val2=0
+    val=val1+val2
+    return(val)
+
+def affmplist(uemail):
+    temp=db.session.query(tblafflmen.affmp).filter_by(email=uemail).distinct().all()
+    mplist=[i[0] for i in temp]
+    if "Shopee" in mplist:
+        return(['Shopee','Tiktok'])
+    elif "Tokopedia" in mplist:
+        return(['Tokopedia','Tiktok'])
+    else:
+        return(['Tokopedia','Shopee','Tiktok'])
+
 
 @app.route('/',methods=['POST','GET'])
 def index():
@@ -501,8 +522,9 @@ def lmenkeluar():
 
 @app.route('/lmen_goes_to_europe/input',methods=['GET','POST'])
 def lmeninput():
+
     # print(app.config['basedir'])
-    print(os.path.abspath(os.path.dirname(__file__)))
+    # print(os.path.abspath(os.path.dirname(__file__)))
     if session.get('user',None):
         if request.method == 'POST':
             # print(request.form['action'])
@@ -523,9 +545,11 @@ def lmeninput():
                 db.session.commit()
                 return redirect(url_for('lmeninput'))
         else:
+            mpops=affmplist(session.get('user',None))
             df=tblorderlmen.query.filter_by(email=session.get('user',None)).all()#
             df2=tblafflmen.query.filter_by(email=session.get('user',None)).all()#
-            return render_template('lmen2023/lmeninput.html',df=df,df2=df2)
+            valtrx=valord(session.get('user',None))
+            return render_template('lmen2023/lmeninput.html',df=df,df2=df2,valtrx=valtrx,mpops=mpops)
     else:
         return redirect(url_for('lmentopspender2023'))
 
