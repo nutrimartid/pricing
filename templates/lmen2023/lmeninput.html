@@ -14,7 +14,11 @@
 <!-- <a href="">order</a> -->
 
 {% else %}
-<p>Nilai Transaksimu : <b>{{ "Rp {:,.0f}".format(valtrx) }}</b></p>
+<p>Nilai Transaksimu : <b>{{ "Rp {:,.0f}".format(valtrx) }}</b>
+    <a href="" role="button" data-bs-toggle="modal" data-bs-target="#valinfoModal">
+        <img src="{{ url_for('static', filename='info.png') }}" alt="" style="height: 15px;">
+    </a>
+</p>
 <br>
 
 <ul class="nav nav-tabs" id="myTab" role="tablist">
@@ -139,19 +143,13 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <p>Berikut contoh order ID yang benar</p>
-          <ul>
-            <li>Tokopedia : INV/20230201/MPL/301896**** </li>
-            <li>Blibli : 1212364**** </li>
-            <li>Shopee : 230202V6XC**** </li>
-            <li>Lazada : 103792573554**** </li>
-            <li>Bukalapak : 23349035**** </li>
-            <li>TikTok : 57703148877712****</li>
-            <li>Aladin Mall : 104507****-1</li>
-            <li>Nutrimart : 100010**** </li>
-            <li>Order Online : 10216**** </li>
-            <li>Orami : 1995**** </li>
-          </ul>
+          <p>Panduan mengisi form input order:</p>
+          <ol>
+            <li>Setelah menyelesaikan transaksi silahkan salin no order yang tertera pada website / aplikasi yang Anda gunakan untuk belanja</li>
+            <li>Klik tombol Add Order</li>
+            <li>Data Anda akan kami verifikasi terlebih dahulu dan status tertulis PENDING. Jika verifikasi sudah selesai maka status akan berubah menjadi VALID / NOT VALID.</li>
+            <li>Pesanan akan dinyatakan VALID jika status pesanan sudah selesai dan tidak ada permintaan retur & refund. </li>
+        </ol>
         </div>
         <!-- <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -169,7 +167,33 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          ...
+            <p>Panduan mengisi form input hasil affiliate:</p>
+            <ol>
+                <li>Setelah melakukan promosi silahkan screenshot hasil penjualan produk L-Men yang muncul di dashboard Affiliate Anda setiap akhir bulan (contoh: Hasil bulan April discreenshot tanggal 30 April 2023, dst)</li>
+                <li>Ketik hasil yang muncul pada dashboard ke kolom Affiliate Value</li>
+                <li>Pilih marketplace sesuai program affiliate yang kamu ikuti</li>
+                <li>Klik tombol Add Affiliate</li>
+                <li>Data Anda akan kami verifikasi terlebih dahulu dan status tertulis PENDING. Jika verifikasi sudah selesai maka status akan berubah menjadi VALID / NOT VALID.</li>
+                <li>Data akan dinyatakan VALID jika sesuai dengan data yang kami terima dari marketplace tersebut.</li>
+            </ol>
+        </div>
+        <!-- <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div> -->
+      </div>
+    </div>
+</div>
+
+<div class="modal fade" id="valinfoModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Info Nilai Transaksi</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <p>Akumulasi pembelanjaanmu dihitung dari transaksi dengan status VALID. Jika ada transaksi yang dinyatakan tidak valid silahkan mengisi ulang dengan data yang benar atau menghubungi Whatsapp kami.</p>
         </div>
         <!-- <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
