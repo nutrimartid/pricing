@@ -659,5 +659,13 @@ def affiliateedit(id):
     else:
         return redirect(url_for('lmenkeluar'))
 
+@app.route('/lmen_goes_to_europe/faq',methods=['POST','GET'])  
+def lmenfaq():
+    # if str(session.get('user',None))=='customer@nutrimart.co.id':
+    #     df=tblafflmen.query.all()
+    #     return render_template('lmen2023/lmenaffall.html',df=df)
+    # else:
+    return render_template('lmen2023/lmenfaq.html')
+
 if __name__ == '__main__':
     app.run()
