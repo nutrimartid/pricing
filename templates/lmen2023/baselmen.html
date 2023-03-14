@@ -21,7 +21,7 @@
       </a>
       
       <div class="col text-end">
-        <a class="btn btn-outline-primary btn-sm" role="button" href="">FAQ</a>
+        <a class="btn btn-outline-primary btn-sm" role="button" href="{{url_for('lmenfaq')}}">FAQ</a>
         {% if session['user'] %}
         <a class="btn btn-outline-primary btn-sm" role="button" href="{{url_for('lmenprofile',id=session['uid'])}}">Profile</a>
         <a class="btn btn-outline-primary btn-sm" role="button" href="{{url_for('lmenkeluar')}}">Keluar</a>
