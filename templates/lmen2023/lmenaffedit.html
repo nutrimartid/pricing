@@ -1,8 +1,21 @@
 {% extends 'lmen2023/baselmen.html' %}
 {% block content %}
 
-<h2>{{df.id}}</h2>
-<h2>{{df.email}}</h2>
+<table>
+  <tr>
+    <td>
+      <a href="{{url_for('lmenaffall')}}" >
+        <img src="{{ url_for('static', filename='back.png') }}" alt="" style="height: 30px;">
+      </a>
+    </td>
+    <td>
+      <h2>{{df.id}} {{df.email}}</h2>
+    </td>
+  </tr>
+</table>
+
+
+<!-- <h2>{{df.email}}</h2> -->
 <a href="/{{df.affdocs}}" target="_blank">view</a>
 <!-- <h2>{{df.affdocs}}</h2> -->
 

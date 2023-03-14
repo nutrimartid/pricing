@@ -1,8 +1,18 @@
 {% extends 'lmen2023/baselmen.html' %}
 {% block content %}
 
-<h2>{{df.orderid}}</h2>
-<h2>{{df.email}}</h2>
+<table>
+  <tr>
+    <td>
+      <a href="{{url_for('lmenorderall')}}" >
+        <img src="{{ url_for('static', filename='back.png') }}" alt="" style="height: 30px;">
+      </a>
+    </td>
+    <td>
+      <h2>{{df.orderid}} {{df.email}}</h2>
+    </td>
+  </tr>
+</table>
 
 <form method="POST">
     {% if msg %}
