@@ -557,6 +557,7 @@ def lmeninput():
                 # filedir=os.path.join(app.config['UPLOAD_FOLDER'],secure_filename(f.filename))
                 # f.save(filedir)
                 # newaffiliate=tblafflmen(email=session.get('user',None),affvalue=request.form['inpaffval'],affdocs=filedir,affstatus="Pending",affmp=request.form['inpaffmp'])
+                user.affmp=request.form['inpaffmp']
                 user.username_tiktok=request.form['inpuseridtt']
                 user.username_tokpi=request.form['inpuseridst']
                 db.session.add(user)
