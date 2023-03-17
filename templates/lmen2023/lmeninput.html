@@ -75,7 +75,7 @@
                 <label for="inpuseridst" class="form-label">Shopee / Tokpedia</label>
                 <input class="form-control" type="text" placeholder="Nama Profile" value="{{user.username_tokpi}}" aria-label="default input example" id="inpuseridst" name="inpuseridst" {% if user.username_tokpi %} readonly {% endif %}>
                 {% if ((user.username_tiktok) and (user.username_tokpi)) %}
-                <p>hubungi admin untuk mengganti username affilaite</p>
+                <p>hubungi admin untuk mengganti username affiliate</p>
                 {% else %}
                 <input type="submit" name="action" value="Add Affiliate" class="btn btn-primary mb-3">
                 {% endif %}
