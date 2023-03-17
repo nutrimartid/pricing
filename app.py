@@ -35,6 +35,8 @@ class tbluserlmen(db.Model):
     email = db.Column(db.String(64),index=True, unique=True)
     phone = db.Column(db.String(64))
     username_tiktok = db.Column(db.String(100))
+    username_tokpi = db.Column(db.String(100))
+    voucher = db.Column(db.String(100))
     # aplikasi = db.Column(db.String(64))
     password = db.Column(db.String(64))
 
@@ -42,6 +44,7 @@ class tblorderlmen(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(64))
     orderid = db.Column(db.String(100),index=True, unique=True)
+    orderdate = db.Column(db.Date)
     ordervalue = db.Column(db.Integer)
     orderstatus = db.Column(db.String(64))
 
@@ -522,37 +525,55 @@ def lmenkeluar():
 
 @app.route('/lmen_goes_to_europe/input',methods=['GET','POST'])
 def lmeninput():
-
-    # print(app.config['basedir'])
-    # print(os.path.abspath(os.path.dirname(__file__)))
     if session.get('user',None):
+        user=tbluserlmen.query.get(session.get('uid',None))
         if request.method == 'POST':
-            # print(request.form['action'])
             if request.form['action']=='Add Order':
-                neworderid=tblorderlmen(orderid=request.form['inporderid'],email=session.get('user',None),orderstatus="Pending")
+                y1=int(request.form['inporderdate'].split('-')[0])
+                m1=int(request.form['inporderdate'].split('-')[1])
+                d1=int(request.form['inporderdate'].split('-')[2])
+                neworderid=tblorderlmen(orderid=request.form['inporderid'],orderdate=date(year=y1,month=m1,day=d1),email=session.get('user',None),orderstatus="Pending")
                 db.session.add(neworderid)
                 db.session.commit()
                 return redirect(url_for('lmeninput'))
+            
+            elif request.form['action']=='Add Voucher':
+                v1=request.form['inpvcr1']
+                v2=request.form['inpvcr2']
+                v=[f"{v1}",f"{v2}"]
+                if "" in v:
+                    v.remove("")
+                print(len(v))
+                
+                user.voucher=str(v)
+                db.session.add(user)
+                db.session.commit()
+                return redirect(url_for('lmeninput'))
             else:
-                f=request.files['formAff']
-                ftype=f.content_type.split('/')[1]
-                timeid=str(datetime.now()).replace("-",'').replace(":",'').replace(" ",'').replace(".",'')
-                f.filename = f"{session.get('uid',None)}_{timeid}.{ftype}"
-                filedir=os.path.join(app.config['UPLOAD_FOLDER'],secure_filename(f.filename))
-                f.save(filedir)
-                newaffiliate=tblafflmen(email=session.get('user',None),affvalue=request.form['inpaffval'],affdocs=filedir,affstatus="Pending",affmp=request.form['inpaffmp'])
-                db.session.add(newaffiliate)
+                # f=request.files['formAff']
+                # ftype=f.content_type.split('/')[1]
+                # timeid=str(datetime.now()).replace("-",'').replace(":",'').replace(" ",'').replace(".",'')
+                # f.filename = f"{session.get('uid',None)}_{timeid}.{ftype}"
+                # filedir=os.path.join(app.config['UPLOAD_FOLDER'],secure_filename(f.filename))
+                # f.save(filedir)
+                # newaffiliate=tblafflmen(email=session.get('user',None),affvalue=request.form['inpaffval'],affdocs=filedir,affstatus="Pending",affmp=request.form['inpaffmp'])
+                user.username_tiktok=request.form['inpuseridtt']
+                user.username_tokpi=request.form['inpuseridst']
+                db.session.add(user)
                 db.session.commit()
                 return redirect(url_for('lmeninput'))
         else:
             mpops=affmplist(session.get('user',None))
             df=tblorderlmen.query.filter_by(email=session.get('user',None)).all()#
             df2=tblafflmen.query.filter_by(email=session.get('user',None)).all()#
+            if user.voucher:
+                vou = json.loads(user.voucher.replace("'",'"'))
+            else:
+                vou=[]
             valtrx=valord(session.get('user',None))
-            return render_template('lmen2023/lmeninput.html',df=df,df2=df2,valtrx=valtrx,mpops=mpops)
+            return render_template('lmen2023/lmeninput.html',df=df,df2=df2,valtrx=valtrx,mpops=mpops,vou=vou,user=user)
     else:
         return redirect(url_for('lmentopspender2023'))
-
 
 @app.route('/lmen_goes_to_europe/delinput/<id>',methods=['POST','GET']) #### masih bisa delete punya org lain
 def lmendelinput(id):

@@ -23,15 +23,18 @@
 
 <ul class="nav nav-tabs" id="myTab" role="tablist">
     <li class="nav-item" role="presentation">
-      <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home-tab-pane" type="button" role="tab" aria-controls="home-tab-pane" aria-selected="true">Konsumen & Reseller</button>
+      <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#cust-tab-pane" type="button" role="tab" aria-controls="home-tab-pane" aria-selected="true">Konsumen</button>
     </li>
     <li class="nav-item" role="presentation">
-      <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile-tab-pane" type="button" role="tab" aria-controls="profile-tab-pane" aria-selected="false">Affiliate</button>
+      <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#resell-tab-pane" type="button" role="tab" aria-controls="profile-tab-pane" aria-selected="false">Reseller</button>
+    </li>
+    <li class="nav-item" role="presentation">
+        <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#affil-tab-pane" type="button" role="tab" aria-controls="profile-tab-pane" aria-selected="false">Affiliate</button>
     </li>
 </ul>
 
 <div class="tab-content" id="myTabContent">
-    <div class="tab-pane fade show active" id="home-tab-pane" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
+    <div class="tab-pane fade show active" id="cust-tab-pane" role="tabpanel" aria-labelledby="home-tab" tabindex="0">
         <div class="container">
             <form method="POST">
                 <br>
@@ -40,33 +43,43 @@
                         <img src="{{ url_for('static', filename='info.png') }}" alt="" style="height: 15px;">
                     </a>
                 <input class="form-control" type="text" placeholder="" aria-label="default input example" id="inporderid" name="inporderid" required>
-                <br>
+                <label for="inporderdate" class="form-label">Order Date</label>
+                <input class="form-control" type="date" placeholder="" aria-label="default input example" id="inporderdate" name="inporderdate" required>
                 <input type="submit" name="action" value="Add Order" class="btn btn-primary mb-3">
             </form>
         </div>
     </div>
-    <div class="tab-pane fade" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
+    <div class="tab-pane fade" id="resell-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
         <div class="container">
             <form method="POST" enctype=multipart/form-data>
                 <br>
-                <label for="formAff" class="form-label">Screenshot Page Affiliate</label>
-                    <a href="" role="button" data-bs-toggle="modal" data-bs-target="#affinfoModal">
-                        <img src="{{ url_for('static', filename='info.png') }}" alt="" style="height: 15px;">
-                    </a>
-                <input class="form-control" type='file' name='formAff' id="formAff" accept="image/png, image/jpeg, .mp4" required>
-                <label for="inporderid" class="form-label">Affiliate Value</label>
-                <input class="form-control" type="number" placeholder="" aria-label="default input example" id="inpaffval" name="inpaffval" required>
-                <label for="inpaffmp" class="form-label">Marketplace</label>
-                <select name="inpaffmp" id="inpaffmp" class="form-select mb-3">
-                    {% for ops in mpops %}
-                    <option value="{{ops}}">{{ops}}</option>
-                    <!-- <option value="Shopee">Shopee</option>
-                    <option value="Tiktok">Tiktok</option> -->
-                    {% endfor %}
-
-                </select>
+                <label for="inpvcr1" class="form-label">Voucher 1</label>
+                <input class="form-control" type="text" placeholder="" value="{{vou[0]}}" aria-label="default input example" id="inpvcr1" name="inpvcr1" {% if vou[0] %} readonly {% endif %}>
+                <label for="inpvcr2" class="form-label">Voucher 2</label>
+                <input class="form-control" type="text" placeholder="" value="{{vou[1]}}" aria-label="default input example" id="inpvcr2" name="inpvcr2" {% if vou[1] %} readonly {% endif %}>
+                {% if vou[1] and vou[0] %}
+                <p>hubungi admin untuk mengganti voucher</p>
+                {% else %}
+                <input type="submit" name="action" value="Add Voucher" class="btn btn-primary mb-3">
+                {% endif %}
+                
+            </form>
+        </div>
+    </div>
+    <div class="tab-pane fade" id="affil-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
+        <div class="container">
+            <form method="POST" enctype=multipart/form-data>
                 <br>
+                <label for="inpuseridtt" class="form-label">Tiktok</label>
+                <input class="form-control" type="text" placeholder="User Id" value="{{user.username_tiktok}}" aria-label="default input example" id="inpuseridtt" name="inpuseridtt" {% if user.username_tiktok %} readonly {% endif %}>
+                <label for="inpuseridst" class="form-label">Shopee / Tokpedia</label>
+                <input class="form-control" type="text" placeholder="Nama Profile" value="{{user.username_tokpi}}" aria-label="default input example" id="inpuseridst" name="inpuseridst" {% if user.username_tokpi %} readonly {% endif %}>
+                {% if ((user.username_tiktok) and (user.username_tokpi)) %}
+                <p>hubungi admin untuk mengganti username affilaite</p>
+                {% else %}
                 <input type="submit" name="action" value="Add Affiliate" class="btn btn-primary mb-3">
+                {% endif %}
+                
             </form>
         </div>
     </div>
@@ -88,7 +101,7 @@
             <tbody>
                 {% for i in df %}
                 <tr>
-                    <td>{{i.orderid}}</td>
+                    <td>{{i.orderid}} {{i.orderdate}}</td>
                     {% if i.ordervalue %}
                         <td>{{ "Rp {:,.0f}".format(i.ordervalue) }}</td>
                         {% else %}
