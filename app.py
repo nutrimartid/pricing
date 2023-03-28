@@ -492,7 +492,7 @@ def lmentopspender2023():
     else:
         if request.method == 'POST':
             if request.form['action']=='Daftar':
-                newuser=tbluserlmen(first_name=request.form['qnama'],email=request.form['qemail'],phone=request.form['qphone'],username_tiktok=request.form['qunamett'],password=request.form['qpass'])
+                newuser=tbluserlmen(first_name=request.form['qnama'],email=request.form['qemail'],phone=request.form['qphone'],password=request.form['qpass'])
                 db.session.add(newuser)
                 db.session.commit()
                 print(request.form['action'])
