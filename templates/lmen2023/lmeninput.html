@@ -52,6 +52,9 @@
     <div class="tab-pane fade" id="resell-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
         <div class="container">
             <form method="POST" enctype=multipart/form-data>
+                <a href="" role="button" data-bs-toggle="modal" data-bs-target="#rslinfoModal">
+                    Panduan mengisi kode voucher reseller <img src="{{ url_for('static', filename='info.png') }}" alt="" style="height: 15px;">
+                </a>
                 <br>
                 <label for="inpvcr1" class="form-label">Voucher 1</label>
                 <input class="form-control" type="text" placeholder="" value="{{vou[0]}}" aria-label="default input example" id="inpvcr1" name="inpvcr1" {% if vou[0] %} readonly {% endif %}>
@@ -211,6 +214,27 @@
                 <li>Data transaksi yang masuk dari akun Anda akan kami cek dan update secara berkala setiap 2 minggu sekali.</li>
                 <li>Jika terjadi kesalahan penulisan informasi silahkan hubungi admin menggunakan tombol Whatsapp di pojok kanan bawah.</li>
                 
+            </ol>
+        </div>
+
+      </div>
+    </div>
+</div>
+
+<div class="modal fade" id="rslinfoModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Reseller Info</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <p>Panduan mengisi form kode voucher reseller:</p>
+            <ol>
+                <li>Masukkan kode voucher reseller yang Anda gunakan untuk belanja. Usahakan kode voucher yang dimasukkan BENAR karena Anda hanya bisa mengisi form ini 1x. </li>
+                <li>Lakukan transaksi Anda seperti biasa dan data pembelian akan tercatat didalam sistem kami.</li>
+                <li>Data transaksi yang VALID akan kami update 2 minggu sekali.</li>
+                <li>Jika terjadi kesalahan penulisan voucher silahkan hubungi admin menggunakan tombol Whatsapp di pojok kanan bawah.</li>
             </ol>
         </div>
 

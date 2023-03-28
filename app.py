@@ -607,7 +607,7 @@ def lmendelinput(id):
 def lmendelinputaff(id):
     deldata=tblafflmen.query.get(id)
     if str(session.get('user',None))==str(deldata.email) or str(session.get('user',None))=='customer@nutrimart.co.id':    
-        os.remove(deldata.affdocs)
+        # os.remove(deldata.affdocs)
         db.session.delete(deldata)
         db.session.commit()
         if str(session.get('user',None))=='customer@nutrimart.co.id':
