@@ -568,7 +568,7 @@ def lmeninput():
                     print(request.form['inpuseridtt'])
                     user.username_tiktok=request.form['inpuseridtt']
                     print('done')
-                if request.form['inpuseridst']!='None':
+                if request.form['inpuseridst'] and request.form['inpuseridst']!='None':
                     user.app2=request.form['inpaffmp']
                     user.username_tokpi=request.form['inpuseridst']
                     print('masuk2')
