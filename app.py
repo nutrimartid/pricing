@@ -35,9 +35,10 @@ class tbluserlmen(db.Model):
     email = db.Column(db.String(64),index=True, unique=True)
     phone = db.Column(db.String(64))
     username_tiktok = db.Column(db.String(100))
+    app2=db.Column(db.String(100))
     username_tokpi = db.Column(db.String(100))
     voucher = db.Column(db.String(100))
-    # aplikasi = db.Column(db.String(64))
+    # affmp = db.Column(db.String(64))
     password = db.Column(db.String(64))
 
 class tblorderlmen(db.Model):
@@ -562,9 +563,15 @@ def lmeninput():
                 # filedir=os.path.join(app.config['UPLOAD_FOLDER'],secure_filename(f.filename))
                 # f.save(filedir)
                 # newaffiliate=tblafflmen(email=session.get('user',None),affvalue=request.form['inpaffval'],affdocs=filedir,affstatus="Pending",affmp=request.form['inpaffmp'])
-                user.affmp=request.form['inpaffmp']
-                user.username_tiktok=request.form['inpuseridtt']
-                user.username_tokpi=request.form['inpuseridst']
+                
+                if request.form['inpuseridtt']!='None':
+                    print(request.form['inpuseridtt'])
+                    user.username_tiktok=request.form['inpuseridtt']
+                    print('done')
+                if request.form['inpuseridst']!='None':
+                    user.app2=request.form['inpaffmp']
+                    user.username_tokpi=request.form['inpuseridst']
+                    print('masuk2')
                 db.session.add(user)
                 db.session.commit()
                 return redirect(url_for('lmeninput'))
