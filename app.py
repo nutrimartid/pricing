@@ -106,13 +106,18 @@ class apiv1(Resource):
 api.add_resource(apiv1,'/apiv1')
 
 def valord(uemail):
+    user=tbluserlmen.query.filter_by(email=uemail).first()
+    # user.username_tiktok
     val1=db.session.query(db.func.sum(tblorderlmen.ordervalue)).filter_by(email=uemail,orderstatus="Valid").scalar()
     if not val1:
         val1=0
-    val2=db.session.query(db.func.sum(tblafflmen.affvalue)).filter_by(email=uemail,affstatus="Valid").scalar()
+    val2=db.session.query(db.func.sum(tblafflmen.affvalue)).filter_by(email=user.username_tiktok,affstatus="Valid").scalar()
     if not val2:
         val2=0
-    val=val1+val2
+    val3=db.session.query(db.func.sum(tblafflmen.affvalue)).filter_by(email=user.username_tokpi,affstatus="Valid").scalar()
+    if not val3:
+        val3=0
+    val=val1+val2+val3
     return(val)
 
 def affmplist(uemail):
@@ -487,7 +492,7 @@ def lmentopspender2023():
     else:
         if request.method == 'POST':
             if request.form['action']=='Daftar':
-                newuser=tbluserlmen(first_name=request.form['qnama'],email=request.form['qemail'],phone=request.form['qphone'],username_tiktok=request.form['qunamett'],password=request.form['qpass'])
+                newuser=tbluserlmen(first_name=request.form['qnama'],email=request.form['qemail'],phone=request.form['qphone'],password=request.form['qpass'])
                 db.session.add(newuser)
                 db.session.commit()
                 print(request.form['action'])
@@ -566,7 +571,9 @@ def lmeninput():
         else:
             mpops=affmplist(session.get('user',None))
             df=tblorderlmen.query.filter_by(email=session.get('user',None)).all()#
-            df2=tblafflmen.query.filter_by(email=session.get('user',None)).all()#
+            # df2=tblafflmen.query.filter(email=user.username_tiktok|email=user.username_tokpi).all()#
+            # df2=session.query(tblafflmen).filter(or_(email=user.username_tiktok,email=user.username_tokpi))
+            df2=tblafflmen.query.filter((tblafflmen.email == user.username_tiktok) | (tblafflmen.email == user.username_tokpi)).all()
             if user.voucher:
                 vou = json.loads(user.voucher.replace("'",'"'))
             else:
@@ -660,8 +667,14 @@ def lmenorderedit(id):
 @app.route('/lmen_goes_to_europe/affiliate',methods=['POST','GET'])  
 def lmenaffall():
     if str(session.get('user',None))=='customer@nutrimart.co.id':
-        df=tblafflmen.query.all()
-        return render_template('lmen2023/lmenaffall.html',df=df)
+        if request.method == 'POST':
+            newaff=tblafflmen(email=request.form['inpaffuid'],affvalue=request.form['inpaffvalue'],affstatus='Valid')
+            db.session.add(newaff)
+            db.session.commit()
+            return redirect(url_for('lmenaffall'))
+        else:
+            df=tblafflmen.query.all()
+            return render_template('lmen2023/lmenaffall.html',df=df)
     else:
         return redirect(url_for('lmenkeluar'))
 
