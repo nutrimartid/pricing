@@ -23,7 +23,7 @@
                 <td>{{i.phone}}</td>
                 <td>{{i.username_tiktok}}</td>
                 <!-- <td>{{i.password}}</td> -->
-                <td><a href="">delete</a></td>
+                <td><a href="{{ url_for('lmendeluser',id=i.id) }}">delete</a></td>
             </tr>
             {% endfor %}
         </tbody>

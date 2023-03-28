@@ -52,6 +52,9 @@
     <div class="tab-pane fade" id="resell-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
         <div class="container">
             <form method="POST" enctype=multipart/form-data>
+                <a href="" role="button" data-bs-toggle="modal" data-bs-target="#rslinfoModal">
+                    Panduan mengisi kode voucher reseller <img src="{{ url_for('static', filename='info.png') }}" alt="" style="height: 15px;">
+                </a>
                 <br>
                 <label for="inpvcr1" class="form-label">Voucher 1</label>
                 <input class="form-control" type="text" placeholder="" value="{{vou[0]}}" aria-label="default input example" id="inpvcr1" name="inpvcr1" {% if vou[0] %} readonly {% endif %}>
@@ -74,22 +77,27 @@
                 </a>
                 <br>
                 <label for="inpuseridtt" class="form-label">Tiktok</label>
-                <input class="form-control" type="text" placeholder="User Id" value="{{user.username_tiktok}}" aria-label="default input example" id="inpuseridtt" name="inpuseridtt" {% if user.username_tiktok %} readonly {% endif %}>
+                <input class="form-control" type="text" placeholder="User Id" {% if user.username_tiktok %} value="{{user.username_tiktok}}" {% endif %} aria-label="default input example" id="inpuseridtt" name="inpuseridtt" {% if user.username_tiktok %} readonly {% endif %}>
                 
                 <label for="inpaffmp" class="form-label">Platform ke-2</label>
                 <div class="row g-3">
                     <!-- <label for="inpaffmp" class="form-label">Platform ke-2</label> -->
                     <!-- <p></p> -->
                     
-                    
-                    <div class="col">
-                        <select name="inpaffmp" id="inpaffmp" class="form-select mb-3">
-                            <option value="Tokopedia">Tokopedia</option>
-                            <option value="Shopee">Shopee</option>
-                        </select>        
+                    <div class="col">         
+                        <select name="inpaffmp" id="inpaffmp" class="form-select mb-3" {% if user.app2 %} readonly {% endif %}>
+                            {% if user.app2 ==  "Tokopedia" %}
+                                <option value="Tokopedia">Tokopedia</option>
+                            {% elif user.app2 ==  "Shopee" %}
+                                <option value="Shopee">Shopee</option>
+                            {% else %}
+                                <option value="Tokopedia">Tokopedia</option>
+                                <option value="Shopee">Shopee</option>
+                            {% endif %}
+                        </select>
                     </div>
                     <div class="col">
-                        <input class="form-control" type="text" placeholder="Nama Profile" value="{{user.username_tokpi}}" aria-label="default input example" id="inpuseridst" name="inpuseridst" {% if user.username_tokpi %} readonly {% endif %}>
+                        <input class="form-control" type="text" placeholder="Nama Profile" {% if user.username_tokpi %} value="{{user.username_tokpi}}" {% endif %} aria-label="default input example" id="inpuseridst" name="inpuseridst" {% if user.username_tokpi %} readonly {% endif %}>
                     </div>
                 </div>
 
@@ -142,9 +150,9 @@
                 <tr>
                     <th>ID</th>
                     <th>Value</th>
-                    <th>Marketplace</th>
-                    <th>Attachment</th>
-                    <th>Status</th>
+                    <!-- <th>Marketplace</th> -->
+                    <!-- <th>Attachment</th>
+                    <th>Status</th> -->
                     <th>Action</th>
                 </tr>
             </thead>
@@ -158,9 +166,9 @@
                         {% else %}
                         <td>-</td>
                     {% endif %}
-                    <td>{{i.affmp}}</td>
+                    <!-- <td>{{i.affmp}}</td>
                     <td><a href="/{{i.affdocs}}" target="_blank">view</a></td>
-                    <td>{{i.affstatus}}</td>
+                    <td>{{i.affstatus}}</td> -->
                     <td><a href="{{url_for('lmendelinputaff',id=i.id)}}"><img class='utilicon' src="{{ url_for('static', filename='delete_w.png') }}" alt=""></a></td>
                 </tr>
                 {% endfor %}
@@ -206,6 +214,27 @@
                 <li>Data transaksi yang masuk dari akun Anda akan kami cek dan update secara berkala setiap 2 minggu sekali.</li>
                 <li>Jika terjadi kesalahan penulisan informasi silahkan hubungi admin menggunakan tombol Whatsapp di pojok kanan bawah.</li>
                 
+            </ol>
+        </div>
+
+      </div>
+    </div>
+</div>
+
+<div class="modal fade" id="rslinfoModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Reseller Info</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <p>Panduan mengisi form kode voucher reseller:</p>
+            <ol>
+                <li>Masukkan kode voucher reseller yang Anda gunakan untuk belanja. Usahakan kode voucher yang dimasukkan BENAR karena Anda hanya bisa mengisi form ini 1x. </li>
+                <li>Lakukan transaksi Anda seperti biasa dan data pembelian akan tercatat didalam sistem kami.</li>
+                <li>Data transaksi yang VALID akan kami update 2 minggu sekali.</li>
+                <li>Jika terjadi kesalahan penulisan voucher silahkan hubungi admin menggunakan tombol Whatsapp di pojok kanan bawah.</li>
             </ol>
         </div>
 
