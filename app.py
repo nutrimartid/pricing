@@ -34,9 +34,9 @@ class tbluserlmen(db.Model):
     first_name = db.Column(db.String(100))
     email = db.Column(db.String(64),index=True, unique=True)
     phone = db.Column(db.String(64))
-    username_tiktok = db.Column(db.String(100))
+    username_tiktok = db.Column(db.String(100), unique=True)
     app2=db.Column(db.String(100))
-    username_tokpi = db.Column(db.String(100))
+    username_tokpi = db.Column(db.String(100), unique=True)
     voucher = db.Column(db.String(100))
     # affmp = db.Column(db.String(64))
     password = db.Column(db.String(64))
@@ -527,6 +527,8 @@ def lmendeluser(id):
 @app.route('/lmen_goes_to_europe/logout',methods=['GET','POST'])
 def lmenkeluar():
     session.pop('user', None)
+    session.pop('username', None)
+    session.pop('uid', None)
     return redirect(url_for('lmentopspender2023'))
 
 @app.route('/lmen_goes_to_europe/input',methods=['GET','POST'])
@@ -617,36 +619,58 @@ def lmendelinputaff(id):
     else:
         return redirect(url_for("lmenkeluar"))
 
-@app.route('/lmen_goes_to_europe/profile/<id>',methods=['POST','GET'])  ## ini belum beres
+@app.route('/lmen_goes_to_europe/editprofile/<id>',methods=['POST','GET'])
+def editprofile(id):
+    user=tbluserlmen.query.get(id)
+    if str(session.get('user',None))=='customer@nutrimart.co.id':
+        
+        if request.method == 'GET':
+            return render_template("lmen2023/lmenprofile.html",user=user)
+        else:
+            if user.email != request.form['qemail']:
+                df=tblorderlmen.query.filter_by(email=user.email).all()#
+                for i in df:
+                    i.email=request.form['qemail']
+                    db.session.add(i)
+                    db.session.commit()
+                user.email=request.form['qemail']
+            
+            if user.username_tiktok != request.form['qunamett']:
+                df=tblafflmen.query.filter_by(email=user.username_tiktok).all()#
+                for i in df:
+                    i.email=request.form['qunamett']
+                    db.session.add(i)
+                    db.session.commit()
+                user.username_tiktok=request.form['qunamett']
+
+            if user.username_tokpi != request.form['qunametokpi']:
+                df=tblafflmen.query.filter_by(email=user.username_tokpi).all()#
+                for i in df:
+                    i.email=request.form['qunametokpi']
+                    db.session.add(i)
+                    db.session.commit()
+                user.username_tokpi= request.form['qunametokpi']
+
+            user.voucher=request.form['qvoucher']
+            user.app2=request.form['inpaffmp']
+            user.first_name=request.form['qnama']
+            user.phone=request.form['qphone']
+
+            db.session.add(user)
+            db.session.commit()
+            return redirect(url_for('lmenalluser'))
+    else:
+        return redirect(url_for('lmenkeluar'))
+
+@app.route('/lmen_goes_to_europe/profile/<id>',methods=['POST','GET'])  
 def lmenprofile(id):
     if str(session.get('uid',None))==str(id):    
         user=tbluserlmen.query.get(id)
-        if request.method == 'GET':
-            # user=tbluserlmen.query.get(id)
-            return render_template("lmen2023/lmenprofile.html",user=user)
-        else:
-            # df=tblorderlmen.query.filter_by(email=user.email).all()#
-            # for i in df:
-            #     i.email=request.form['qemail']
-            #     db.session.add(i)
-            #     db.session.commit()
-            # df2=tblafflmen.query.filter_by(email=user.email).all()#
-            # for i in df2:
-            #     i.email=request.form['qemail']
-            #     db.session.add(i)
-            #     db.session.commit()
-            # user.first_name=request.form['qnama']
-            # user.email=request.form['qemail']
-            user.phone=request.form['qphone']
-            user.username_tiktok=request.form['qunamett']
-            user.password=request.form['qpass']
-            db.session.add(user)
-            db.session.commit()
-            # session['user']=user.email
-            # session['username']=user.first_name
-            return redirect(url_for('lmeninput'))
+        return render_template("lmen2023/lmenprofileuser.html",user=user)
     else:
         return redirect(url_for('lmenkeluar'))
+
+
 
 @app.route('/lmen_goes_to_europe/order',methods=['POST','GET'])  
 def lmenorderall():

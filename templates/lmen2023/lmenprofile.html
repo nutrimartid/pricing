@@ -5,32 +5,48 @@
 <br>
 <form method="POST" autocomplete="off" class="formprofilelmen">
     <div class="container">
-    Nama Lengkap
-    <!-- <br> -->
-    <input class="form-control" value="{{user.first_name}}" type="text" placeholder="" aria-label="default input example" id="qnama" name="qnama" readonly>
+        Nama Lengkap
+        <input class="form-control" value="{{user.first_name}}" type="text" placeholder="" aria-label="default input example" id="qnama" name="qnama">
     </div>
-    <!-- <br> -->
+
     <div class="container">
-    Email
-    <!-- <br> -->
-    <input class="form-control" value="{{user.email}}" type="email" placeholder="" aria-label="default input example" id="qemail" name="qemail" readonly>
+        Email
+        <input class="form-control" value="{{user.email}}" type="email" placeholder="" aria-label="default input example" id="qemail" name="qemail">
     </div>
-    <!-- <br> -->
+
     <div class="container">
-    Nomor Handphone
-    <!-- <br> -->
-    <input class="form-control" value="{{user.phone}}" type="text" placeholder="" aria-label="default input example" id="qphone" name="qphone" required>
+        Nomor Handphone
+        <input class="form-control" value="{{user.phone}}" type="text" placeholder="" aria-label="default input example" id="qphone" name="qphone">
     </div>
+
     <div class="container">
-    Username Tiktok
-    <!-- <br> -->
-    <input class="form-control" value="{{user.username_tiktok}}" type="text" placeholder="" aria-label="default input example" id="qunamett" name="qunamett">
+        Voucher List
+        <input class="form-control" value="{{user.voucher}}" type="text" placeholder="" aria-label="default input example" id="qvoucher" name="qvoucher">
     </div>
+
     <div class="container">
-    Password
-    <!-- <br> -->
-    <input class="form-control" value="{{user.password}}" type="password" placeholder="" aria-label="default input example" id="qpass" name="qpass" required>
+        Username Tiktok
+        <input class="form-control" value="{{user.username_tiktok}}" type="text" placeholder="" aria-label="default input example" id="qunamett" name="qunamett">
     </div>
+
+    <div class="container">
+        Marketplace 2
+        <select name="inpaffmp" id="inpaffmp" class="form-select mb-3">
+            {% if user.app2 ==  "Tokopedia" %}
+                <option value="Tokopedia" selected>Tokopedia</option>
+                <option value="Shopee">Shopee</option>
+            {% elif user.app2 ==  "Shopee" %}
+                <option value="Tokopedia">Tokopedia</option>
+                <option value="Shopee" selected>Shopee</option>
+            {% else %}
+                <option selected>None</option>
+                <option value="Tokopedia">Tokopedia</option>
+                <option value="Shopee">Shopee</option>
+            {% endif %}
+        </select>
+        <input class="form-control" value="{{user.username_tokpi}}" type="text" placeholder="" aria-label="default input example" id="qunametokpi" name="qunametokpi">
+    </div>
+
     <!-- <br> -->
     <br>
     <div class="container">

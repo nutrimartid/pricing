@@ -10,7 +10,9 @@
                 <th>Nama</th>
                 <th>Email</th>
                 <th>Phone</th>
-                <th>Username Tiktok</th>
+                <th>Voucher</th>
+                <th>Tiktok</th>
+                <th>Shopee/Tokopedia</th>
                 <!-- <th>Password</th> -->
                 <th>Action</th>
             </tr>
@@ -21,9 +23,16 @@
                 <td>{{i.first_name}}</td>
                 <td>{{i.email}}</td>
                 <td>{{i.phone}}</td>
+                <td>{{i.voucher}}</td>
                 <td>{{i.username_tiktok}}</td>
+                <td>{{i.app2}} {{i.username_tokpi}}</td>
                 <!-- <td>{{i.password}}</td> -->
-                <td><a href="{{ url_for('lmendeluser',id=i.id) }}">delete</a></td>
+                <td>
+                    
+                    <a href="{{ url_for('editprofile',id=i.id) }}">edit</a>
+                    <a href="{{ url_for('lmendeluser',id=i.id) }}">delete</a>
+                    
+                </td>
             </tr>
             {% endfor %}
         </tbody>
