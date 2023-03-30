@@ -32,11 +32,11 @@ class tbluser(db.Model):
 class tbluserlmen(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String(100))
-    email = db.Column(db.String(64),index=True, unique=True)
+    email = db.Column(db.String(64), index=True, unique=True)
     phone = db.Column(db.String(64))
-    username_tiktok = db.Column(db.String(100), unique=True)
+    username_tiktok = db.Column(db.String(100), index=True, unique=True)
     app2=db.Column(db.String(100))
-    username_tokpi = db.Column(db.String(100), unique=True)
+    username_tokpi = db.Column(db.String(100), index=True, unique=True)
     voucher = db.Column(db.String(100))
     # affmp = db.Column(db.String(64))
     password = db.Column(db.String(64))
@@ -514,8 +514,11 @@ def lmentopspender2023():
 
 @app.route('/lmen_goes_to_europe/alluser',methods=['POST','GET'])
 def lmenalluser():
-    df=tbluserlmen.query.all()
-    return render_template('lmen2023/lmenalluser.html',df=df)
+    if str(session.get('user',None))=='customer@nutrimart.co.id':
+        df=tbluserlmen.query.all()
+        return render_template('lmen2023/lmenalluser.html',df=df)
+    else:
+        return redirect(url_for('lmenkeluar'))
 
 @app.route('/lmen_goes_to_europe/deluser/<id>',methods=['POST','GET']) #### delete user saja bukan yg di submit jg
 def lmendeluser(id):
@@ -623,7 +626,6 @@ def lmendelinputaff(id):
 def editprofile(id):
     user=tbluserlmen.query.get(id)
     if str(session.get('user',None))=='customer@nutrimart.co.id':
-        
         if request.method == 'GET':
             return render_template("lmen2023/lmenprofile.html",user=user)
         else:
