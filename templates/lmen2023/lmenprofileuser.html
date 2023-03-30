@@ -1,0 +1,25 @@
+{% extends 'lmen2023/baselmen.html' %}
+{% block content %}
+
+<h1>Profile</h1>
+<br>
+<ul>
+    <li>
+        Nama : <b>{{user.first_name}}</b>
+    </li>
+    <li>
+        Email : <b>{{user.email}}</b>
+    </li>
+    <li>
+        No HP : <b>{{user.phone}}</b>
+    </li>
+    <li>
+        Tiktok : <b>{{user.username_tiktok}}</b>
+    </li>
+    <li>
+        {{user.app2}} : <b>{{user.username_tokpi}}</b>
+    </li>
+</ul>
+{% endblock %}
+
+
