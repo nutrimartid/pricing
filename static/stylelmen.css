@@ -17,7 +17,7 @@ select[name="tabellmenorder_length"] {
 .mainbanner{
     width: -webkit-fill-available;
     max-height: 500px;
-    border-radius: 25px;
+    border-radius: 15px;
     max-width: -moz-available;
 }
 
