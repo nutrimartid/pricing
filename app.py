@@ -82,6 +82,13 @@ class apiv1(Resource):
             df=df.to_json(orient='records')
             df=json.loads(df)
             return df
+        elif request.args.get('type')=="janjian":
+            engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
+            df = pd.read_sql_query("SELECT * FROM tbljanjian", con=engine)
+            engine.dispose()
+            df=df.to_json(orient='records')
+            df=json.loads(df)
+            return df
         else:
             engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
             df = pd.read_sql_query("SELECT * FROM tbljanjian", con=engine)
