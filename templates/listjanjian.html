@@ -33,7 +33,6 @@
         <th>Disc</th>
         <th>Start</th>
         <th>End</th>
-        <!-- <th>ID</th> -->
         <th>Action</th>
       </tr>
     </thead>
@@ -47,13 +46,10 @@
         <td>{{((i.hargajanjian/i.plnfi-1)*100) | round | int}} %</td>
         <td>{{i.startdate}}</td>
         <td>{{i.enddate}}</td>
-        <!-- <td>{{i.id}}</td> -->
+
         <td>
-          <!-- <a class="btn btn-outline-danger btn-sm" href="{{url_for('deljanjian',id=i.id)}}" role="button">delete</a>
-          <a class="btn btn-outline-warning btn-sm" href="{{url_for('editjanjian',id=i.id)}}" role="button">Edit</a> -->
           <a href="{{url_for('deljanjian',id=i.id)}}"><img class='utilicon' src="static/delete.png" alt=""></a>
           <a href="{{url_for('editjanjian',id=i.id)}}"><img class='utilicon' src="static/edit.png" alt=""></a>
-          <!-- <a href="">edit</a> -->
         </td>
       </tr>
       {% endfor %}
@@ -74,7 +70,6 @@
         <th>Disc</th>
         <th>Start</th>
         <th>End</th>
-        <!-- <th>ID</th> -->
         <th>Action</th>
       </tr>
     </thead>
@@ -90,11 +85,8 @@
         <td>{{i.enddate}}</td>
         <!-- <td>{{i.id}}</td> -->
         <td>
-          <!-- <a class="btn btn-outline-danger btn-sm" href="{{url_for('deljanjian',id=i.id)}}" role="button">delete</a> -->
-          <!-- <a class="btn btn-outline-warning btn-sm" href="{{url_for('editjanjian',id=i.id)}}" role="button">Edit</a> -->
           <a href="{{url_for('deljanjian',id=i.id)}}"><img class='utilicon' src="static/delete.png" alt=""></a>
           <a href="{{url_for('editjanjian',id=i.id)}}"><img class='utilicon' src="static/edit.png" alt=""></a>
-          <!-- <a href="">edit</a> -->
         </td>
       </tr>
       {% endfor %}
@@ -115,7 +107,6 @@
         <th>Disc</th>
         <th>Start</th>
         <th>End</th>
-        <!-- <th>ID</th> -->
         <!-- <th>Action</th> -->
       </tr>
     </thead>
@@ -126,14 +117,12 @@
         <td>{{i.realsku}}</td>
         <td>{{i.plnfi}}</td>
         <td>{{i.hargajanjian}}</td>
-        <td>{{((i.hargajanjian/i.plnfi-1)*100) | round}} %</td>
+        <td>{{((i.hargajanjian/i.plnfi-1)*100) | round | int}} %</td>
         <td>{{i.startdate}}</td>
         <td>{{i.enddate}}</td>
-        <!-- <td>{{i.id}}</td> -->
         <!-- <td>
           <a class="btn btn-outline-danger btn-sm" href="{{url_for('deljanjian',id=i.id)}}" role="button">delete</a>
           <a class="btn btn-outline-warning btn-sm" href="{{url_for('editjanjian',id=i.id)}}" role="button">Edit</a>
-          <a href="">edit</a>
         </td> -->
       </tr>
       {% endfor %}

@@ -220,6 +220,66 @@ def listjanjianharga():
     df_selesai=tbljanjian.query.filter(tbljanjian.enddate<date.today()).all()
     return render_template('listjanjian.html',df=df_active,df2=df_pending,msg=msg,df_selesai=df_selesai)
 
+@app.route('/bulkuploadjanjian',methods=['POST','GET'])
+def bulkuploadjanjian():
+    if request.method == 'POST':
+        errormsg=""
+        f = request.files['ppfile']
+        filedir=os.path.join(app.config['UPLOAD_FOLDER'],secure_filename('bulkjanjian.xlsx'))
+        f.save(filedir)
+        dfu=pd.read_excel(filedir,engine='openpyxl')
+        if len([col for col in dfu.columns if col in ['SKU','Harga Janjian','Start Date','End Date','Notes']])==5:
+            data_sku=requests.get('https://tatanama.pythonanywhere.com/apinew')
+            data_sku=pd.DataFrame(data_sku.json())
+            data_sku=data_sku[['SKU','Brand','Nama_Produk','Harga_Display','Price_List_NFI']]
+
+            for i in range(len(dfu)):
+                item_sku=dfu.iloc[i]['SKU']
+                try:
+                    hargajanjian=int(dfu.iloc[i]['Harga Janjian'])
+                    startdate=dfu.iloc[i]['Start Date']
+                    endate=dfu.iloc[i]['End Date']
+                    
+                    note=dfu.iloc[i]['Notes']
+                    if str(item_sku) in data_sku['SKU'].unique():
+                        item_name=data_sku[data_sku['SKU']==str(item_sku)]['Nama_Produk'].unique()[0]
+                        item_pl=data_sku[data_sku['SKU']==str(item_sku)]['Price_List_NFI'].unique()[0]
+
+                        cnx = create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
+                        df=pd.read_sql(f"SELECT * FROM tbljanjian WHERE realsku = '{item_sku}'", con=cnx)
+                        cnx.dispose()
+                        df['enddate']=pd.to_datetime(df["enddate"], format="%Y/%m/%d")
+                        df['startdate']=pd.to_datetime(df["startdate"], format="%Y/%m/%d")
+
+                        cek_a=df[(df['enddate']>startdate)&(df['startdate']<endate)]['id']
+                        cek_c=df[(df['startdate']<startdate)&(df['enddate']>endate)]['id']
+                        cek_d=df[(df['startdate']>startdate)&(df['enddate']<endate)]['id']
+                        cek=cek_a.append(cek_c).append(cek_d)
+
+                        if endate>startdate:
+                            if len(cek)==0:
+                                if note in ['Launching','Launching tahap 2','Internal','Marketing']:
+                                    newjanjian=tbljanjian(realnamaproduk=item_name,realsku=item_sku,plnfi=item_pl,
+                                                        hargajanjian=hargajanjian,startdate=startdate,enddate=endate,
+                                                        notes=note)
+                                    db.session.add(newjanjian)
+                                    db.session.commit()
+                                else:
+                                    errormsg=errormsg+" "+str(item_sku)+" note error."
+                            else:
+                                errormsg=errormsg+" "+str(item_sku)+" overlap error."
+                        else:
+                            errormsg=errormsg+" "+str(item_sku)+" date error."
+                    else:
+                        errormsg=errormsg+" "+str(item_sku)+" SKU error."
+                except:
+                    errormsg=errormsg+" "+str(item_sku)+" value error."
+        else:
+            errormsg=errormsg+"file error"
+        return render_template('uploadjanjian.html',msg=errormsg)
+    else:
+        return render_template('uploadjanjian.html')
+
 @app.route('/deljanjian/<id>',methods=['POST','GET'])
 def deljanjian(id):
     if request.method=='POST':
@@ -426,7 +486,10 @@ def upload_file():
 
 @app.route("/downtemp", methods=['GET', 'POST'])
 def downtemp():
-    return send_file('static/generate promoplan template.xlsx')
+    if request.args.get('type')=="janjian":
+        return send_file('static/template_bulk_upload.xlsx')
+    else:
+        return send_file('static/generate promoplan template.xlsx')
 
 @app.route("/konten", methods=['GET', 'POST'])
 def konten():
