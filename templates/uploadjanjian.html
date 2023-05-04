@@ -1,0 +1,33 @@
+{% extends 'base2.html' %}
+{% block content %}
+
+<h1>Bulk Upload Janjian</h1>
+
+<div class='container'>
+    <div class="dropdown">
+      <button class="btn btn-sm btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+        Download
+      </button>
+      <ul class="dropdown-menu">
+        <li><a class="dropdown-item" href="{{url_for('downtemp',type='janjian')}}">Template</a></li>
+      </ul>
+    </div>
+</div>
+
+<br>
+
+<div class="agr1">
+    {% if msg %}
+    <div class="alert alert-danger" role="alert">{{msg}}</div>
+    {% endif %}
+    <div class="mb-3">
+        <form method=POST enctype=multipart/form-data>
+            <label for="formFile" class="form-label">Masukan file janjian</label>
+            <input class="form-control" type='file' name='ppfile' id="formFile" accept=".xlsx" required>
+            <br>
+            <input class="btn btn-primary mb-3" type=submit value=Upload>
+        </form>
+    </div>
+</div>
+
+{% endblock %}
