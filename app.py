@@ -214,8 +214,8 @@ def janjianharga():
 
 @app.route('/listjanjianharga',methods=['POST','GET'])
 def listjanjianharga():
-    msg=tbljanjian.query.filter(tbljanjian.enddate<=date.today()+timedelta(days=7),tbljanjian.enddate>date.today(),tbljanjian.startdate<=date.today()).count()
-    df_active=tbljanjian.query.filter(tbljanjian.enddate>date.today(),tbljanjian.startdate<=date.today()).all()
+    msg=tbljanjian.query.filter(tbljanjian.enddate<=date.today()+timedelta(days=7),tbljanjian.enddate>=date.today(),tbljanjian.startdate<=date.today()).count()
+    df_active=tbljanjian.query.filter(tbljanjian.enddate>=date.today(),tbljanjian.startdate<=date.today()).all()
     df_pending=tbljanjian.query.filter(tbljanjian.startdate>date.today()).all()
     df_selesai=tbljanjian.query.filter(tbljanjian.enddate<date.today()).all()
     return render_template('listjanjian.html',df=df_active,df2=df_pending,msg=msg,df_selesai=df_selesai)
@@ -289,6 +289,17 @@ def deljanjian(id):
         return redirect(url_for('listjanjianharga'))
     else:
         return render_template('delconfirm.html',id=id)
+
+@app.route('/endjanjian/<id>',methods=['POST','GET'])
+def endjanjian(id):
+    if request.method=='POST':
+        itemjanjian=tbljanjian.query.get(id)
+        itemjanjian.enddate=date.today()
+        db.session.add(itemjanjian)
+        db.session.commit()
+        return redirect(url_for('listjanjianharga'))
+    else:
+        return render_template('endconfirm.html',id=id)
 
 @app.route('/editjanjian/<id>',methods=['GET','POST'])
 def editjanjian(id):

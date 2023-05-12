@@ -50,6 +50,7 @@
         <td>
           <a href="{{url_for('deljanjian',id=i.id)}}"><img class='utilicon' src="static/delete.png" alt=""></a>
           <a href="{{url_for('editjanjian',id=i.id)}}"><img class='utilicon' src="static/edit.png" alt=""></a>
+          <a href="{{url_for('endjanjian',id=i.id)}}"><img class='utilicon' src="static/stop.png" alt=""></a>
         </td>
       </tr>
       {% endfor %}
