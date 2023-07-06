@@ -82,6 +82,13 @@ class apiv1(Resource):
             df=df.to_json(orient='records')
             df=json.loads(df)
             return df
+        elif request.args.get('type')=="lmenvoucheruser":
+            engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
+            df = pd.read_sql_query("SELECT * FROM tbluserlmen WHERE voucher IS NOT NULL", con=engine)
+            engine.dispose()
+            df=df.to_json(orient='records')
+            df=json.loads(df)
+            return df
         elif request.args.get('type')=="janjian":
             engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
             df = pd.read_sql_query("SELECT * FROM tbljanjian", con=engine)
@@ -232,9 +239,10 @@ def bulkuploadjanjian():
             data_sku=requests.get('https://tatanama.pythonanywhere.com/apinew')
             data_sku=pd.DataFrame(data_sku.json())
             data_sku=data_sku[['SKU','Brand','Nama_Produk','Harga_Display','Price_List_NFI']]
-
             for i in range(len(dfu)):
-                item_sku=dfu.iloc[i]['SKU']
+                item_sku=str(dfu.iloc[i]['SKU'])
+                print(item_sku)
+                
                 try:
                     hargajanjian=int(dfu.iloc[i]['Harga Janjian'])
                     startdate=dfu.iloc[i]['Start Date']
