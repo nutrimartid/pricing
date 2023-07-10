@@ -108,6 +108,7 @@ class apiv1(Resource):
         id=request.args.get('id')
         value=request.args.get('value')
         status=request.args.get('status')
+        rsl_email=request.args.get('rsl_email')
         editdata=tblorderlmen.query.get(id)
         if editdata:
             editdata.orderstatus=str(status)
@@ -116,7 +117,10 @@ class apiv1(Resource):
             db.session.commit()
             return {'status':'added new api'}
         else:
-            return {'status':'FAILED'}
+            neworderid=tblorderlmen(orderid=id,email=rsl_email,orderstatus="Valid",ordervalue=value)
+            db.session.add(neworderid)
+            db.session.commit()
+            return {'status':'added new reseller order via api'}
 
 api.add_resource(apiv1,'/apiv1')
 
@@ -241,8 +245,6 @@ def bulkuploadjanjian():
             data_sku=data_sku[['SKU','Brand','Nama_Produk','Harga_Display','Price_List_NFI']]
             for i in range(len(dfu)):
                 item_sku=str(dfu.iloc[i]['SKU'])
-                print(item_sku)
-                
                 try:
                     hargajanjian=int(dfu.iloc[i]['Harga Janjian'])
                     startdate=dfu.iloc[i]['Start Date']
