@@ -357,6 +357,8 @@ def download(type):
         df['enddate']=df['enddate']+timedelta(hours=23,minutes=59,seconds=59)
     elif type=='lmenuser':
         df=pd.read_sql_table('tbluserlmen', con=cnx)
+    elif type=='lmenorder':
+        df=pd.read_sql_table('tblorderlmen', con=cnx)
     else:
         df=pd.read_sql_table('tbluser', con=cnx)
     cnx.dispose()
