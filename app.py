@@ -73,6 +73,16 @@ class tblkonten(db.Model):
     herourl = db.Column(db.String(64))
     prod_desc = db.Column(db.Text)
 
+class tblfo(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    realnamaproduk = db.Column(db.String(175))
+    realsku = db.Column(db.String(64))
+    # plnfi = db.Column(db.Integer)
+    # hargajanjian = db.Column(db.Integer)
+    startdate = db.Column(db.Date)
+    enddate = db.Column(db.Date)
+    mp=db.Column(db.String(64))
+
 class apiv1(Resource):
     def get(self):
         if request.args.get('type')=="lmen":
@@ -359,6 +369,8 @@ def download(type):
         df=pd.read_sql_table('tbluserlmen', con=cnx)
     elif type=='lmenorder':
         df=pd.read_sql_table('tblorderlmen', con=cnx)
+    elif type=='flushout':
+        df=pd.read_sql_table('tblfo', con=cnx)
     else:
         df=pd.read_sql_table('tbluser', con=cnx)
     cnx.dispose()
@@ -827,6 +839,56 @@ def lmenfaq():
     #     return render_template('lmen2023/lmenaffall.html',df=df)
     # else:
     return render_template('lmen2023/lmenfaq.html')
+
+@app.route('/flushoutmp',methods=['POST','GET'])  
+def flushoutmp():
+    df=tblfo.query.all()
+    item_name=request.args.get('item_name')
+    item_sku=request.args.get('item_sku')
+    if request.method=='POST':
+        if request.form['jh_startdate'] < request.form['jh_enddate']:
+            y1=int(request.form['jh_startdate'].split('-')[0])
+            m1=int(request.form['jh_startdate'].split('-')[1])
+            d1=int(request.form['jh_startdate'].split('-')[2])
+            y2=int(request.form['jh_enddate'].split('-')[0])
+            m2=int(request.form['jh_enddate'].split('-')[1])
+            d2=int(request.form['jh_enddate'].split('-')[2])
+            newflushout=tblfo(realnamaproduk=request.form['jh_itemname'],realsku=request.form['jh_itemsku'],startdate=date(year=y1,month=m1,day=d1),enddate=date(year=y2,month=m2,day=d2),mp=request.form['jh_notes'])
+            db.session.add(newflushout)
+            db.session.commit()
+            return redirect(url_for('flushoutmp'))
+        else:
+            return redirect(url_for('flushoutmp'))
+    else:
+        # item_pl=request.args.get('item_pl')
+        return render_template('flushout_list.html',a=item_name,b=item_sku,df=df)
+
+@app.route('/editfo/<id>',methods=['POST','GET'])  
+def editfo(id):
+    editdata=tblfo.query.get(id)   
+    if request.method=='POST':
+        y1=int(request.form['jh_startdate'].split('-')[0])
+        m1=int(request.form['jh_startdate'].split('-')[1])
+        d1=int(request.form['jh_startdate'].split('-')[2])
+        y2=int(request.form['jh_enddate'].split('-')[0])
+        m2=int(request.form['jh_enddate'].split('-')[1])
+        d2=int(request.form['jh_enddate'].split('-')[2])
+        editdata.startdate=date(year=y1,month=m1,day=d1)
+        editdata.enddate=date(year=y2,month=m2,day=d2)
+        editdata.mp=request.form['jh_notes']
+        # newflushout=tblfo(realnamaproduk=request.form['jh_itemname'],realsku=request.form['jh_itemsku'],startdate=date(year=y1,month=m1,day=d1),enddate=date(year=y2,month=m2,day=d2),mp=request.form['jh_notes'])
+        db.session.add(editdata)
+        db.session.commit()
+        return redirect(url_for('flushoutmp'))
+    else:
+        return render_template('flushout_edit.html',editdata=editdata)
+
+@app.route('/delfo/<id>',methods=['POST','GET'])  
+def delfo(id):
+    deldata=tblfo.query.get(id)    
+    db.session.delete(deldata)
+    db.session.commit()
+    return redirect(url_for('flushoutmp'))
 
 if __name__ == '__main__':
     app.run()

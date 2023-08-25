@@ -33,7 +33,8 @@
           <!-- <a class="nav-link active" aria-current="page" href="#">Home</a> -->
           <a class="nav-link" href="{{url_for('listjanjianharga')}}">List Janjian</a>
           <a class="nav-link" href="{{url_for('upload_file')}}">Promo Plan</a>
-          <a class="nav-link" href="{{url_for('bulkuploadjanjian')}}">Bulk Upload</a>
+          <!-- <a class="nav-link" href="{{url_for('bulkuploadjanjian')}}">Bulk Upload</a> -->
+          <a class="nav-link" href="{{url_for('flushoutmp')}}">Flush Out</a>
           <!-- <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a> -->
         </div>
       </div>
@@ -46,6 +47,7 @@
   <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
   <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap5.js"></script>
+  <script src="/static/localjs.js"></script> 
   {% block scripts %}{% endblock %}
 </body>
 <!-- <footer>
