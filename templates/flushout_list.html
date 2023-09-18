@@ -10,6 +10,7 @@
 </div>
 <div>
   <a class="btn btn-sm btn-outline-success" role="button" href="{{url_for('download',type='flushout')}}">Download</a>
+  <a class="btn btn-sm btn-outline-success" role="button" href="{{url_for('bulkuploadfo')}}">Bulk Upload</a>
 </div>
 
 <form method="POST" id="formaddfo" >
@@ -40,11 +41,11 @@
           <label for="jh_notes">MP</label>
           <select name="jh_notes" id="jh_notes" class="form-select mb-3">
             <!-- <option selected>Open this select menu</option> -->
-            <option value="Tokopedia">Tokopedia</option>
-            <option value="Shopee">Shopee</option>
-            <option value="Tiktok">Tiktok</option>
-            <option value="Lazada">Lazada</option>
-            <option value="Blibli">Blibli</option>
+            <option value="DT">DT</option>
+            <option value="SSI">SSI</option>
+            <option value="FBL">FBL</option>
+            <option value="FBB">FBB</option>
+            <option value="Enjo">Enjo</option>
           </select>        
         </div>
       </div>
@@ -55,9 +56,10 @@
         <tr>
             <th>SKU</th>
             <th>Product Name</th>
-            <th>MP</th>
+            <th>WH</th>
             <th>Start Flush Out</th>
             <th>End Flush Out</th>
+            <th>Status</th>
             <th></th>
         </tr>
     </thead>
@@ -69,9 +71,14 @@
             <td>{{i.mp}}</td>
             <td>{{i.startdate}}</td>
             <td>{{i.enddate}}</td>
+            <td>{{i.stat}}</td>
             <td>
-                <a href="{{url_for('editfo',id=i.id)}}">edit</a>
-                <a href="{{url_for('delfo',id=i.id)}}">delete</a>
+                {% if i.stat=="NEW" %}
+                  <a href="{{url_for('accfo',id=i.id)}}"><img class='utilicon' src="static/check.png" alt=""></a>
+                  <a href="{{url_for('rejfo',id=i.id)}}"><img class='utilicon' src="static/close.png" alt=""></a>
+                {% endif %}
+                <a href="{{url_for('editfo',id=i.id)}}"><img class='utilicon' src="static/edit.png" alt=""></a>
+                <a href="{{url_for('delfo',id=i.id)}}"><img class='utilicon' src="static/delete.png" alt=""></a>
             </td>
         </tr>
         {% endfor %}
