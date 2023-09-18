@@ -40,36 +40,36 @@
           <label for="jh_notes">MP</label>
           <select name="jh_notes" id="jh_notes" class="form-select mb-3" >
             <!-- <option selected>Open this select menu</option> -->
-            {% if editdata.mp=='Tokopedia' %}
-                <option selected value="Tokopedia">Tokopedia</option>
-                <option value="Shopee">Shopee</option>
-                <option value="Tiktok">Tiktok</option>
-                <option value="Lazada">Lazada</option>
-                <option value="Blibli">Blibli</option>
-            {% elif editdata.mp=='Shopee' %}
-                <option value="Tokopedia">Tokopedia</option>
-                <option selected value="Shopee">Shopee</option>
-                <option value="Tiktok">Tiktok</option>
-                <option value="Lazada">Lazada</option>
-                <option value="Blibli">Blibli</option>
-            {% elif editdata.mp=='Tiktok' %}
-                <option value="Tokopedia">Tokopedia</option>
-                <option value="Shopee">Shopee</option>
-                <option selected value="Tiktok">Tiktok</option>
-                <option value="Lazada">Lazada</option>
-                <option value="Blibli">Blibli</option>
-            {% elif editdata.mp=='Lazada' %}
-                <option value="Tokopedia">Tokopedia</option>
-                <option value="Shopee">Shopee</option>
-                <option value="Tiktok">Tiktok</option>
-                <option selected value="Lazada">Lazada</option>
-                <option value="Blibli">Blibli</option>
+            {% if editdata.mp=='DT' %}
+              <option selected value="DT">DT</option>
+              <option value="SSI">SSI</option>
+              <option value="FBL">FBL</option>
+              <option value="FBB">FBB</option>
+              <option value="Enjo">Enjo</option>
+            {% elif editdata.mp=='SSI' %}
+            <option value="DT">DT</option>
+            <option selected value="SSI">SSI</option>
+            <option value="FBL">FBL</option>
+            <option value="FBB">FBB</option>
+            <option value="Enjo">Enjo</option>
+            {% elif editdata.mp=='FBL' %}
+            <option value="DT">DT</option>
+            <option value="SSI">SSI</option>
+            <option selected value="FBL">FBL</option>
+            <option value="FBB">FBB</option>
+            <option value="Enjo">Enjo</option>
+            {% elif editdata.mp=='FBB' %}
+            <option value="DT">DT</option>
+            <option value="SSI">SSI</option>
+            <option value="FBL">FBL</option>
+            <option selected value="FBB">FBB</option>
+            <option value="Enjo">Enjo</option>
             {% else %}
-                <option value="Tokopedia">Tokopedia</option>
-                <option value="Shopee">Shopee</option>
-                <option value="Tiktok">Tiktok</option>
-                <option selected value="Lazada">Lazada</option>
-                <option value="Blibli">Blibli</option>
+            <option value="DT">DT</option>
+            <option value="SSI">SSI</option>
+            <option value="FBL">FBL</option>
+            <option value="FBB">FBB</option>
+            <option selected value="Enjo">Enjo</option>
             {% endif %}
           </select>        
         </div>

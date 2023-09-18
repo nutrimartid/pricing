@@ -77,10 +77,9 @@ class tblfo(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     realnamaproduk = db.Column(db.String(175))
     realsku = db.Column(db.String(64))
-    # plnfi = db.Column(db.Integer)
-    # hargajanjian = db.Column(db.Integer)
     startdate = db.Column(db.Date)
     enddate = db.Column(db.Date)
+    stat = db.Column(db.String(64))
     mp=db.Column(db.String(64))
 
 class apiv1(Resource):
@@ -523,6 +522,8 @@ def upload_file():
 def downtemp():
     if request.args.get('type')=="janjian":
         return send_file('static/template_bulk_upload.xlsx')
+    elif request.args.get('type')=="flushout":
+        return send_file('static/template_bulk_upload_flushout.xlsx')
     else:
         return send_file('static/generate promoplan template.xlsx')
 
@@ -777,8 +778,6 @@ def lmenprofile(id):
     else:
         return redirect(url_for('lmenkeluar'))
 
-
-
 @app.route('/lmen_goes_to_europe/order',methods=['POST','GET'])  
 def lmenorderall():
     if str(session.get('user',None))=='customer@nutrimart.co.id':
@@ -853,7 +852,7 @@ def flushoutmp():
             y2=int(request.form['jh_enddate'].split('-')[0])
             m2=int(request.form['jh_enddate'].split('-')[1])
             d2=int(request.form['jh_enddate'].split('-')[2])
-            newflushout=tblfo(realnamaproduk=request.form['jh_itemname'],realsku=request.form['jh_itemsku'],startdate=date(year=y1,month=m1,day=d1),enddate=date(year=y2,month=m2,day=d2),mp=request.form['jh_notes'])
+            newflushout=tblfo(realnamaproduk=request.form['jh_itemname'],realsku=request.form['jh_itemsku'],startdate=date(year=y1,month=m1,day=d1),enddate=date(year=y2,month=m2,day=d2),mp=request.form['jh_notes'],stat='NEW')
             db.session.add(newflushout)
             db.session.commit()
             return redirect(url_for('flushoutmp'))
@@ -889,6 +888,77 @@ def delfo(id):
     db.session.delete(deldata)
     db.session.commit()
     return redirect(url_for('flushoutmp'))
+
+@app.route('/accfo/<id>',methods=['POST','GET'])  
+def accfo(id):
+    editdata=tblfo.query.get(id)  
+    editdata.stat='Accept'
+    db.session.add(editdata)
+    db.session.commit()
+    return redirect(url_for('flushoutmp'))
+
+@app.route('/rejfo/<id>',methods=['POST','GET'])  
+def rejfo(id):
+    editdata=tblfo.query.get(id)   
+    editdata.stat='Reject'
+    db.session.add(editdata) 
+    db.session.commit()
+    return redirect(url_for('flushoutmp'))
+
+
+@app.route('/bulkuploadfo',methods=['POST','GET'])
+def bulkuploadfo():
+    if request.method == 'POST':
+        errormsg=""
+        f = request.files['ppfile']
+        filedir=os.path.join(app.config['UPLOAD_FOLDER'],secure_filename('bulkflushout.xlsx'))
+        f.save(filedir)
+        dfu=pd.read_excel(filedir,engine='openpyxl')
+        if len([col for col in dfu.columns if col in ['SKU','Start Date','End Date','WH']])==4:
+            data_sku=requests.get('https://tatanama.pythonanywhere.com/apinew')
+            data_sku=pd.DataFrame(data_sku.json())
+            data_sku=data_sku[['SKU','Brand','Nama_Produk','Harga_Display','Price_List_NFI']]
+            for i in range(len(dfu)):
+                item_sku=str(dfu.iloc[i]['SKU'])
+                # hargajanjian=int(dfu.iloc[i]['Harga Janjian'])
+                startdate=dfu.iloc[i]['Start Date']
+                endate=dfu.iloc[i]['End Date']
+                note=dfu.iloc[i]['WH']
+                if str(item_sku) in data_sku['SKU'].unique():
+                    item_name=data_sku[data_sku['SKU']==str(item_sku)]['Nama_Produk'].unique()[0]
+                    # item_pl=data_sku[data_sku['SKU']==str(item_sku)]['Price_List_NFI'].unique()[0]
+
+                    # cnx = create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
+                    # df=pd.read_sql(f"SELECT * FROM tbljanjian WHERE realsku = '{item_sku}'", con=cnx)
+                    # cnx.dispose()
+                    # df['enddate']=pd.to_datetime(df["enddate"], format="%Y/%m/%d")
+                    # df['startdate']=pd.to_datetime(df["startdate"], format="%Y/%m/%d")
+
+                    # cek_a=df[(df['enddate']>startdate)&(df['startdate']<endate)]['id']
+                    # cek_c=df[(df['startdate']<startdate)&(df['enddate']>endate)]['id']
+                    # cek_d=df[(df['startdate']>startdate)&(df['enddate']<endate)]['id']
+                    # cek=cek_a.append(cek_c).append(cek_d)
+
+                    if endate>startdate:
+                        
+                        if note in ['DT','SSI','FBL','FBB','Enjo']:
+                            newjanjian=tblfo(realnamaproduk=item_name,realsku=item_sku,
+                                                    startdate=startdate,enddate=endate,stat='NEW',
+                                                    mp=note)
+                            db.session.add(newjanjian)
+                            db.session.commit()
+                        else:
+                            errormsg=errormsg+" "+str(item_sku)+" note error."
+                    else:
+                        errormsg=errormsg+" "+str(item_sku)+" date error."
+                else:
+                    errormsg=errormsg+" "+str(item_sku)+" SKU error."
+        else:
+            errormsg=errormsg+"file error"
+        return render_template('uploadflushout.html',msg=errormsg)
+    else:
+        return render_template('uploadflushout.html')
+
 
 if __name__ == '__main__':
     app.run()
