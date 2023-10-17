@@ -77,8 +77,12 @@ class tblfo(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     realnamaproduk = db.Column(db.String(175))
     realsku = db.Column(db.String(64))
+    prodid= db.Column(db.String(64))
     startdate = db.Column(db.Date)
     enddate = db.Column(db.Date)
+    stoktotal = db.Column(db.Integer)
+    doi = db.Column(db.Integer)
+    ketegori = db.Column(db.String(64))
     stat = db.Column(db.String(64))
     mp=db.Column(db.String(64))
 
@@ -852,7 +856,11 @@ def flushoutmp():
             y2=int(request.form['jh_enddate'].split('-')[0])
             m2=int(request.form['jh_enddate'].split('-')[1])
             d2=int(request.form['jh_enddate'].split('-')[2])
-            newflushout=tblfo(realnamaproduk=request.form['jh_itemname'],realsku=request.form['jh_itemsku'],startdate=date(year=y1,month=m1,day=d1),enddate=date(year=y2,month=m2,day=d2),mp=request.form['jh_notes'],stat='NEW')
+            newflushout=tblfo(realnamaproduk=request.form['jh_itemname'],
+                              realsku=request.form['jh_itemsku'],prodid=request.form['jh_prodid'],
+                              startdate=date(year=y1,month=m1,day=d1),stoktotal=request.form['jh_totstok'],
+                              doi =request.form['jh_doi'],enddate=date(year=y2,month=m2,day=d2),
+                              mp=request.form['jh_notes'],ketegori=request.form['jh_kategori'],stat='NEW')
             db.session.add(newflushout)
             db.session.commit()
             return redirect(url_for('flushoutmp'))
@@ -920,7 +928,10 @@ def bulkuploadfo():
             data_sku=data_sku[['SKU','Brand','Nama_Produk','Harga_Display','Price_List_NFI']]
             for i in range(len(dfu)):
                 item_sku=str(dfu.iloc[i]['SKU'])
-                # hargajanjian=int(dfu.iloc[i]['Harga Janjian'])
+                prodid=str(dfu.iloc[i]['Product ID'])
+                totalstok=str(dfu.iloc[i]['Total Stock'])
+                itemdoi=str(dfu.iloc[i]['DOI'])
+                fokategori=str(dfu.iloc[i]['Kategori'])
                 startdate=dfu.iloc[i]['Start Date']
                 endate=dfu.iloc[i]['End Date']
                 note=dfu.iloc[i]['WH']
@@ -942,9 +953,9 @@ def bulkuploadfo():
                     if endate>startdate:
                         
                         if note in ['DT','SSI','FBL','FBB','Enjo']:
-                            newjanjian=tblfo(realnamaproduk=item_name,realsku=item_sku,
-                                                    startdate=startdate,enddate=endate,stat='NEW',
-                                                    mp=note)
+                            newjanjian=tblfo(realnamaproduk=item_name,realsku=item_sku,prodid=prodid,
+                                             stoktotal=totalstok,doi=itemdoi,kategori=fokategori,
+                                             startdate=startdate,enddate=endate,stat='NEW',mp=note)
                             db.session.add(newjanjian)
                             db.session.commit()
                         else:
