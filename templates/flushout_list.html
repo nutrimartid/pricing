@@ -23,7 +23,21 @@
           <label for="jh_itemsku">Real SKU</label>
           <input class="form-control-plaintext" type="text" value="{{b}}" aria-label="default input example" id="jh_itemsku" name="jh_itemsku" readonly>
         </div>
+        <div class="col-3">
+          <label for="jh_prodid">Product ID</label>
+          <input class="form-control" type="text" aria-label="default input example" id="jh_prodid" name="jh_prodid">
+        </div>
     </div>
+    <div class="row g-3">
+      <div class="col">
+        <label for="jh_totstok">Total Stok</label>
+        <input class="form-control" type="number" aria-label="default input example" id="jh_totstok" name="jh_totstok" required>
+      </div>
+      <div class="col">
+        <label for="jh_doi">DOI</label>
+        <input class="form-control" type="number" aria-label="default input example" id="jh_doi" name="jh_doi" required>
+      </div>
+  </div>
     <div class="row g-3">
         <div class="col">
           <label for="jh_startdate">Start Date</label>
@@ -36,8 +50,14 @@
     </div>
     <div class="row g-3">
         <div class="col">
-          <!-- <label for="jh_notes">Notes</label>
-          <input class="form-control" type="text" aria-label="default input example" id="jh_notes" name="jh_notes"> -->
+          <label for="jh_kategori">Kategori</label>
+          <select name="jh_kategori" id="jh_kategori" class="form-select mb-3">
+            <!-- <option selected>Open this select menu</option> -->
+            <option value="ED">ED</option>
+            <option value="OVERSTOK">OVERSTOK</option>
+          </select>
+        </div>
+        <div class="col">
           <label for="jh_notes">MP</label>
           <select name="jh_notes" id="jh_notes" class="form-select mb-3">
             <!-- <option selected>Open this select menu</option> -->
@@ -46,7 +66,7 @@
             <option value="FBL">FBL</option>
             <option value="FBB">FBB</option>
             <option value="Enjo">Enjo</option>
-          </select>        
+          </select>    
         </div>
       </div>
     <button type="submit" class="btn btn-primary mb-3">Submit</button>
@@ -55,10 +75,14 @@
     <thead>
         <tr>
             <th>SKU</th>
+            <th>Product ID</th>
             <th>Product Name</th>
             <th>WH</th>
+            <th>Total Stock</th>
+            <th>DOI (hari)</th>
             <th>Start Flush Out</th>
             <th>End Flush Out</th>
+            <th>Kategori</th>
             <th>Status</th>
             <th></th>
         </tr>
@@ -67,10 +91,14 @@
         {% for i in df %}
         <tr>
             <td>{{i.realsku}}</td>
+            <td>{{i.prodid}}</td>
             <td>{{i.realnamaproduk}}</td>
             <td>{{i.mp}}</td>
+            <td>{{i.stoktotal}}</td>
+            <td>{{i.doi}}</td>
             <td>{{i.startdate}}</td>
             <td>{{i.enddate}}</td>
+            <td>{{i.kategori}}</td>
             <td>{{i.stat}}</td>
             <td>
                 {% if i.stat=="NEW" %}
