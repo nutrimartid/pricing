@@ -262,9 +262,15 @@
   
 
 {% endif %}
-
-
-
 {% endblock %}
 
 
+{% block scripts %}
+<script>
+  $(document).ready(function(){$('table').DataTable({
+    "ordering": false,
+    "lengthChange": false,
+    "pageLength": 5
+  });});
+</script>
+{% endblock %}
