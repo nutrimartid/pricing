@@ -82,7 +82,7 @@ class tblfo(db.Model):
     enddate = db.Column(db.Date)
     stoktotal = db.Column(db.Integer)
     doi = db.Column(db.Integer)
-    ketegori = db.Column(db.String(64))
+    kategori = db.Column(db.String(64))
     stat = db.Column(db.String(64))
     mp=db.Column(db.String(64))
 
@@ -922,10 +922,12 @@ def bulkuploadfo():
         filedir=os.path.join(app.config['UPLOAD_FOLDER'],secure_filename('bulkflushout.xlsx'))
         f.save(filedir)
         dfu=pd.read_excel(filedir,engine='openpyxl')
-        if len([col for col in dfu.columns if col in ['SKU','Start Date','End Date','WH']])==4:
+        if len([col for col in dfu.columns if col in ['SKU','Product ID','Total Stock','DOI','Start Date','End Date','Kategori','WH']])==8:
             data_sku=requests.get('https://tatanama.pythonanywhere.com/apinew')
             data_sku=pd.DataFrame(data_sku.json())
             data_sku=data_sku[['SKU','Brand','Nama_Produk','Harga_Display','Price_List_NFI']]
+            dfu['End Date']=pd.to_datetime(dfu["End Date"], format="%Y/%m/%d")
+            dfu['Start Date']=pd.to_datetime(dfu["Start Date"], format="%Y/%m/%d")
             for i in range(len(dfu)):
                 item_sku=str(dfu.iloc[i]['SKU'])
                 prodid=str(dfu.iloc[i]['Product ID'])
@@ -937,21 +939,7 @@ def bulkuploadfo():
                 note=dfu.iloc[i]['WH']
                 if str(item_sku) in data_sku['SKU'].unique():
                     item_name=data_sku[data_sku['SKU']==str(item_sku)]['Nama_Produk'].unique()[0]
-                    # item_pl=data_sku[data_sku['SKU']==str(item_sku)]['Price_List_NFI'].unique()[0]
-
-                    # cnx = create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
-                    # df=pd.read_sql(f"SELECT * FROM tbljanjian WHERE realsku = '{item_sku}'", con=cnx)
-                    # cnx.dispose()
-                    # df['enddate']=pd.to_datetime(df["enddate"], format="%Y/%m/%d")
-                    # df['startdate']=pd.to_datetime(df["startdate"], format="%Y/%m/%d")
-
-                    # cek_a=df[(df['enddate']>startdate)&(df['startdate']<endate)]['id']
-                    # cek_c=df[(df['startdate']<startdate)&(df['enddate']>endate)]['id']
-                    # cek_d=df[(df['startdate']>startdate)&(df['enddate']<endate)]['id']
-                    # cek=cek_a.append(cek_c).append(cek_d)
-
                     if endate>startdate:
-                        
                         if note in ['DT','SSI','FBL','FBB','Enjo']:
                             newjanjian=tblfo(realnamaproduk=item_name,realsku=item_sku,prodid=prodid,
                                              stoktotal=totalstok,doi=itemdoi,kategori=fokategori,
