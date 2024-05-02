@@ -21,17 +21,53 @@
                 {% if not session['user'] %}
                 <div class="col">
                     <button type="button" class="btn btn-primary lgnbtn" data-bs-toggle="modal" data-bs-target="#modalLogin">
-                        Masuk
+                        <b>Masuk</b>
                     </button>
                 </div>
                 <div class="col">
                     <button type="button" class="btn btn-primary lgnbtn" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-                        Daftar
+                        <b>Daftar</b>
                     </button>
                 </div>
                 {% endif %}
             </div>
         </div>
+    </div>
+    <br>
+
+    <div class="alert alert-light" role="alert">
+        <center><b>Peserta L-Men Goes To Europe tahun sebelumnya dimohon untuk mendaftarkan ulang kembali ya.</b></center>
+        
+    </div>
+      
+    <div class="col">
+        <img class="mainbanner" src="{{ url_for('static', filename='mainbanner2.jpg') }}" alt="" style="width: 100%; height: auto;">
+    </div>
+    <div>
+        <ol style="list-style-type: decimal;">
+            <li>Program ini hanya berlaku untuk transaksi produk L-Men selama <strong>1 Mei 2024 - 30 April 2025</strong> (tidak berlaku untuk produk <strong>Clearance Sale</strong> atau <strong>Near ED</strong>)</li>
+            <li>Peserta yang mencapai minimal pembelanjaan akan mendapatkan hadiah dan dihubungi selambat-lambatnya <strong>1 Juni 2025</strong>.</li>
+            <li>Pemenang bisa memilih hadiah sesuai kategori pencapaian di akhir periode. Pemenang hanya diperbolehkan memilih 1 jenis hadiah dan hadiah bisa berlaku kelipatan. Contoh:<ol style="list-style-type: lower-alpha;">
+                    <li>Pencapaian Rp 600.000.000 boleh memilih 1 Paket Tur atau 2 Paket Tur Asia atau 6 Emas Antam 4gr atau 12 Voucher Nutrimart (senilai Rp30.000.000,-).</li>
+                    <li>Pencapaian Rp 400.000.000 boleh memilih 1 Paket Tur Asia atau 4 Emas Antam 4gr atau 8 voucher Nutrimart &nbsp;(senilai Rp20.000.000,-) namun tidak boleh memilih 1 paket tur Asia dan 1 Emas Antam 4gr.</li>
+                </ol>
+            </li>
+            <li>Khusus untuk Paket Tur (Tur Eropa maupun Asia), 1 Paket Tur hanya berlaku untuk 1 orang dan masing-masing Tur hanya dapat dilaksanakan jika minimum 2 pemenang yang memilih Paket Tur yang bersangkutan. Jika minimum pemenang tidak terpenuhi, maka PT Nutrifood Indonesia (Nutrimart) dapat meniadakan Tur yang bersangkutan dan pemenang diperbolehkan untuk memilih hadiah yang lain sesuai dengan ketentuan nomor 3.</li>
+            <li>Pemenang hadiah Tur wajib mengikuti jadwal dan destinasi yang telah ditentukan PT Nutrifood Indonesia (Nutrimart). Jika pemenang berhalangan untuk mengikuti Tur yang telah ditentukan, pemenang diperbolehkan untuk memilih hadiah yang lain sesuai dengan ketentuan nomor 3.</li>
+            <li>Hadiah Voucher Nutrimart senilai Rp2.500.000,- berlaku hanya untuk pembelian produk L-Men di <a href="https://www.nutrimart.co.id/" target="_blank" title="https://www.nutrimart.co.id/">www.nutrimart.co.id</a>. Voucher berlaku hingga 31 Agustus 2025.</li>
+            <li>Transaksi terhitung hanya berlaku untuk transaksi yang telah diinput oleh peserta ke form yang bisa di akses di bit.ly/formlmengoestoeurope dan telah dinyatakan valid oleh PT Nutrifood Indonesia (Nutrimart).<ol style="list-style-type: lower-alpha;">
+                    <li>Konsumen dan Gym wajib mengisi form dengan nomor pesanan sesuai yang tertulis pada detil masing-masing channel. Jika ada kesalahan penulisan silahkan melakukan penginputan ulang.</li>
+                    <li>Reseller (Nutriseller) wajib mengisi kode voucher yang digunakan untuk belanja dan akan kami gunakan sebagai validasi data pesanan.</li>
+                    <li>Affiliate wajib mengisi informasi yang dibutuhkan sesuai channel yang dipilih. (Tokopedia: Affiliate ID; Tiktok: Username; Shopee: Nama Akun)</li>
+                </ol>
+            </li>
+            <li>Untuk menghindari perbedaan harga yang ada pada setiap channel maka nilai transaksi yang terhitung pada form akan mengikuti harga standar dari PT Nutrifood Indonesia (Nutrimart).</li>
+            <li>PT Nutrifood Indonesia (Nutrimart) berhak untuk sewaktu-waktu mengubah, menambahkan atau memodifikasi Syarat dan Ketentuan ini tanpa pemberitahuan terlebih dahulu kepada pengguna.</li>
+            <li>Hadiah program diberikan sesuai paket biaya tur yang ditagihkan oleh jasa tur yang ditunjuk oleh PT Nutrifood Indonesia (Nutrimart). Segala bentuk pengeluaran lainnya dan pajak hadiah akan ditanggung oleh pemenang.</li>
+            <li>PT Nutrifood Indonesia (Nutrimart) akan melakukan validasi data dan jika dalam proses ditemukan kecurigaan pemalsuan dan segala bentuk kecurangan lainnya, maka PT Nutrifood Indonesia (Nutrimart) berhak meminta tambahan bukti yang mendukung sesuai kebutuhan kepada peserta yang bersangkutan. Apabila bukti tidak dapat disediakan atau dinyatakan tidak kuat untuk validasi kecurigaan kecurangan tersebut maka PT Nutrifood Indonesia (Nutrimart) berhak menghentikan keikutsertaan peserta dalam program ini.</li>
+            <li>Seluruh pertanyaan dan pengaduan terkait Program L-Men Goes to Europe 2025 dapat menghubungi 0877-8779-9000</li>
+            <li>Seluruh karyawan &amp; keluarga karyawan PT Nutrifood Indonesia (Nutrimart) tidak akan diikutsertakan dalam Program L-Men Goes to Europe 2025.</li>
+        </ol>
     </div>
     
 
@@ -117,6 +153,7 @@
                     <input type="submit" name="action" value="Masuk" class="btn btn-primary mb-3">
                     </div>
                 </form>
+
                 
 
 
