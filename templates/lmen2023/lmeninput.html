@@ -1,6 +1,8 @@
 {% extends 'lmen2023/baselmen.html' %}
 {% block content %}
-
+<header>
+    <img class="header" src="{{ url_for('static', filename='header.jpg') }}" alt="">
+</header>
 <h1>Hi, <b>{{session['username']}}</b></h1>
 
 
