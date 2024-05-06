@@ -658,10 +658,11 @@ def lmeninput():
                 db.session.commit()
                 return redirect(url_for('lmeninput'))
             
-            elif request.form['action']=='Add Voucher':
+            elif request.form['action']=='Add Email':
                 v1=request.form['inpvcr1']
-                v2=request.form['inpvcr2']
-                v=[f"{v1}",f"{v2}"]
+                # v2=request.form['inpvcr2']
+                # v=[f"{v1}",f"{v2}"]
+                v=[f"{v1}"]
                 if "" in v:
                     v.remove("")
                 print(len(v))

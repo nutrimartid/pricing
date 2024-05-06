@@ -28,7 +28,7 @@
       <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#cust-tab-pane" type="button" role="tab" aria-controls="home-tab-pane" aria-selected="true">Konsumen</button>
     </li>
     <li class="nav-item" role="presentation">
-      <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#resell-tab-pane" type="button" role="tab" aria-controls="profile-tab-pane" aria-selected="false">Reseller</button>
+      <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#resell-tab-pane" type="button" role="tab" aria-controls="profile-tab-pane" aria-selected="false">Nutriseller</button>
     </li>
     <li class="nav-item" role="presentation">
         <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#affil-tab-pane" type="button" role="tab" aria-controls="profile-tab-pane" aria-selected="false">Affiliate</button>
@@ -54,18 +54,18 @@
     <div class="tab-pane fade" id="resell-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
         <div class="container">
             <form method="POST" enctype=multipart/form-data>
-                <a href="" role="button" data-bs-toggle="modal" data-bs-target="#rslinfoModal">
+                <!-- <a href="" role="button" data-bs-toggle="modal" data-bs-target="#rslinfoModal">
                     Panduan mengisi kode voucher reseller <img src="{{ url_for('static', filename='info.png') }}" alt="" style="height: 15px;">
-                </a>
+                </a> -->
                 <br>
-                <label for="inpvcr1" class="form-label">Voucher 1</label>
-                <input class="form-control" type="text" placeholder="" value="{{vou[0]}}" aria-label="default input example" id="inpvcr1" name="inpvcr1" {% if vou[0] %} readonly {% endif %}>
-                <label for="inpvcr2" class="form-label">Voucher 2</label>
-                <input class="form-control" type="text" placeholder="" value="{{vou[1]}}" aria-label="default input example" id="inpvcr2" name="inpvcr2" {% if vou[1] %} readonly {% endif %}>
-                {% if vou[1] and vou[0] %}
-                <p>hubungi admin untuk mengganti voucher</p>
+                <label for="inpvcr1" class="form-label">Email Nutriseller</label>
+                <input class="form-control" type="email" placeholder="" value="{{vou[0]}}" aria-label="default input example" id="inpvcr1" name="inpvcr1" {% if vou[0] %} readonly {% endif %}>
+                <!-- <label for="inpvcr2" class="form-label" style="display: none;">Voucher 2</label>
+                <input class="form-control" type="text" placeholder="" value="{{vou[1]}}" aria-label="default input example" id="inpvcr2" name="inpvcr2" {% if vou[1] %} readonly {% endif %} style="display: none;"> -->
+                {% if vou[1] or vou[0] %}
+                <p>hubungi admin untuk mengganti email</p>
                 {% else %}
-                <input type="submit" name="action" value="Add Voucher" class="btn btn-primary mb-3">
+                <input type="submit" name="action" value="Add Email" class="btn btn-primary mb-3">
                 {% endif %}
                 
             </form>
