@@ -45,7 +45,7 @@
         <td>{{i.realsku}}</td>
         <td>{{i.plnfi}}</td>
         <td>{{i.hargajanjian}}</td>
-        <td>{{((i.hargajanjian/i.plnfi-1)*100) | round | int}} %</td>
+        <td>{% i.plnfi > 0 %}{{((i.hargajanjian/i.plnfi-1)*100) | round | int}} %{% endif %}</td>
         <td>{{i.startdate}}</td>
         <td>{{i.enddate}}</td>
 
@@ -83,7 +83,7 @@
         <td>{{i.realsku}}</td>
         <td>{{i.plnfi}}</td>
         <td>{{i.hargajanjian}}</td>
-        <td>{{((i.hargajanjian/i.plnfi-1)*100) | round | int}} %</td>
+        <td>{% i.plnfi > 0 %}{{((i.hargajanjian/i.plnfi-1)*100) | round | int}} %{% endif %}</td>
         <td>{{i.startdate}}</td>
         <td>{{i.enddate}}</td>
         <!-- <td>{{i.id}}</td> -->
@@ -120,7 +120,7 @@
         <td>{{i.realsku}}</td>
         <td>{{i.plnfi}}</td>
         <td>{{i.hargajanjian}}</td>
-        <td>{{((i.hargajanjian/i.plnfi-1)*100) | round | int}} %</td>
+        <td>{% i.plnfi > 0 %}{{((i.hargajanjian/i.plnfi-1)*100) | round | int}} %{% endif %}</td>
         <td>{{i.startdate}}</td>
         <td>{{i.enddate}}</td>
         <!-- <td>
